@@ -1,0 +1,20 @@
+                        <td>
+                            <div class="d-flex align-items-start">
+                                    <span class="fw-semibold fs-6 text-dark d-block fs-7">Login As</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="text-dark fw-bold text-hover-primary d-block fs-3 "> :</span>
+                        </td>
+                        <td class="text-center">
+
+<div class="dropdown">
+  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+    Select
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+<? echo  $list_level ;?>
+  </ul>
+</div>
+                        </td>
+        

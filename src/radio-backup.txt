@@ -1,0 +1,18 @@
+ <div class='bulgy-radios form-check' role='radiogroup' aria-labelledby=bulgy-radios-label'>
+  <label  style='border: 2px solid hsla(150, 75%, 50%, 1);height:50px; border-radius: 25px;'>
+        <input  type='radio' id='optionsRadio' name='optionsRadios' value='$id_price#$type_participant#$publication#$optional_bill' required/>
+        <span class='radio'></span>
+        <span class='label fs-5 fw-bold mt-2'></span>
+        IDR $price <br>$type_participant: $publication
+      </label>
+</div>
+
+
+
+ <div class='bulgy-radios form-check' role='radiogroup' aria-labelledby=bulgy-radios-label'>
+  <label>
+        <input type='radio'  type='radio' id='optionsRadio' name='optionsRadios' value='$id_price#$type_participant#$publication#$optional_bill' required/>
+        <span class='radio'></span>
+        <span class='label fs-5 fw-bold mt-2'>IDR $price</span>
+     </label>
+</div>
