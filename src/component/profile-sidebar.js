@@ -15,8 +15,8 @@ const banner =  {
         <div className='profile-images is-flex is-flex-direction-column is-flex-gap-md'>
                       <div className='banner' style={banner}></div>
                        <div className='profiles is-flex is-justify-content-space-between is-align-items-center mx-3'>
-     <figure class="image image is-64x64">
-     <img class="is-rounded" src={props.avatar === '' ? akun : props.avatar} alt='' /> 
+     <figure class="image is-64x64 avatar ">
+     <img class="is-rounded border-md" src={props.avatar === '' ? akun : props.avatar} alt='' /> 
      </figure>
      <div className='username is-flex is-flex-direction-column is-align-items-start is-flex-gap-sm'>
       <h4 className='is-size-5 has-text-weight-bold is-title'>{props.fullname}</h4>

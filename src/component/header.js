@@ -18,16 +18,16 @@ function Header(props){
 
   </div>
 
+
+
 <div className='mx-auto search'>
   <form className='is-flex mt-4'>
-  <p class="control is-expanded">
-    <input class="input has-text-dark" type="text" placeholder="Find a repository" />
-  </p>
-  <p class="control">
-    <a class="button is-info">
-      Search
-    </a>
-  </p>
+  <div class="control has-icons-left has-icons-right">
+    <input class="input " type="text" placeholder="search user" />
+    <span class="icon is-small is-left">
+      <i class="fa fa-search "></i>
+    </span>
+  </div>
   </form>
 </div>
 

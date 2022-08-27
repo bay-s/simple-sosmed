@@ -227,6 +227,7 @@ registerAkun = (e) => {
           username:this.state.username = '',
           password:this.state.password = ''
         })  
+        window.location = "/";
       })
       .catch((error) => {
         const errorMsg = error.message;
@@ -332,19 +333,21 @@ this.setState({hide:!this.state.hide});
   render(){
     return (
       <Router>
-      <Header id={this.state.uid} openModal={this.openModal} isLogin={this.state.isLogin}/>
+      <Header id={this.state.uid} openModal={this.openModal} logout={this.logout} isLogin={this.state.isLogin}/>
       
       <Routes>
 
-      <Route path="/" element={<Home id={this.state.uid} total_follow={this.state.totalFollow} total_following={this.state.totalFollowing} fullname={this.state.akunFullName} name={this.state.akunUserName} avatar={this.state.akunImages} total_post={this.state.totalPost} />} />
-      <Route path="/profile/:id" element={<ProfilePage id={this.state.uid}/>} />
-      <Route path="/post/:ID" element={<PostDetail id={this.state.uid}/>} />
-      <Route path="/message-list/" element={<MessageList name={this.state.akunUserName} avatar={this.state.akunImages} id={this.state.uid} isLogin={this.state.isLogin} /> }/>
-      <Route path="/message/" element={<MessageDetail name={this.state.akunUserName} avatar={this.state.akunImages} id={this.state.uid} isLogin={this.state.isLogin} /> }/>
-      <Route path="/send-message/" element={<SendMessage name={this.state.akunUserName} avatar={this.state.akunImages} id={this.state.uid} isLogin={this.state.isLogin} /> }/>
-      <Route path="/edit-profile/:id" element={<EditProfile id={this.state.uid}/>} />
+      <Route path="/" element={this.state.isLogin ? <Home id={this.state.uid} total_follow={this.state.totalFollow} total_following={this.state.totalFollowing} fullname={this.state.akunFullName} name={this.state.akunUserName} avatar={this.state.akunImages} total_post={this.state.totalPost} /> :<LoginPage isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} loginValidasi={this.loginValidasi} handlerChange={this.handlerChange}/>} />
+
+      <Route path="/profile/:id" element={this.state.isLogin ? <ProfilePage id={this.state.uid}/> : <LoginPage isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} loginValidasi={this.loginValidasi} handlerChange={this.handlerChange}/>} />
+      <Route path="/post/:ID" element={this.state.isLogin ? <PostDetail id={this.state.uid}/> : <LoginPage isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} loginValidasi={this.loginValidasi} handlerChange={this.handlerChange}/>} />
+      <Route path="/message-list/" element={this.state.isLogin ? <MessageList name={this.state.akunUserName} avatar={this.state.akunImages} id={this.state.uid} isLogin={this.state.isLogin} /> : <LoginPage isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} loginValidasi={this.loginValidasi} handlerChange={this.handlerChange}/>}/>
+      <Route path="/message/" element={this.state.isLogin ? <MessageDetail name={this.state.akunUserName} avatar={this.state.akunImages} id={this.state.uid} isLogin={this.state.isLogin} /> : <LoginPage isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} loginValidasi={this.loginValidasi} handlerChange={this.handlerChange}/>}/>
+      <Route path="/send-message/:id" element={this.state.isLogin ? <SendMessage name={this.state.akunUserName} avatar={this.state.akunImages} id={this.state.uid} isLogin={this.state.isLogin} /> : <LoginPage isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} loginValidasi={this.loginValidasi} handlerChange={this.handlerChange}/>}/>
+      <Route path="/edit-profile/:id" element={this.state.isLogin ? <EditProfile id={this.state.uid}/> : <LoginPage isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} loginValidasi={this.loginValidasi} handlerChange={this.handlerChange}/>} />
+
       <Route path="/login/" element={<LoginPage isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} loginValidasi={this.loginValidasi} handlerChange={this.handlerChange}/>} />
-      <Route path="/register/" element={<RegisterPages isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} registerValidasi={this.registerValidasi} handlerChange={this.handlerChange }/>} />
+      <Route path="/register/" element={<RegisterPages isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} registerValidasi={this.registerValidasi} handlerChange={this.handlerChange }/>} /> 
       <Route path='*' element={<NotFound />} />
       </Routes>
 <div className={this.state.hide ? 'modal' : 'modal is-active'}>

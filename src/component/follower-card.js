@@ -41,7 +41,7 @@ async componentDidUpdate(){
                         this.setState({follower:this.state.follower = data})
                         });
                       })
-}
+} 
     render(){
 
         return(
@@ -57,7 +57,6 @@ async componentDidUpdate(){
  <h5 className='is-size-6 has-text-weight-normal '>@{this.state.follower.username}</h5>
 </div>
 </div>
- <button class="button is-info">Following</button>
 </div>
              )
     }

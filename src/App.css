@@ -311,12 +311,12 @@ body {
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
-.card-image:hover img {
+.profile-post:hover img {
   filter: brightness(0.75);
   transition: 250ms;
 }
 
-.card-image:hover .comments {
+.profile-post:hover .comments {
   opacity: 1;
   visibility: visible;
   transition: 250ms;
@@ -361,6 +361,10 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center center;
+}
+
+.avatar img{
+  height: 100% !important;
 }
 
 .loader-image {

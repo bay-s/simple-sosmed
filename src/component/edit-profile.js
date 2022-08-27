@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link, useParams} from 'react-router-dom'
 import akun from '../akun.jpg'
-import {database,auth} from '../firebase';
-import { getAuth, deleteUser } from "firebase/auth";
-import { collection, getDocs,query, where,doc, deleteDoc,getDocFromCache} from 'firebase/firestore';
+import {database,storage} from '../firebase';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
+import { collection,updateDoc,doc,query,getDocFromCache,getDocs,where} from 'firebase/firestore';
 
 function EditProfile(props){
   const {id} = useParams()
@@ -23,6 +23,7 @@ class EditProfileCard extends React.Component{
     this.state = {
      data:[],
      error:false,
+     sukses:false,
      pesan:'',
      isSubmit:false,
      fullname:'',
@@ -56,7 +57,8 @@ class EditProfileCard extends React.Component{
     const {name,value} = e.target
     this.setState(prev => {
       return{
-   [name]:value
+   [name]:value,
+   isSubmit:this.state.isSubmit = true
       }
     })
   }
@@ -69,7 +71,8 @@ class EditProfileCard extends React.Component{
       console.log(img.name);
       this.setState({
         imgUpload: URL.createObjectURL(img),
-        url:img
+        url:img,
+        isSubmit:true
       });
     }
   };
@@ -113,7 +116,10 @@ class EditProfileCard extends React.Component{
             images:downloadURL
           })
         .then(() =>{
-          this.setState({pesan:"Upload Sukses"})
+          this.setState({
+            pesan:"Update Profile Success",
+            sukses:this.state.sukses = true
+          })
         })
         .catch(err => {
         alert(err.message)
@@ -135,26 +141,6 @@ class EditProfileCard extends React.Component{
     const id = this.props.id
     const docUpdate = doc(database,'user',id)
 
-  if(this.state.url === ''){
-    updateDoc(docUpdate,{
-      username:this.state.username,
-      fullname:this.state.fullname,
-      biodata:this.state.biodata,
-      link_website:this.state.website,
-      phone:this.state.phone
-     })
-     .then(() =>{
-       this.setState({pesan:"Upload Sukses"})
-     })
-     .catch(err => {
-     alert(err.message)
-     this.setState({
-       error:this.state.error = true,
-       pesan:err.message
-     })
-     console.log(err);
-     })
-  }else{
     updateDoc(docUpdate,{
       username:this.state.username,
       fullname:this.state.fullname,
@@ -166,6 +152,7 @@ class EditProfileCard extends React.Component{
      .then(() =>{
        this.setState({pesan:"Upload Sukses"})
        e.target.reset()
+       alert("update sukses")
      })
      .catch(err => {
      alert(err.message)
@@ -173,9 +160,7 @@ class EditProfileCard extends React.Component{
        error:this.state.error = true,
        pesan:err.message
      })
-     console.log(err);
      })
-  }
   }
   
   Validasi = e => {
@@ -187,23 +172,23 @@ class EditProfileCard extends React.Component{
         error:this.state.error = true
       })
       }
-      else if (this.state.username.length < 6) {
-        this.setState({
-          pesan:this.state.pesan = "Username minimal 6 karakter",
-          error:this.state.error = true
-        })
-      }
-      else if(this.state.fullname.length < 8){
-        this.setState({
-          pesan:this.state.pesan = "Fullname minimal 8 karakter",
-          error:this.state.error = true
-      })
-     }
+    //   else if (this.state.username.length < 6) {
+    //     this.setState({
+    //       pesan:this.state.pesan = "Username minimal 6 karakter",
+    //       error:this.state.error = true
+    //     })
+    //   }
+    //   else if(this.state.fullname.length < 8){
+    //     this.setState({
+    //       pesan:this.state.pesan = "Fullname minimal 8 karakter",
+    //       error:this.state.error = true
+    //   })
+    //  }
   else{
     this.setState({
       isLoad:this.state.isLoad = true
     })
-  this.updateProfile (e) 
+  this.updateProfile(e) 
     }
   }
 
@@ -238,21 +223,21 @@ Small file…
 <div class="field">
 <label class="label">Fullname</label>
 <div class="control">
-<input class="input  is-link has-text-dark" type="text" name='fullname' placeholder={this.state.data.fullname} />
+<input class="input  is-link has-text-dark" type="text" name='fullname' placeholder={this.state.data.fullname} onChange={this.handlerChange}/>
 </div>
 </div>
 
 <div class="field">
 <label class="label">Username</label>
 <div class="control">
-<input class="input  is-link" type="text" name='username' placeholder={this.state.data.username} />
+<input class="input  is-link" type="text" name='username' placeholder={this.state.data.username} onChange={this.handlerChange}/>
 </div>
 </div>
 
 <div class="field">
 <label class="label">Website Link</label>
 <div class="control">
-<input class="input  is-link" type="text" name='website' placeholder={this.state.data.link_website} />
+<input class="input  is-link" type="text" name='website' placeholder={this.state.data.link_website} onChange={this.handlerChange}/>
 </div>
 </div>
 
@@ -267,7 +252,7 @@ Small file…
           </a>
         </p>
         <p class="control is-expanded">
-          <input class="input is-link" type="tel" name='phone' placeholder="Your phone number" />
+          <input class="input is-link" type="tel" name='phone' placeholder="Your phone number" onChange={this.handlerChange}/>
         </p>
       </div>
       <p class="help">Do not enter the first zero</p>
@@ -277,22 +262,23 @@ Small file…
 
 <div class="field">
 <label class="label">Bio</label>
-<textarea class="textarea is-link is-small" name='biodata' placeholder={this.state.data.biodata}></textarea>
+<textarea class="textarea is-link is-small" name='biodata' placeholder={this.state.data.biodata} onChange={this.handlerChange}></textarea>
 </div>
 
 
-<fieldset disabled>
+<article class={this.state.error ? "message is-danger" : 'hide'}>
+  <div class="message-body">
+ <i> {this.state.pesan}</i>
+  </div>
+</article>
+<article class={this.state.sukses ? "message is-success" : 'hide'}>
+  <div class="message-body">
+ <i> {this.state.pesan}</i>
+  </div>
+</article>
+
 <div class="field">
-<label class="label">Email</label>
-<div class="control">
-<input class="input  is-link has-text-weiht-bold" type="email" name='email' placeholder={this.state.data.email} />
-</div>
-</div>
-</fieldset>
-
-
-<div class="field">
-{this.state.isSubmit ? <button class="button is-link" title="Disabled button" disabled>Submit</button> :<button class="button is-link" title="Disabled button">Submit</button>}
+{this.state.isSubmit ?  <button class="button is-link" title="Disabled button">Submit</button> : <button class="button is-link" title="Disabled button" disabled>Submit</button>}
 </div>
                 </form>
             </div>

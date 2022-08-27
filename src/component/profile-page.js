@@ -8,7 +8,7 @@ import banners from "../banner.jpg";
 import Banner from './banner';
 import BannerUser from './banner-user';
 import UserProfilePage from './user-profile-page';
-import UserPostCard from './post-card';
+import PostCard from './post-card';
 import ModalDeleteAccount from './modal-delete-account';
 import FollowerCard from './follower-card';
 import FollowingCard from './following-card';
@@ -183,7 +183,7 @@ this.setState({modalDelete:!this.state.modalDelete})
 
       const postCard = Array.isArray(this.state.dataPost.docs) ? this.state.dataPost.docs.map((post,index)=> {
           const posts = post.data()
-          return <UserPostCard data={posts} isLogin={this.props.isLogin} id={this.props.ID}/>
+          return <PostCard data={posts} avatar={this.state.data.images} isLogin={this.props.isLogin} id={this.props.ID}/>
           }) : ""
 
       const followCard = this.state.follower != null ? this.state.follower.map(data => {
@@ -197,15 +197,15 @@ this.setState({modalDelete:!this.state.modalDelete})
       return (
         <>
            {/* START TCOL 2 */}
-           <div className="column is-10 box is-flex is-flex-direction-column is-flex-gap-lg">
+          <div className="column is-10 box is-flex is-flex-direction-column is-flex-gap-lg">
            <h3 className="is-title is-size-4 has-text-weight-bold has-text-centered my-2">
              Profile
            </h3>
            <div className="is-flex is-justify-content-space-between is-align-items-center ">
              <div className="is-flex is-align-items-center is-flex-gap-md">
-               <figure class="image is-128x128">
+               <figure class="image is-128x128 avatar">
                  <img
-                   class="is-rounded"
+                   class="is-rounded border-md "
                    src={this.state.data.images === '' ? akun : this.state.data.images }
                    alt=""
                  />

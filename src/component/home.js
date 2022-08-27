@@ -76,6 +76,11 @@ class Home extends React.Component{
 
     render(){
 
+        const postContentCard = this.state.dataPost.length < 1 ? "" : this.state.dataPost.docs.map(item => {
+          const post = item.data()
+          console.log(post);
+          return <PostContent  post={post} />
+        })
         return(
 <div className='container my-fluid my-6'>
   <div className='columns is-multiline mx-6 is-centered is-variable is-desktop is-6-widescreen home-container'>
@@ -94,7 +99,7 @@ class Home extends React.Component{
       <p></p>
     </div>
   </div> 
-  </div> : <PostContent  dataPost={this.state.dataPost} />}
+  </div> : postContentCard }
   
   </div>
 

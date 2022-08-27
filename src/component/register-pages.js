@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import banners from '../banner2.jpg'
 
 function RegisterPages(props){
@@ -85,7 +86,7 @@ const banner =  {
                 </form>
 <div class="field is-flex is-flex-gap-md is-justify-content-center pb-4">
 <p className='is-title'>Already have an Account ?</p>
-<a href='#0' className='has-text-info has-text-weight-bold is-title'>Login</a>
+<Link to='/login/' className='has-text-info has-text-weight-bold is-title'>Login</Link>
 </div>
           </div>
    </div>
