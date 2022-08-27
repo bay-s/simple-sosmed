@@ -17,8 +17,10 @@ import EditProfile from './component/edit-profile';
 import ModalPosts from './component/modal-posts';
 import LoginPage from './component/login-pages';
 import RegisterPages from './component/register-pages';
-
-
+import PostDetail from './component/post-detail';
+import MessageList from './component/message-list';
+import MessageDetail from './component/message-detail';
+import SendMessage from './component/send-message-form';
 
 class App extends React.Component{
 constructor(){
@@ -336,7 +338,10 @@ this.setState({hide:!this.state.hide});
 
       <Route path="/" element={<Home id={this.state.uid} total_follow={this.state.totalFollow} total_following={this.state.totalFollowing} fullname={this.state.akunFullName} name={this.state.akunUserName} avatar={this.state.akunImages} total_post={this.state.totalPost} />} />
       <Route path="/profile/:id" element={<ProfilePage id={this.state.uid}/>} />
-      <Route path="/user-profile/" element={<UserProfilePage id={this.state.uid}  isLogin={this.state. isLogin} />} />
+      <Route path="/post/:ID" element={<PostDetail id={this.state.uid}/>} />
+      <Route path="/message-list/" element={<MessageList name={this.state.akunUserName} avatar={this.state.akunImages} id={this.state.uid} isLogin={this.state.isLogin} /> }/>
+      <Route path="/message/" element={<MessageDetail name={this.state.akunUserName} avatar={this.state.akunImages} id={this.state.uid} isLogin={this.state.isLogin} /> }/>
+      <Route path="/send-message/" element={<SendMessage name={this.state.akunUserName} avatar={this.state.akunImages} id={this.state.uid} isLogin={this.state.isLogin} /> }/>
       <Route path="/edit-profile/:id" element={<EditProfile id={this.state.uid}/>} />
       <Route path="/login/" element={<LoginPage isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} loginValidasi={this.loginValidasi} handlerChange={this.handlerChange}/>} />
       <Route path="/register/" element={<RegisterPages isSubmit={this.state.isSubmit} sukses={this.state.sukses}  error={this.state.error} pesan={this.state.pesan} registerValidasi={this.registerValidasi} handlerChange={this.handlerChange }/>} />

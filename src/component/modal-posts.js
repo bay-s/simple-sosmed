@@ -156,6 +156,7 @@ const docUpdate = doc(database,'user',id)
           post_id:ranID,
           username:username,
           user_id:id,
+          post_tag:'',
           timestamp: serverTimestamp(),
           total_comment:0,
           total_likes:0

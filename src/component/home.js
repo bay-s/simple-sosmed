@@ -5,7 +5,7 @@ import {database} from '../firebase';
 import { collection, addDoc ,getDocs, doc, updateDoc, deleteDoc,onSnapshot, setDoc, query, orderBy, where} from 'firebase/firestore';
 import PostContent from './post-content'
 import ProfileSidebar from './profile-sidebar'
-import RightSidebar from './right-sidebar'
+import SidebarPost from './right-sidebar'
 import UserRecomendCard from './user-recomend-card'
 
 
@@ -104,7 +104,7 @@ class Home extends React.Component{
             {/* START RIGHT SIDEBAR */}
                 <div className='column is-4 p-0 right-sidebar'>
                <ProfileSidebar id={this.props.uid} total_follow={this.props.total_follow} total_following={this.props.total_following} name={this.props.name} fullname={this.props.fullname} avatar={this.props.avatar} total_post={this.props.total_post} />
-               <RightSidebar />
+               <SidebarPost />
                 </div>
             {/* END RIGHT COLUMN */}
             </div>

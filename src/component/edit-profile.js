@@ -22,11 +22,11 @@ class EditProfileCard extends React.Component{
     super()
     this.state = {
      data:[],
+     error:false,
+     pesan:'',
      isSubmit:false,
      fullname:'',
      username:'',
-     password:'',
-     email:'',
      phone:'',
      website:'',
      biodata:'',
@@ -77,11 +77,7 @@ class EditProfileCard extends React.Component{
    uploadImage = () => {
   
     const id = this.props.id
-    let total_posts = this.props.total_post
-    const ranID = Math.random().toString(36).substring(2,36);
-    const username = this.props.name
-  const db = collection(database,"post")
-  const docUpdate = doc(database,'user',id)
+    const docUpdate = doc(database,'user',id)
   
       const spaceRef = ref(storage, `images/${this.state.url.name}`);
       const uploadTask = uploadBytesResumable(spaceRef,this.state.url);
@@ -112,28 +108,12 @@ class EditProfileCard extends React.Component{
           console.log('File available at', downloadURL);
           // this.setState({saveImage:!this.state.saveImage,});
           // this.postLikes(ranID);
-          console.log(downloadURL);
+
           updateDoc(docUpdate,{
-            total_post:total_posts + 1
-          })
-          setDoc(doc(db,ranID),  {
-            post_caption:this.state.caption,
-            post_image:downloadURL,
-            post_id:ranID,
-            username:username,
-            user_id:id,
-            timestamp: serverTimestamp(),
-            total_comment:0,
-            total_likes:0
+            images:downloadURL
           })
         .then(() =>{
-          this.setState({
-            pesan:this.state.pesan = "Berhasil membuat post",
-            hide:this.state.hide = true,
-            error:this.state.error = false,
-            isLoad:this.state.isLoad = false,
-            isUpload:this.state.isUpload = true
-          })
+          this.setState({pesan:"Upload Sukses"})
         })
         .catch(err => {
         alert(err.message)
@@ -150,41 +130,99 @@ class EditProfileCard extends React.Component{
   
   }
   
+
+  updateProfile = (e) => {
+    const id = this.props.id
+    const docUpdate = doc(database,'user',id)
+
+  if(this.state.url === ''){
+    updateDoc(docUpdate,{
+      username:this.state.username,
+      fullname:this.state.fullname,
+      biodata:this.state.biodata,
+      link_website:this.state.website,
+      phone:this.state.phone
+     })
+     .then(() =>{
+       this.setState({pesan:"Upload Sukses"})
+     })
+     .catch(err => {
+     alert(err.message)
+     this.setState({
+       error:this.state.error = true,
+       pesan:err.message
+     })
+     console.log(err);
+     })
+  }else{
+    updateDoc(docUpdate,{
+      username:this.state.username,
+      fullname:this.state.fullname,
+      biodata:this.state.biodata,
+      link_website:this.state.website,
+      phone:this.state.phone,
+      images:this.uploadImage() 
+     })
+     .then(() =>{
+       this.setState({pesan:"Upload Sukses"})
+       e.target.reset()
+     })
+     .catch(err => {
+     alert(err.message)
+     this.setState({
+       error:this.state.error = true,
+       pesan:err.message
+     })
+     console.log(err);
+     })
+  }
+  }
+  
   Validasi = e => {
     e.preventDefault()
-  
-  
-    if(this.state.url.length < 1){
+
+    if(this.state.username.indexOf(' ') >= 0){
       this.setState({
-        pesan:this.state.pesan = "Post can`t be empty",
+        pesan:this.state.pesan = "Username tidak boleh menggunakan spasi",
         error:this.state.error = true
       })
-    }
+      }
+      else if (this.state.username.length < 6) {
+        this.setState({
+          pesan:this.state.pesan = "Username minimal 6 karakter",
+          error:this.state.error = true
+        })
+      }
+      else if(this.state.fullname.length < 8){
+        this.setState({
+          pesan:this.state.pesan = "Fullname minimal 8 karakter",
+          error:this.state.error = true
+      })
+     }
   else{
     this.setState({
       isLoad:this.state.isLoad = true
     })
-  console.log(this.state.isLoad);
-  this.uploadImage() 
+  this.updateProfile (e) 
     }
   }
+
 
   render(){
     return(
     <div className="container my-fluid " >
-    <div className='columns is-multiline  mx-6 is-centered is-variable is-desktop is-6-widescreen  '>
-        <div className='column is-two-thirds box'>
-            <div className='p-3'>
-                <form className='is-flex is-flex-direction-column is-flex-gap-lg'>
+  <div className='columns is-multiline  mx-6 is-centered is-variable is-desktop is-6-widescreen  '>
+        <div className='column is-two-thirds box '>
+<div className='p-3'>
+<form className='is-flex is-flex-direction-column is-flex-gap-lg' onSubmit={this.Validasi}>
 <div class="field is-flex is-flex-gap-xl is-align-items-center">
 <figure class="image is-48x48">
-<img class="is-rounded" src={this.state.data.images === "" ? akun : this.state.data.images} />
+<img class="is-rounded edit-image" src={this.state.imgUpload !== '' ? this.state.imgUpload : this.state.data.images === "" ? akun : this.state.data.images}  alt="profile"/>
 </figure>
-<form>
 <div class="file is-small is-flex is-flex-direction-column is-flex-gap-sm">
 <label class="label p-0 m-0">{this.state.data.username}</label>
 <label class="file-label">
-<input class="file-input" type="file" name="resume" />
+<input class="file-input" type="file" name="resume" onChange={this.ImageChange}/>
 <span class="file-cta">
 <span class="file-icon">
 <i class="fa fa-upload"></i>
@@ -195,9 +233,8 @@ Small file…
 </span>
 </label>
 </div>
-</form>
 </div>
-
+{/* END UPLOAD INPUT */}
 <div class="field">
 <label class="label">Fullname</label>
 <div class="control">

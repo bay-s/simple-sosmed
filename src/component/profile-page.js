@@ -9,8 +9,9 @@ import Banner from './banner';
 import BannerUser from './banner-user';
 import UserProfilePage from './user-profile-page';
 import UserPostCard from './post-card';
-
-
+import ModalDeleteAccount from './modal-delete-account';
+import FollowerCard from './follower-card';
+import FollowingCard from './following-card';
 
 
 function ProfilePage(props){
@@ -53,6 +54,7 @@ class UserProfileCard extends React.Component{
       this.state = {
          data:[],
          modal:false,
+         modalDelete:false,
          dataPost:[],
          loading:true,
          follower:[],
@@ -173,7 +175,10 @@ displayOption = (e) => {
   this.setState({option:this.state.option = id})
 }
 
-
+openModalDelete = e  => {
+  e.preventDefault()
+this.setState({modalDelete:!this.state.modalDelete})
+}
   render(){
 
       const postCard = Array.isArray(this.state.dataPost.docs) ? this.state.dataPost.docs.map((post,index)=> {
@@ -181,14 +186,13 @@ displayOption = (e) => {
           return <UserPostCard data={posts} isLogin={this.props.isLogin} id={this.props.ID}/>
           }) : ""
 
-      // const followCard = this.state.follower != null ? this.state.follower.map(data => {
-      //  return <FollowerCard follow_id={data} user_id={this.props.id }/>
-      // }) : ""
+      const followCard = this.state.follower != null ? this.state.follower.map(data => {
+       return <FollowerCard follow_id={data} user_id={this.props.id }/>
+      }) : ""
 
-      // const followingCard = this.state.following != null ? this.state.following.map(data => {
-      //   return <FollowingCard follow_id={data} user_id={this.props.id }/>
-      //  }) : ""
-
+      const followingCard = this.state.following != null ? this.state.following.map(data => {
+        return <FollowingCard follow_id={data} user_id={this.props.id }/>
+       }) : ""
 
       return (
         <>
@@ -218,7 +222,7 @@ displayOption = (e) => {
              {/* END PROFILE LEFT */}
              <div className="button-action is-flex is-flex-direction-column is-flex-gap-sm">
              <Link to={`/edit-profile/${this.props.id}`} class="button is-link is-outlined is-title is-small"><i class="fa fa-cog is-size-6 mx-3" aria-hidden="true"></i> Edit Profile</Link>
-             <button class="button is-danger is-outlined is-title is-small"><i class="fa fa-trash mx-3" aria-hidden="true"></i>Delete Account</button>
+             <button class="button is-danger is-outlined is-title is-small"  onClick={this.openModalDelete }><i class="fa fa-trash mx-3" aria-hidden="true" ></i>Delete Account</button>
              </div>
            </div>
            {/* END PROFILE */}
@@ -280,9 +284,18 @@ displayOption = (e) => {
            </div>
            <div className="columns is-multiline">
              {postCard}
+             {/* <UserPostCard /> */}
             </div> 
          </div>
          {/* END COLUMN CONTENT*/}
+         
+
+
+ <div className={this.state.modalDelete ? 'modal is-active' : 'modal'}>
+ <div class="modal-background"></div>
+ <ModalDeleteAccount modalDelete={this.openModalDelete} deleteAccount={this.deleteAccount}/>
+ <button class="modal-close is-large" aria-label="close" onClick={this.openModalDelete }></button>
+ </div>
          </>
       );
   }

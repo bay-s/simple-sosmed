@@ -1,0 +1,1551 @@
+<?php 
+error_reporting (E_ALL ^ E_NOTICE); 
+?>
+<?php session_start();
+
+//echo "<h1> test </h1>";
+//exit();
+
+
+//Display Error
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1); 
+//error_reporting(E_ALL);
+
+
+//$event_id=$_GET['event_id'];
+//$GLOBALS['event_id']=$event_id;
+//echo "<img src='images/logo_SNF_icon.png'>";
+
+if(isset($_GET['event_id'])){
+//    echo $_GET['event_id'];
+}
+//echo 'Index';
+ //echo $_GET['user'];
+  //echo $_GET['mod'];
+   //echo $_GET['content'];
+
+
+$url = $_GET['url'];
+
+
+
+//$url_parts = explode('/', $url);
+//echo "pp $url".$url_parts[1];
+
+
+
+//Maintenece,ceklogin, new user
+$m= $GLOBALS['web_maintenance'];
+
+
+$GLOBALS['url_refere']=$_SERVER['REQUEST_URI'];
+$sesion_user=$_SESSION['id_user'];
+
+ $url_direct=$_GET['url']; 
+ if($url_direct!="" && $sesion_user=="" ){
+   $sesion_user="0";
+ }
+
+if ($sesion_user=="") {
+ header("location:login.php");
+  }
+  
+include "config.php";    
+                               
+include "function.php";
+include "src/log.php"; 
+
+  
+$level_value= base64_dec($_GET["a"]);
+ 
+if($level_value!=""){
+$sql1=mysql_query("SELECT A.id as id_user,A.level,B.`level` as level_user_setting
+      FROM registration_user A LEFT JOIN registration_user_level B ON A.id = B.id_user WHERE A.id LIKE '".$_SESSION['id_user']."' ")  or die(mysql_error());
+      
+// $sql1=mysql_query("SELECT level FROM registration_user  WHERE id LIKE '".$_SESSION['id_user']."' ")  or die(mysql_error());  
+ //$sql1=mysql_query("SELECT level FROM registration_user_level  WHERE id_user LIKE '".$_SESSION['id_user']."' ")  or die(mysql_error());  
+      
+      while($data1=mysql_fetch_array($sql1)){   
+       $level_gabung=$data1['level'].",".$data1['level_user_setting']; 
+        $level_array = explode(",", $level_gabung);          
+        foreach($level_array as $level_isi) {
+        if($level_value==$level_isi){
+              $_SESSION['level']=$level_isi;
+              setcookie("cookielogin[level]",$level_isi , time() + (86400 * 360 * 2));
+              //echo "ll$level_isi";
+          }
+        } 
+      }
+     
+}
+
+
+$username=$_SESSION['username'];
+//$level=$_SESSION['level'];
+$level=$_COOKIE['cookielogin']['user'];
+
+//echo "pp".$_COOKIE['cookielogin']['level'];
+
+$CONFERENCE_NAME=$GLOBALS['conference_name'];
+
+
+
+$sql=mysql_query("SELECT * FROM registration_abstract WHERE id_user LIKE '".$_SESSION['id_user']."' AND trash NOT LIKE 'Y' AND conference_year='".$_SESSION['periode']."' AND id_event='". $GLOBALS['id_event']."'")  or die(mysql_error());
+      $jum=mysql_num_rows($sql);
+      $_SESSION['jum_submit']=$jum;
+      
+      
+?>
+
+<!DOCTYPE html>
+<!--
+Author: Keenthemes
+Product Name: Metronic - Bootstrap 5 HTML, VueJS, React, Angular & Laravel Admin Dashboard Theme
+Purchase: https://1.envato.market/EA4JP
+Website: http://www.keenthemes.com
+Contact: support@keenthemes.com
+Follow: www.twitter.com/keenthemes
+Dribbble: www.dribbble.com/keenthemes
+Like: www.facebook.com/keenthemes
+License: For each use you must have a valid license purchased only from above link in order to legally use the theme for your project.
+-->
+<html lang="en">
+<!--begin::Head-->
+
+<head>
+    <title>
+        <?php echo $GLOBALS['conference_header_email']." ".$GLOBALS['conference_name'];?>
+    </title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <meta charset="utf-8" />
+    <meta name="description"
+        content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 100,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
+    <meta name="keywords"
+        content="Metronic, bootstrap, bootstrap 5, Angular, VueJs, React, Laravel, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title"
+        content="Metronic - Bootstrap 5 HTML, VueJS, React, Angular &amp; Laravel Admin Dashboard Theme" />
+    <meta property="og:url" content="https://keenthemes.com/metronic" />
+    <meta property="og:site_name" content="Keenthemes | Metronic" />
+    <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
+    <link rel="icon" href="<? echo $GLOBALS['logo_favicon'];?>">
+    <!--begin::Fonts-->
+    <!--<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />-->
+        
+   <link href="css2/progress-tracker.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <!--end::Global Stylesheets Bundle-->
+
+    <link href="vendors/form-helpers/css/bootstrap-formhelpers.min.css" rel="stylesheet">
+    <script type="text/javascript" src="vendors/mask/jquery.maskedinput.min.js"></script>
+    <link href="vendors/select/bootstrap-select.min.css" rel="stylesheet">
+    <link href="vendors/tags/css/bootstrap-tags.css" rel="stylesheet">
+    <!--<link href="css/custom.css" rel="stylesheet">-->
+    
+    
+       
+    <link href="css/forms.css" rel="stylesheet">
+  <link href="css2/custom-radio.css" rel="stylesheet">
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+<!--CSS DATATABLES-->
+   <link href="css2/datatables.bundle.css" rel="stylesheet" type="text/css" />	
+
+  
+       <link rel="stylesheet" href="css2/jquery-ui.css">
+      <!--<link href="css/progress-wizard.min.css" rel="stylesheet" type="text/css" />	-->
+<!-- CSS -->
+<!--<link href="https://cdn.jsdelivr.net/npm/smartwizard@6/dist/css/smart_wizard_all.min.css" rel="stylesheet" type="text/css" />-->
+    <!--<link href="vendors/datatables/dataTables.bootstrap.css" rel="stylesheet" media="screen">-->
+
+    <!--<link href="vendors/datatables/dataTables.bootstrap.css" rel="stylesheet" media="screen">-->
+
+
+   <script src="http://code.jquery.com/jquery-2.2.1.min.js"></script>
+        <!--JQUERY SMART WIZARD-->
+
+    <style type="text/css">
+    
+.putars{
+    transform:rotateY(-90deg);
+    transition:500ms;
+}
+
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            background-color: #fff;
+        }
+
+        .preloader .loading {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            font: 14px arial;
+        }
+        
+        /* TRACKER */
+  /*code {*/
+  /*      font-family: Monaco, Consolas, "Lucida Console", monospace;*/
+  /*      background-color: #f1f1f1;*/
+  /*      font-size: 70%;*/
+  /*      padding: 4px 8px;*/
+  /*      border-radius: 4px;*/
+  /*      border: 1px solid #ccc;*/
+  /*  }*/
+  /*  .subdued {*/
+  /*      font-size: 80%;*/
+  /*      opacity: 0.6;*/
+  /*  }*/
+
+    /* A totally custom override */
+
+  /*  .progress-indicator.custom-complex {*/
+  /*      background-color: #f1f1f1;*/
+  /*      padding: 10px 5px;*/
+  /*      border: 1px solid #ddd;*/
+  /*      border-radius: 10px;*/
+  /*  }*/
+  /*  .progress-indicator.custom-complex > li .bubble {*/
+  /*      height: 12px;*/
+  /*      width: 99%;*/
+  /*      border-radius: 2px;*/
+  /*      box-shadow: inset -5px 0 12px rgba(0, 0, 0, 0.2);*/
+  /*  }*/
+  /*  .progress-indicator.custom-complex > li .bubble:before,*/
+  /*  .progress-indicator.custom-complex > li .bubble:after {*/
+  /*      display: none;*/
+  /*  }*/
+
+    /* Demo for vertical bars */
+
+  /*  .progress-indicator.stepped.stacked {*/
+  /*      width: 48%;*/
+  /*      display: inline-block;*/
+  /*  }*/
+  /*  .progress-indicator.stepped.stacked > li {*/
+  /*      height: 150px;*/
+  /*  }*/
+  /*  .progress-indicator.stepped.stacked > li .bubble {*/
+  /*      padding: 0.1em;*/
+  /*  }*/
+  /*  .progress-indicator.stepped.stacked > li:first-of-type .bubble {*/
+  /*      padding: 0.5em;*/
+  /*  }*/
+  /*  .progress-indicator.stepped.stacked > li:last-of-type .bubble {*/
+  /*      padding: 0em;*/
+  /*  }*/
+
+    /* Nocenter */
+
+  /*  .progress-indicator.nocenter.stacked > li {*/
+  /*      min-height: 100px;*/
+  /*  }*/
+  /*  .progress-indicator.nocenter.stacked > li span {*/
+  /*      display: block;*/
+  /*  }*/
+
+    /* Demo for Timeline vertical bars */
+
+  /*  #timeline-speaker-example {*/
+  /*      color:black;*/
+  /*      padding: 1em 2em;*/
+  /*      text-align: center;*/
+  /*      border-radius: 10px;*/
+  /*  }*/
+  /*  #timeline-speaker-example .progress-indicator {*/
+  /*      width: 100%;*/
+  /*  }*/
+  /*  #timeline-speaker-example .bubble {*/
+  /*      padding: 0;*/
+  /*  }*/
+  /*  #timeline-speaker-example .progress-indicator > li {*/
+  /*      color: white;*/
+  /*  }*/
+  /*  #timeline-speaker-example .time {*/
+  /*      position: relative;*/
+  /*      left: -80px;*/
+  /*      top: 30px;*/
+  /*      font-size: 130%;*/
+  /*      text-align: right;*/
+  /*      opacity: 0.6;*/
+  /*      font-weight: 100;*/
+  /*  }*/
+  /*  #timeline-speaker-example .current-time .time {*/
+  /*      font-size: 170%;*/
+  /*      opacity: 1;*/
+  /*  }*/
+  /*  #timeline-speaker-example .stacked-text {*/
+  /*      top: -37px;*/
+  /*      left: -50px;*/
+  /*  }*/
+  /*  #timeline-speaker-example .subdued {*/
+  /*      font-size: 10px;*/
+  /*      display: block;*/
+  /*  }*/
+  /*  #timeline-speaker-example > li:hover {*/
+  /*      color: #ff3d54;*/
+  /*  }*/
+  /*  #timeline-speaker-example > li:hover .bubble,*/
+  /*  #timeline-speaker-example > li:hover .bubble:before,*/
+  /*  #timeline-speaker-example > li:hover .bubble:after {*/
+  /*      background-color: #ff3d54;*/
+  /*  }*/
+  /*  #timeline-speaker-example .current-time .sub-info {*/
+  /*      font-size: 60%;*/
+  /*      line-height: 0.2em;*/
+  /*      text-transform: capitalize;*/
+  /*      color: #6988be;*/
+  /*  }*/
+  /*  @media handheld, screen and (max-width: 400px) {*/
+  /*      .container {*/
+  /*          margin: 0;*/
+  /*          width: 100%;*/
+  /*      }*/
+  /*      .progress-indicator.stacked {*/
+  /*          display: block;*/
+  /*          width: 100%;*/
+  /*      }*/
+  /*      .progress-indicator.stacked > li {*/
+  /*          height: 80px;*/
+  /*      }*/
+  /*  }*/
+    </style>
+    <script>
+        $(document).ready(function () {
+            $(".preloader").fadeOut();
+        })
+    </script>
+
+
+</head>
+
+<!--end::Head-->
+<!--begin::Body-->
+
+<body data-kt-name="metronic" id="kt_body" class="header-tablet-and-mobile-fixed aside-enabled">
+
+    <!-- LOADER -->
+    <div class="preloader">
+        <div class="loading">
+            <img src="images/wait.gif" width="100%">
+            <br>
+            <center>...</center>
+        </div>
+    </div>
+    <!-- LOADER -->
+
+
+    <!--begin::Main-->
+    <!--begin::Root-->
+    <div class="d-flex flex-column flex-root">
+        <!--begin::Page-->
+        <div class="page d-flex flex-row flex-column-fluid">
+            <!--begin::Aside-->
+<!--============================================================================
+                                     START SIDEBAR
+==============================================================================-->
+            <div id="kt_aside" class="aside" data-kt-drawer="true" data-kt-drawer-name="aside"
+                data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
+                data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start"
+                data-kt-drawer-toggle="#kt_aside_mobile_toggle">
+                <!--begin::Aside Toolbarl-->
+                <div class="aside-toolbar flex-column-auto" id="kt_aside_toolbar">
+                    <!--begin::Aside user-->
+                    <!--begin::User-->
+                    <div class="aside-user d-flex align-items-sm-center justify-content-center py-5">
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-50px ms-auto">
+                            <img src="assets/media/avatar/300-1.jpg" class="mx-auto" alt="" />
+                        </div>
+                        <!--end::Symbol-->
+                        <!--begin::Wrapper-->
+                        <div class="aside-user-info flex-row-fluid flex-wrap ms-5">
+                            <!--begin::Section-->
+                            <div class="d-flex">
+                                <!--begin::Info-->
+                                <div class="flex-grow-1 me-2">
+                                    <!--begin::Username-->
+                                    <a href="#" class="text-white text-hover-primary fs-2 fw-bold">
+                                        <? echo $_SESSION['name'];?>
+                                    </a>
+                                    <span class="text-muted  d-block fs-7 mb-1">
+                                        <? echo $_SESSION['email'];?>
+                                    </span>
+                                    <!--end::Username-->
+                                </div>
+                                <!--end::Info-->
+                                <!--begin::User menu-->
+
+                            </div>
+                            <!--end::Section-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <!--end::User-->
+
+                    <!--end::Aside user-->
+                </div>
+                <!--end::Aside Toolbarl-->
+                <!--begin::Aside menu-->
+                <div class="aside-menu flex-column-fluid">
+                    <!--begin::Aside Menu-->
+                    <div class="hover-scroll-overlay-y px-2 my-5 my-lg-5" id="kt_aside_menu_wrapper"
+                        data-kt-scroll="true" data-kt-scroll-height="auto"
+                        data-kt-scroll-dependencies="{default: '#kt_aside_toolbar, #kt_aside_footer', lg: '#kt_header, #kt_aside_toolbar, #kt_aside_footer'}"
+                        data-kt-scroll-wrappers="#kt_aside_menu" data-kt-scroll-offset="5px">
+
+                        <? 
+       $current_year=date("Y");
+       
+       if($_SESSION['periode']==$current_year){
+        $css_btn_tahun=" btn-success ";
+       }else{
+         $css_btn_tahun=" btn-danger ";
+       }
+       
+       ?>
+                        <!-- DROPDOWN YEAR -->
+                        <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 my-5"
+                            id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <!--begin:Menu link-->
+                                <!--begin:Menu item-->
+                                <div class="btn-group d-flex justify-content-center">
+                                    <button type="button" class='btn <? echo $css_btn_tahun;?> dropdown-toggle'
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        <? echo $_SESSION['periode'];?>
+                                        <span class='caret'></span>
+                                    </button>
+                                    <ul class="dropdown-menu w-100">
+                                        <li><a href="index.php?year=2023" class="dropdown-item">2023</a></li>
+                                        <li><a href="index.php?year=2022" class="dropdown-item">2022</a></li>
+                                        <li><a href="index.php?year=2021" class="dropdown-item">2021</a></li>
+                                    </ul>
+                                </div>
+                                <!--end:Menu link-->
+                            </div>
+                            <!--end:Menu item-->
+                        </div>
+                        <!-- END DROP DOWN YEAR -->
+                        
+ <!-- =====================================
+        START MENU HOME
+=========================================-->
+                        <ul class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fs-4 px-3"
+                            id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <li class="menu-item d-flex gap-1 align-items-center">
+                                <!--begin:Menu item-->
+                                <i class="fas fa-home text-white fs-3"></i>
+                                <a href="index.php" class="menu-link d-flex gap-5 align-items-center fs-5">
+                                    Home
+                                </a>
+                                <!--end:Menu link-->
+                            </li>
+                            <?
+if($_SESSION['level']=='author'){ 
+ ?>
+                            <!--end:Menu item-->
+
+                            <li class="menu-item d-flex gap-1 align-items-center">
+                                <!--begin:Menu item-->
+               <i class="fas fa-copy text-white fs-3"></i>
+                                <a href="?mod=author&content=abstract_list"
+                                    class="menu-link d-flex gap-5 align-items-center fs-5">Submission
+                                    <? echo "<span class='badge bg-primary'>$jum</span>";?></span>
+                                </a>
+                                <!--end:Menu link-->
+                            </li>
+
+                            <li class="menu-item d-flex gap-1 align-items-center">
+                                <!--begin:Menu item-->
+                                <i class="fas fa-user text-white fs-3"></i>
+                                <a href="?mod=author&content=person_list"
+                                    class="menu-link d-flex gap-5 align-items-center fs-5">
+                                    Co-Author
+                                </a>
+                                <!--end:Menu link-->
+                            </li>
+
+                            <li class="menu-item d-flex gap-1 align-items-center">
+                                <!--begin:Menu link-->
+                           <i class="fas fa-tag text-white fs-3"></i>
+                                <a href="?mod=author&content=payment_cekout"
+                                    class="menu-link d-flex gap-5 align-items-center fs-5">
+                                    Payment
+                                </a>
+                                <!--end:Menu link-->
+                            </li>
+                            
+                            
+                            <li data-kt-menu-trigger="click" class="menu-item menu-accordion p-0 m-0">
+                                    <span class="menu-link">
+                                        <i class="fas fa-clock text-white fs-4"></i>
+                                    <span class="menu-title ms-3 fs-5">Template</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
+                                      <ul class="menu-sub menu-sub-accordion">
+                                           <li class="menu-item d-flex align-items-center p-2">
+                                                  <i class="fas fa-tag text-white fs-3"></i>
+                                <a href="#"
+                                    class="menu-link fs-6">
+                                IProceeding Template
+
+                                </a>
+                                           </li>
+                                <!--end:Menu link-->
+                            </ul>
+                            </li>
+          
+                            <?}elseif(stripos($_SESSION['level'],'reviewer')!== false) {
+
+                  $jum_rev_abstract=mysql_num_rows(mysql_query("SELECT registration_abstract.id,title
+                              FROM
+                              registration_abstract
+                              WHERE  registration_abstract.conference_year='".$_SESSION['periode']."' AND id_event='". $GLOBALS['id_event']."' AND registration_abstract.reviewer='$sesion_user' AND trash NOT LIKE 'Y'                  GROUP BY id  ORDER BY id DESC 
+                               ") );
+                 $jum_rev_fullpaper=mysql_num_rows(mysql_query("SELECT 
+                              Max(registration_fullpaper.id) AS id_fullpaper
+                              FROM registration_fullpaper
+                        			INNER JOIN registration_abstract ON registration_fullpaper.id_abstract = registration_abstract.id
+                        			WHERE  registration_abstract.conference_year='".$_SESSION['periode']."' AND id_event='". $GLOBALS['id_event']."'  AND reviewer_fullpaper='$sesion_user' AND trash NOT LIKE 'Y'
+                              GROUP BY id_abstract  ORDER BY id_fullpaper DESC  ") );
+                 
+                 ?>
+                 
+<!-- ===========================
+SUB MENU INNER
+==========================-->
+				<div class="submenu"
+                            id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <!--begin:Menu link-->
+                                <span class="menu-link">
+                                    <span class="menu-icon">
+             <i class="fas fa-copy text-white fs-3"></i>
+                                    </span>
+                                    <span class="menu-title fs-5">Review</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
+                                <!--end:Menu link-->
+                                <!--begin:Menu sub-->
+                                <ul class="menu-sub menu-sub-accordion p-3">
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link" href="?mod=reviewer&content=abstract_list">
+                                  Abstract <? echo "<span class='badge bg-primary ms-5'>$jum_rev_abstract</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link fs-5" href="?mod=reviewer&content=fullpaper_list">
+										Fullpaper <? echo "<span class='badge bg-primary ms-5'>$jum_rev_fullpaper</span>";?> 
+                                        </a>
+                                        <!--end:Menu link-->
+
+                                    </li>
+                                    <!--end:Menu item-->
+                                </ul>
+                                <!-- END MENU SUB -->
+                            </div>
+                            <!-- END ACCORDION CONTAINER -->
+                        </div>
+<!--======================================
+END SUB MENU INNER
+ ===============================-->
+
+ <?}elseif($_SESSION['level']=='participant'){?>  
+               <!--  <li><a href="?mod=participant&content=va_checkout"><i class="glyphicon glyphicon-shopping-cart"></i> Payment</a></li>-->
+                 <!--sementara manual dulu, edit pada Sept 2021 -->
+        
+				 <li class="menu-item d-flex gap-1 align-items-center">
+                                <!--begin:Menu item-->
+								<i class="fas fa-cart-shopping text-white fs-3"></i>
+                                <a href="?mod=participant&content=payment" class="menu-link d-flex gap-5 align-items-center fs-5">
+								Payment
+                                </a>
+                                <!--end:Menu link-->
+                 </li>
+                <?}elseif($_SESSION['level']=='admin'){
+                    $sql=mysql_query("SELECT * FROM registration_user  ")  or die(mysql_error());
+                    $jum=mysql_num_rows($sql);?> 
+           			<div class="submenu"
+                            id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <!--begin:Menu link-->
+                                <div class="menu-link d-flex gap-5">
+								    <i class="fas fa-user text-white fs-4"></i>
+                                    <span class="menu-title mt-1 fs-5">User</span>
+                                    <span class="menu-arrow"></span>
+                                </div>
+      <!--begin:Menu sub-->
+	  <ul class="menu-sub menu-sub-accordion p-3">
+                    <li class="menu-item d-flex gap-1 align-items-center">
+						 <a class="menu-link fs-6" href="?mod=admin&content=user_list">
+						 User List
+                          </a>
+					 </li>
+					 <li class="menu-item d-flex gap-1 align-items-center">
+						 <a class="menu-link fs-6" href="?mod=admin&content=user_list_block">
+						 User Blocked
+                          </a>
+					</li>
+				</ul>
+				</div>
+			</div>
+                <?}elseif($_SESSION['level']=='distributor'){
+                      $sql=mysql_query("SELECT * FROM registration_abstract WHERE reviewer='' AND trash NOT LIKE 'Y' AND conference_year='".$_SESSION['periode']."' AND id_event='". $GLOBALS['id_event']."' ")  or die(mysql_error());
+                    $jum=mysql_num_rows($sql);
+                    $jum_all=mysql_num_rows(mysql_query("SELECT * FROM registration_abstract WHERE trash NOT LIKE 'Y' AND conference_year='".$_SESSION['periode']."' AND id_event='". $GLOBALS['id_event']."'  ") );
+                   // $jum_all=($sql2); 
+                    
+                    $sql_reviwed=mysql_query("SELECT * FROM registration_abstract WHERE loa NOT LIKE '' AND trash NOT LIKE 'Y' AND conference_year='".$_SESSION['periode']."' AND id_event='". $GLOBALS['id_event']."' ")  or die(mysql_error());
+                    $jum_reviwed=mysql_num_rows($sql_reviwed);
+                    
+                    
+                    $sql=mysql_query("SELECT A.id,B.id,A.user,A.title FROM registration_abstract  A
+                                      INNER JOIN registration_fullpaper B ON B.id_abstract=A.id
+                                      WHERE A.reviewer NOT LIKE '' AND A.reviewer_fullpaper='' AND B.file NOT LIKE '' AND A.trash NOT LIKE 'Y' AND  A.conference_year  ='".$_SESSION['periode']."'  AND id_event='". $GLOBALS['id_event']."' 
+                                      GROUP BY B.id_abstract")  or die(mysql_error());
+                                      
+                                      
+                    $jum_full=mysql_num_rows($sql);
+                    $sql2=mysql_query("SELECT * FROM registration_abstract WHERE  fullpaper NOT LIKE '' AND  trash NOT LIKE 'Y' ") or die(mysql_error());
+                    $jum_full_all=mysql_num_rows($sql2); 
+                    
+                    $sql_rev=mysql_query("SELECT
+                        registration_fullpaper.id,
+                        registration_fullpaper.id_abstract,
+                        registration_fullpaper.`user`,
+                        registration_fullpaper.date,
+                        registration_fullpaper.time,
+                        registration_fullpaper.ket,
+                        Max(registration_fullpaper.id) AS id_fullpaper,
+                        registration_fullpaper.file
+                        FROM
+                        registration_fullpaper
+                        INNER JOIN registration_fullpaper_review ON registration_fullpaper.id_abstract = registration_fullpaper_review.id_abstract
+                        INNER JOIN registration_abstract ON registration_fullpaper_review.id_abstract = registration_abstract.id
+                        WHERE ket = 'revise' AND registration_abstract.conference_year='".$_SESSION['periode']."' AND id_event='". $GLOBALS['id_event']."' 
+                        GROUP BY registration_fullpaper.id_abstract
+                        ORDER BY id_fullpaper DESC
+                  ")  or die(mysql_error());
+                  $jum_full_rev=mysql_num_rows($sql_rev); 
+                    
+                  
+                  $jum_fullp_all=mysql_num_rows(mysql_query(" SELECT MAX(registration_fullpaper.id) as id_fullpaper 
+                        FROM registration_fullpaper
+                  			INNER JOIN registration_abstract ON registration_fullpaper.id_abstract = registration_abstract.id
+                        WHERE  registration_abstract.conference_year='".$_SESSION['periode']."' AND id_event='". $GLOBALS['id_event']."'  AND trash NOT LIKE 'Y'
+                        GROUP BY registration_fullpaper.id_abstract  ORDER BY id_fullpaper DESC"));
+                  
+                  $sql_full_accepted=mysql_query("SELECT
+            registration_fullpaper.id,
+            registration_fullpaper.id_abstract,
+            registration_fullpaper.`user`,
+            registration_fullpaper.date,
+            registration_fullpaper.time,
+            registration_fullpaper.ket,
+            Max(registration_fullpaper.id) AS id_fullpaper,
+            registration_fullpaper.file
+            FROM
+            registration_fullpaper
+            INNER JOIN registration_fullpaper_review ON registration_fullpaper.id_abstract = registration_fullpaper_review.id_abstract
+            INNER JOIN registration_abstract ON registration_fullpaper_review.id_abstract = registration_abstract.id
+            WHERE registration_fullpaper_review.status = 'accepted' AND registration_abstract.conference_year='".$_SESSION['periode']."' AND id_event='". $GLOBALS['id_event']."' 
+            GROUP BY registration_fullpaper.id_abstract
+            ORDER BY id_fullpaper DESC
+      ") or die(mysql_error());
+          $jum_full_accepted=mysql_num_rows($sql_full_accepted);         
+                    
+                    ?> 
+                        <!--======================================
+	ABSTRACT LIST
+ ===============================-->
+ <div class="submenu" id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <!--begin:Menu link-->
+                            <div class="menu-link d-flex gap-5 align-items-center">
+								 <i class="fas fa-book text-white fs-4"></i>
+                                    <span class="menu-title mt-1 fs-5">Abstract</span>
+                                    <span class="menu-arrow"></span>
+                              </div>
+                                <!--end:Menu link-->
+                                <!--begin:Menu sub-->
+                                <ul class="menu-sub menu-sub-accordion">
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link fs-6" href="?mod=distributor&content=abstract_list">
+                                            New Abstract
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center fs-6">
+                                        <!--begin:Menu link-->
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link" href="?mod=distributor&content=abstract_list_all">
+                                            Reviewed Abstract
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum_reviwed</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <a class="menu-link fs-6" href="?mod=distributor&content=abstract_list">
+                                            All Abstract
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum_all</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+
+                                        <a class="menu-link" href="?mod=distributor&content=abstract_list_trash">
+                                                                                   <i class="fas fa-trash me-5 fs-5"></i>
+                                            Trash
+                                        </a>
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+
+                                </ul>
+                                <!-- END MENU SUB -->
+                            </div>
+                            <!-- END ACCORDION CONTAINER -->
+                        </div>
+                        
+                        <!--END ABSTRACT SUB MENU-->
+                        
+                         <div class="submenu" id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <!--begin:Menu link-->
+                            <div class="menu-link d-flex gap-5 align-items-center">
+								 <i class="fas fa-book text-white fs-4"></i>
+                                    <span class="menu-title mt-1 fs-5">Fullpaper</span>
+                                    <span class="menu-arrow"></span>
+                              </div>
+                                <!--end:Menu link-->
+                                <!--begin:Menu sub-->
+                                <ul class="menu-sub menu-sub-accordion">
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link fs-6" href='?mod=distributor&content=fullpaper_list'>
+                                                  New Fullpaper 
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum_full</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center fs-6">
+                                        <!--begin:Menu link-->
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link" href="?mod=distributor&content=abstract_list_all">
+                                      All Abstract 
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum_full_all</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <a class="menu-link fs-6" href="?mod=distributor&content=fullpaper_revised_list_all">
+                                       Revised  
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum_full_rev</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                                     <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <a class="menu-link fs-6" href="?mod=distributor&content=fullpaper_list_accepted">
+                                       Accepted
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum_full_acceptedv</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                              <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <a class="menu-link fs-6" href="?mod=distributor&content=fullpaper_list_all">
+                              All Fullpaper 
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum_fullp_all</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                              <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+
+                                        <a class="menu-link" href="?mod=distributor&content=fullpaper_list_trash">
+                                                                                   <i class="fas fa-trash me-5 fs-5"></i>
+                                            Trash
+                                        </a>
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+
+                                </ul>
+                                <!-- END MENU SUB -->
+                            </div>
+                            <!-- END ACCORDION CONTAINER -->
+                        </div>
+  <!--======================================
+	END ABSTRACT & fullpaper LIST
+ ===============================-->
+
+<?}elseif($_SESSION['level']=='treasurer'){?> 
+
+					 <div class="submenu"
+                            id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <!--begin:Menu link-->
+                                <div class="menu-link d-flex align-items-center gap-5">
+								   <i class="fas fa-user text-white fs-4"></i>
+                                    <span class="menu-title mt-1"><? echo ucwords($_SESSION['level']);?></span>
+                                    <span class="menu-arrow"></span>
+                                </div>
+      <!--begin:Menu sub-->
+	  <ul class="menu-sub menu-sub-accordion p-3">
+                    <li class="menu-item d-flex gap-1 align-items-center">
+					<a class="menu-link fs-5" href="?mod=treasurer&content=transaction_list">
+						 List Receipt 
+                          </a>
+					 </li>
+					 <li class="menu-item d-flex gap-1 align-items-center">
+					 <a class="menu-link fs-5" href="?mod=treasurer&content=transaction_list">
+						 Transaction 
+                          </a>
+					</li>
+				</ul>
+			</div>
+</ul>		 
+			
+         
+				<?}?>
+ <!-- ===================================================
+	END MENU HOME
+=====================================================-->
+
+                    </div>
+                    <!--end::Aside Menu-->
+                </div>
+                <!--end::Aside menu-->
+
+            </div>
+            <!--end::Aside-->
+
+  <!--============================================================================= 
+                                       END SIDEBAR
+==============================================================================-->
+
+
+            <!--begin::Wrapper-->
+            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+                <!--begin::Header-->
+                <!--============================================================================= 
+                                   START HEADER
+==============================================================================-->
+                <div id="kt_header" style="background-color:<? echo $GLOBALS['header_color']; ?>;"
+                    class="header align-items-stretch shadow">
+                    <!--begin::Brand-->
+                    <div class="header-brand">
+                        <!--begin::Logo-->
+                        <a href="#">
+                            <img alt="Logo" src="images/cropped-LogoICHELSS-1.png" class="h-25px h-lg-25px" />
+                        </a>
+                        <!--end::Logo-->
+                        <!--begin::Aside minimize-->
+
+                        <!--begin::Aside toggle-->
+                        <div class="d-flex align-items-center d-lg-none ms-n3 me-1" title="Show aside menu">
+                            <div class="btn btn-icon btn-active-color-primary w-30px h-30px battons"
+                                id="kt_aside_mobile_toggle">
+                                <!--begin::Svg Icon | path: icons/duotune/abstract/abs015.svg-->
+                                <!--<span class="svg-icon svg-icon-1">-->
+                                <!--    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"-->
+                                <!--        xmlns="http://www.w3.org/2000/svg">-->
+                                <!--        <path-->
+                                <!--            d="M21 7H3C2.4 7 2 6.6 2 6V4C2 3.4 2.4 3 3 3H21C21.6 3 22 3.4 22 4V6C22 6.6 21.6 7 21 7Z"-->
+                                <!--            fill="currentColor" />-->
+                                <!--        <path opacity="0.3"-->
+                                <!--            d="M21 14H3C2.4 14 2 13.6 2 13V11C2 10.4 2.4 10 3 10H21C21.6 10 22 10.4 22 11V13C22 13.6 21.6 14 21 14ZM22 20V18C22 17.4 21.6 17 21 17H3C2.4 17 2 17.4 2 18V20C2 20.6 2.4 21 3 21H21C21.6 21 22 20.6 22 20Z"-->
+                                <!--            fill="currentColor" />-->
+                                <!--    </svg>-->
+                                <!--</span>-->
+                                <!--end::Svg Icon-->
+                               <h3> <i class="fas fa-bars fw-bold fs-1 text-white"></i></h3>
+                            </div>
+                        </div>
+                        <!--end::Aside toggle-->
+                    </div>
+                    <!--end::Brand-->
+
+                    <!--begin::Toolbar-->
+                    <div class="toolbar d-flex align-items-stretch">
+                        <!--begin::Toolbar container-->
+                        <div
+                            class="container-fluid py-6 py-lg-0 d-flex flex-column flex-lg-row align-items-lg-stretch justify-content-lg-between">
+                            <!--begin::Page title-->
+                            <div class="page-title d-flex justify-content-center flex-column me-5">
+                                <h1 class="d-flex flex-column text-dark fw-bold fs-1 mb-0"><a href="index.php">
+                                        <? echo  $CONFERENCE_NAME; ?>
+                                    </a></h1>
+                            </div>
+                            <!--end::Page title-->
+                            <!--begin::Quick links-->
+                            <div class="d-flex align-items-center px-5 gap-5">
+                                <!--begin::Menu wrapper-->
+                                <div class="dropdown">
+                                    <a class="btn btn-light dropdown-toggle d-flex align-items-center gap-3"
+                                        href="#" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <span class="">
+                                            <? echo $_SESSION['name'];?>
+                                        </span>
+                                        <i class="fas fa-user text-dark fw-bold fs-2"></i>
+                                    </a>
+                                    <ul class="dropdown-menu ms-5" aria-labelledby="dropdownMenuLink">
+                                        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                                    </ul>
+                                </div>
+                                <!--end::Menu wrapper-->
+                            </div>
+                        </div>
+                        <!--end::Toolbar container-->
+                    </div>
+
+                </div>
+                <!-- END HEADER CONTAINER -->
+                <!-- 
+    ======================================
+                 END HEADER
+    =======================================
+ -->
+
+                <div class="container mt-5 py-5 d-flex flex-column gap-2">
+
+ <?php 
+      if($url_direct==""){
+      //echo "po$url_direct";
+          include "content.php";
+       }
+      //include "content.php";
+      
+      ?>
+                </div>
+
+
+                <?
+//     echo "c".$_COOKIE['cookielogin']['user'];
+     //echo "t_".$_COOKIE["TestCookie"];
+        mysql_close();
+      
+      ?>
+
+            </div>
+            <!-- END TABLE CONTAINER -->
+
+
+        </div>
+        <!--end::Wrapper-->
+    </div>
+    <!--end::Page-->
+    </div>
+    <!--end::Root-->
+
+
+
+    <!--begin::Footer-->
+    <div class="footer  d-flex flex-lg-column py-4 shadow" id="kt_footer">
+        <!--begin::Container-->
+        <div class="container-fluid d-flex flex-column flex-md-row align-items-center justify-content-between">
+            <!--begin::Copyright-->
+            <div class="text-dark d-flex justify-content-center order-2 order-md-1 align-self-center mx-auto">
+                <span class="text-muted fw-semibold me-1">20222</span>
+                <h3 class="fw-bold fs-4 text-dark">
+                    <? echo  $CONFERENCE_NAME; ?>
+                </h3>
+            </div>
+            <!--end::Copyright-->
+            <!--begin::Menu-->
+            <ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
+
+                <li class="menu-item">
+                    <a href="#" target="_blank" class="menu-link px-2">@Copyright 2022</a>
+                </li>
+                <li class="menu-item">
+                    <a href="logout.php" class="menu-link px-2">Logout</a>
+                </li>
+            </ul>
+            <!--end::Menu-->
+        </div>
+        <!--end::Container-->
+    </div>
+    <!--end::Footer-->
+
+
+    <!-- MODALS -->
+
+    <div class="modal" id="formModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class=" modal-dialog modal-lg modal-dialog-centered modals">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Complete your Account Information</h5>
+                    <button type="button" class="btn-close text-dark" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- START FORM -->
+                    <form class="p-2">
+
+                        <div class="mb-3">
+                            <label for="" class="form-label">Name in Certificate*</label>
+                            <input class="form-control px-2" type="text" placeholder="Default input"
+                                aria-label="default input example">
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Mobile Phone*</label>
+                            <input class="form-control px-2" type="number" placeholder="Default input"
+                                aria-label="default input example">
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Affiliation*</label>
+                            <input class="form-control px-2" type="text" placeholder="Default input"
+                                aria-label="default input example">
+                        </div>
+                        <div class="mb-3">
+                            <label for="" class="form-label">Faculty*</label>
+                            <input class="form-control px-2" type="text" placeholder="Default input"
+                                aria-label="default input example">
+                        </div>
+
+                        <button type="submit" class="btn btn-info mt-3">Submit</button>
+                    </form>
+                    <!-- END FORM -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info ">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END MODALS -->
+
+
+
+<!--START NAVBAR BOTTOM-->
+
+<div class='navbar-bottom bg-dark border-5 py-5'>
+    <div class='container-xl'>
+ <ul class="menu justify-content-center menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500 fs-4 px-3" id="#kt_aside_menu" data-kt-menu="true">
+	<!--begin:Menu item-->
+	<li class="menu-item d-flex gap-1 align-items-center">
+		<!--begin:Menu item-->
+		<a href="index.php" class="menu-link d-flex gap-5 align-items-center ">
+		<i class="fas fa-home text-white fs-2"></i>
+		</a>
+		<!--end:Menu link-->
+	</li>
+	<!--end:Menu item-->
+
+<?php
+if($_SESSION['level']=='author'){ 
+ ?>
+	<li class="menu-item d-flex gap-1 align-items-center">
+		<!--begin:Menu item-->
+		<a href="?mod=author&amp;content=abstract_list" class="menu-link d-flex gap-5 align-items-center ">
+		    <i class="fas fa-copy text-white fs-3"></i>
+			<span class="badge bg-primary">3</span>
+		</a>
+		<!--end:Menu link-->
+	</li>
+
+	<li class="menu-item d-flex gap-1 align-items-center">
+		<!--begin:Menu item-->
+		<a href="?mod=author&amp;content=person_list" class="menu-link d-flex gap-5 align-items-center ">
+	<i class="fas fa-user text-white fs-3"></i>
+		</a>
+		<!--end:Menu link-->
+	</li>
+
+	<li class="menu-item d-flex gap-1 align-items-center">
+		<!--begin:Menu link-->
+		<a href="?mod=author&amp;content=payment_cekout" class="menu-link d-flex gap-5 align-items-center ">
+  <i class="fas fa-tag text-white fs-3"></i>
+		</a>
+		<!--end:Menu link-->
+	</li>
+	
+	
+	<li data-kt-menu-trigger="click" class="menu-item menu-accordion p-0 mt-1 hover">
+			<span class="menu-link">
+			<i class="fas fa-clock text-white fs-4"></i>
+			<span class="menu-arrow"></span>
+		</span>
+			  <ul class="menu-sub menu-sub-accordion" kt-hidden-height="52" style="">
+				   <li class="menu-item d-flex align-items-center p-2 ">
+		<a href="#" class="menu-link text-white">
+	  <i class="fas fa-tag text-white fs-3"></i>
+		</a>
+				   </li>
+		<!--end:Menu link-->
+	</ul>
+	</li>
+
+
+<!-- ===========================
+SUB MENU INNER
+==========================-->
+                            <?}elseif(stripos($_SESSION['level'],'reviewer')!== false) {  ?>
+				<div class="submenu"
+                            id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <!--begin:Menu link-->
+                                <span class="menu-link">
+                                    <span class="menu-icon">
+             <i class="fas fa-copy text-white fs-3"></i>
+                                    </span>
+                                    <span class="menu-title text-white">Review</span>
+                                    <span class="menu-arrow"></span>
+                                </span>
+                                <!--end:Menu link-->
+                                <!--begin:Menu sub-->
+                                <ul class="menu-sub menu-sub-accordion p-3">
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link text-white" href="?mod=reviewer&content=abstract_list">
+                                  Abstract <? echo "<span class='badge bg-primary ms-5'>$jum_rev_abstract</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link text-white" href="?mod=reviewer&content=fullpaper_list">
+										Fullpaper <? echo "<span class='badge bg-primary ms-5'>$jum_rev_fullpaper</span>";?> 
+                                        </a>
+                                        <!--end:Menu link-->
+
+                                    </li>
+                                    <!--end:Menu item-->
+                                </ul>
+                                <!-- END MENU SUB -->
+                            </div>
+                            <!-- END ACCORDION CONTAINER -->
+                        </div>
+<!--======================================
+END SUB MENU INNER
+ ===============================-->
+
+        
+ <?}elseif($_SESSION['level']=='participant'){?>  
+               <!--  <li><a href="?mod=participant&content=va_checkout"><i class="glyphicon glyphicon-shopping-cart"></i> Payment</a></li>-->
+                 <!--sementara manual dulu, edit pada Sept 2021 -->
+        
+				 <li class="menu-item d-flex gap-1 align-items-center">
+                                <!--begin:Menu item-->
+								<i class="fas fa-cart-shopping text-white fs-2"></i>
+                                <a href="?mod=participant&content=payment" class="menu-link text-white d-flex gap-5 align-items-center ">
+								Payment
+                                </a>
+                                <!--end:Menu link-->
+                 </li>
+            <?}elseif($_SESSION['level']=='admin'){ ?> 
+           			<div class="submenu"
+                            id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <!--begin:Menu link-->
+                                <div class="menu-link d-flex gap-5">
+								    <i class="fas fa-user text-white fs-4"></i>
+                                    <span class="menu-title mt-1 text-white">User</span>
+                                    <span class="menu-arrow"></span>
+                                </div>
+      <!--begin:Menu sub-->
+	  <ul class="menu-sub menu-sub-accordion p-3">
+                    <li class="menu-item d-flex gap-1 align-items-center">
+						 <a class="menu-link text-white" href="?mod=admin&content=user_list">
+						 User List
+                          </a>
+					 </li>
+					 <li class="menu-item d-flex gap-1 align-items-center">
+						 <a class="menu-link text-white" href="?mod=admin&content=user_list_block">
+						 User Blocked
+                          </a>
+					</li>
+				</ul>
+				</div>
+			</div>
+<?}elseif($_SESSION['level']=='distributor'){ ?> 
+
+ <!--======================================
+	ABSTRACT LIST
+ ===============================-->
+ <div class=""
+                            id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <!--begin:Menu link-->
+                            <div class="menu-link d-flex gap-5 align-items-center">
+								 <i class="fas fa-book text-white fs-4"></i>
+                                    <span class="menu-title mt-1 text-white">Abstract</span>
+                                    <span class="menu-arrow"></span>
+                              </div>
+                                <!--end:Menu link-->
+                                <!--begin:Menu sub-->
+                                <ul class="menu-sub menu-sub-accordion">
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link text-white" href="?mod=distributor&content=abstract_list">
+                                            New Abstract
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+                                        <!--begin:Menu link-->
+                                        <a class="menu-link text-white" href="?mod=distributor&content=abstract_list_all">
+                                            Reviewed Abstract
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum_reviwed</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <a class="menu-link text-white" href="?mod=distributor&content=abstract_list">
+                                            All Abstract
+                                            <? echo "<span class='badge bg-primary ms-3'>$jum_all</span>";?>
+                                        </a>
+                                        <!--end:Menu link-->
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+                                    <!--begin:Menu item-->
+                                    <li class="menu-item d-flex gap-1 align-items-center">
+                                        <!--begin:Menu link-->
+
+                                        <a class="menu-link text-white" href="?mod=distributor&content=abstract_list_trash">
+                                       <i class="fas fa-trash me-5"></i>
+                                            Trash
+                                        </a>
+                                        <!--end:Menu link-->
+                                    </li>
+                                    <!--end:Menu item-->
+
+                                </ul>
+                                <!-- END MENU SUB -->
+                            </div>
+                            <!-- END ACCORDION CONTAINER -->
+                        </div>
+<!--======================================
+	END ABSTRACT LIST
+ ===============================-->
+
+<?}elseif($_SESSION['level']=='treasurer'){?> 
+
+					 <div class="submenu"
+                            id="#kt_aside_menu" data-kt-menu="true">
+                            <!--begin:Menu item-->
+                            <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
+                                <!--begin:Menu link-->
+                                <div class="menu-link d-flex align-items-center gap-5">
+								   <i class="fas fa-user text-white fs-4"></i>
+                                    <span class="menu-title mt-1"><? echo ucwords($_SESSION['level']);?></span>
+                                    <span class="menu-arrow"></span>
+                                </div>
+      <!--begin:Menu sub-->
+	          <ul class="menu-sub menu-sub-accordion p-3">
+                    <li class="menu-item d-flex gap-1 align-items-center">
+					<a class="menu-link text-white" href="?mod=treasurer&content=transaction_list">
+						 List Receipt 
+                          </a>
+					 </li>
+					 <li class="menu-item d-flex gap-1 align-items-center">
+					 <a class="menu-link text-white" href="?mod=treasurer&content=transaction_list">
+						 Transaction 
+                          </a>
+					</li>
+				</ul>
+			</div>
+			</div>
+        <?php } ?>         
+
+                                       <!--begin::Aside toggle-->
+                        <div class="d-flex align-items-center d-lg-none ms-n3 me-1 mt-2" title="Show aside menu">
+                            <div class="btn btn-icon btn-active-color-primary w-30px h-30px battons"
+                                id="kt_aside_mobile_toggle">
+      
+                               <h3> <i class="fas fa-bars fw-bold fw-bold text-white"></i></h3>
+                            </div>
+                        </div>
+            <!--end::Aside toggle-->     
+</ul>
+<!-- ===================================================
+END MENU HOME
+=====================================================-->
+
+    </div>
+</div>
+
+
+<!--END NAVBAR BOTTOM-->
+
+
+ 
+
+<!--JS DATATABLES-->
+
+ <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="vendors/datatables/js/jquery.dataTables.min.js"></script>
+    <!--<script src="vendors/datatables/dataTables.bootstrap.js"></script>-->
+    
+    
+    <script src="js/custom.js"></script>
+    <script src="js/tables.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- =============================================== -->
+    <script src="vendors/form-helpers/js/bootstrap-formhelpers-modifcurrency.js"></script>
+    <script src="vendors/select/bootstrap-select.min.js"></script>
+    <script src="vendors/tags/js/bootstrap-tags.min.js"></script>
+    <script src="vendors/mask/jquery.maskedinput.min.js"></script>
+    <script src="vendors/moment/moment.min.js"></script>
+    <script src="vendors/wizard/jquery.bootstrap.wizard.min.js"></script>
+    <!-- bootstrap-datetimepicker -->
+    <link href="vendors/bootstrap-datetimepicker/datetimepicker.css" rel="stylesheet">
+    <script src="vendors/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+    <script src="js/forms.js"></script>
+
+
+    <script type="text/javascript" src="vendors/table-html-to-excel/tableExport.js"></script>
+    <script type="text/javascript" src="vendors/table-html-to-excel/jquery.base64.js"></script>
+    <script type="text/javascript" src="vendors/table-html-to-excel/html2canvas.js"></script>
+    <script type="text/javascript" src="vendors/table-html-to-excel/jspdf/libs/sprintf.js"></script>
+    <script type="text/javascript" src="vendors/table-html-to-excel/jspdf/jspdf.js"></script>
+    <script type="text/javascript" src="vendors/table-html-to-excel/jspdf/libs/base64.js"></script>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/code.jquery/jquery.js"></script>
+
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="assets/js/scripts.bundle.js"></script>
+
+  
+    <!-- tables-->
+    <script>
+        $(document).ready(function () {
+            $(".preloader").fadeOut();
+        })
+
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+        
+
+    </script>
+
+
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/code.jquery/jquery.js"></script>
+    <!-- jQuery UI -->
+    <script src="js/code.jquery/jquery-ui.js"></script>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <!-- tables-->
+    <!--<script src="vendors/datatables/js/jquery.dataTables.min.js"></script>-->
+    <!--<script src="vendors/datatables/dataTables.bootstrap.js"></script>-->
+    
+    <script src="js/custom.js"></script>
+    <!--<script src="js/tables.js"></script>-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- =============================================== -->
+    <script src="vendors/form-helpers/js/bootstrap-formhelpers-modifcurrency.js"></script>
+    <script src="vendors/select/bootstrap-select.min.js"></script>
+    <script src="vendors/tags/js/bootstrap-tags.min.js"></script>
+    <script src="vendors/mask/jquery.maskedinput.min.js"></script>
+    <script src="vendors/moment/moment.min.js"></script>
+    <script src="vendors/wizard/jquery.bootstrap.wizard.min.js"></script>
+    <!-- bootstrap-datetimepicker -->
+    <link href="vendors/bootstrap-datetimepicker/datetimepicker.css" rel="stylesheet">
+    <script src="vendors/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
+    <script src="js/forms.js"></script>
+
+
+    <script type="text/javascript" src="vendors/table-html-to-excel/tableExport.js"></script>
+    <script type="text/javascript" src="vendors/table-html-to-excel/jquery.base64.js"></script>
+    <script type="text/javascript" src="vendors/table-html-to-excel/html2canvas.js"></script>
+    <script type="text/javascript" src="vendors/table-html-to-excel/jspdf/libs/sprintf.js"></script>
+    <script type="text/javascript" src="vendors/table-html-to-excel/jspdf/jspdf.js"></script>
+    <script type="text/javascript" src="vendors/table-html-to-excel/jspdf/libs/base64.js"></script>
+
+<!--jquery smart wizard-->
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!--<script type="text/javascript" src="js/jquery-ui.js"></script>-->
+<!--<script src="js/jquery.smartWizard.min.js"></script>-->
+
+<script src="assets/js/datatables.bundle.js"></script>
+<!--<script src="assets/js/datatables.init.js"></script>-->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $("#kt_datatable_zero_configuration").DataTable();
+    
+    $("#kt_datatable_vertical_scroll").DataTable({
+    "scrollY": "500px",
+    "scrollCollapse": true,
+    "paging": false,
+    "dom": "<'table-responsive'tr>"
+});
+
+
+
+// $("#flush-collapseThree").slideUp( "slow", function() {
+//     // Animation complete.
+//   });
+  
+  
+//     $(".btn2").on('click',function(){
+//  $("#flush-collapseThree").slideDown( "slow", function() {
+//     // Animation complete.
+//   });
+//     })
+
+
+        // function onFinish(){ alert('Finish Clicked'); }
+        // function onCancel(elm){ elm.smartWizard("reset"); }
+
+        // $(function() {
+
+
+        //     // Smart Wizard 2
+        //     // $('#smartwizard2').smartWizard({
+        //     //     selected: 0,
+        //     //     theme: 'arrows', // basic, arrows, square, round, dots
+        //     //     transition: {
+        //     //       animation:'slideVertical' // none|fade|slideHorizontal|slideVertical|slideSwing|css
+        //     //     },
+        //     //     toolbar: {
+        //     //       showNextButton: true, // show/hide a Next button
+        //     //       showPreviousButton: true, // show/hide a Previous button
+        //     //       position: 'both', // none/ top/ both bottom
+        //     //       extraHtml: `<button class="btn btn-success" onclick="onFinish()">Complete</button>
+        //     //                   <button class="btn btn-secondary" onclick="onCancel($('#smartwizard2'))">Cancel</button>`
+        //     //     }
+        //     // });
+            
+        //               $('#smartwizard2').smartWizard({
+        //         selected: 0,
+        //         theme: 'arrows', // basic, arrows, square, round, dots
+        //         transition: {
+        //           animation:'slideVertical' // none|fade|slideHorizontal|slideVertical|slideSwing|css
+        //         },
+        //         toolbar: {
+        //           showNextButton: true, // show/hide a Next button
+        //           showPreviousButton: true, // show/hide a Previous button
+        //           position: 'both', // none/ top/ both bottom
+        //           extraHtml: `<button class="btn btn-success" onclick="onFinish()">Complete</button>
+        //                       <button class="btn btn-secondary" onclick="onCancel($('#smartwizard2'))">Cancel</button>`
+        //         }
+        //     });
+        // });
+        
+  const divs = document.querySelectorAll('#open-ups')  
+  const btnSlide  = document.querySelectorAll("#open-drop");
+  
+  
+$(document).ready(function(){
+    // Loop through each div element with the class box
+ $(".open-ups").each(function(){
+console.log($(this))
+      $(this).slideUp( "slow", function() {
+    // Animation complete.
+  });
+        // if($(this).is(":empty")){
+        //     $(this).css("background", "yellow");
+        // }
+    });
+    
+
+});
+// end functuin
+
+
+
+  
+$(document).ready(function(){
+    // Loop through each div element with the class box
+$(".open-down").each(function(indexs){
+
+$(this).click(function(e){
+console.log($(".open-ups")[indexs])
+console.log(`#open_${indexs}`)
+ $(`#open_${indexs}`).slideToggle( "slow", function() {
+    // Animation complete.
+  });
+  
+})
+
+});
+
+
+});
+
+
+</script>
+</body>
+
+</html>

@@ -43,9 +43,9 @@ function Header(props){
   <li className='navbar-item'><a href='#0' onClick={props.openModal}>
   <i className="fa fa-plus-square-o has-text-dark has-text-weight-bold is-size-5" aria-hidden="true"></i>
   </a></li>
-  <li className='navbar-item'><a href='#0'>
+  <li className='navbar-item'><Link to='/message-list/'>
   <i className="fa fa-envelope-o has-text-dark has-text-weight-bold is-size-5" aria-hidden="true"></i>
-  </a></li>
+</Link></li>
 </ul>
 
 <ul className='is-flex is-align-items-center navbar-item has-dropdown is-hoverable mt-1 right-nav'>

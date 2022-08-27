@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-function RightSidebar(){
+function SidebarPost(){
 
     return(
 <div className='is-flex is-flex-direction-column is-flex-gap-md card p-0'>
@@ -50,4 +50,4 @@ function RightSidebar(){
 }
 
 
-export default RightSidebar;
+export default SidebarPost;
