@@ -107,16 +107,16 @@ alert("Too short")
     return(
       
   <div class="modal-card ">
-  <section class="modal-card-body columns p-0">
+  <section class="modal-card-body columns  p-0">
   {/* IMAGE POST */}
-<div className='column is-7 h-100 p-0'>
+<div className='column is-8 h-100 p-0'>
 <figure class="h-100 image is-4by3">
 <img src={this.props.post_img} alt="Placeholder image" />
 </figure>
 </div>
   {/* END IMAGE POST */}
       {/*POST CAPTION*/}
-<div className='column is-5 p-0 is-flex is-flex-column justify-between'>
+<div className='column is-4 p-0 is-flex is-flex-column justify-between'>
 <header class="modal-card-head has-background-white is-flex align-center justify-between">
 <div className='media-left is-flex is-flex-gap-md align-center mt-2'>
 <figure class="image is-32x32">

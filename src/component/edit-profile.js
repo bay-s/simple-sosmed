@@ -25,7 +25,9 @@ class EditProfileCard extends React.Component{
      error:false,
      sukses:false,
      pesan:'',
+     hide:false,
      isSubmit:false,
+     isUpload:false,
      fullname:'',
      username:'',
      phone:'',
@@ -46,7 +48,14 @@ class EditProfileCard extends React.Component{
   getDocs(q).then(res => {
       res.docs.map(item => {
       const data = item.data()
-        return this.setState({ data:this.state.data = data})  
+        return this.setState({ 
+          data:this.state.data = data,
+          username:data.username,
+          fullname:data.fullname,
+          biodata:data.biodata,
+          website:data.link_website,
+          phone:data.phone,
+        })  
         });
       })
     
@@ -55,6 +64,8 @@ class EditProfileCard extends React.Component{
 
   handlerChange = (e) => {
     const {name,value} = e.target
+    console.log(value);
+    console.log(this.state.username);
     this.setState(prev => {
       return{
    [name]:value,
@@ -67,18 +78,20 @@ class EditProfileCard extends React.Component{
     console.log(event.target.files);
     if (event.target.files && event.target.files[0]) {
       let img = event.target.files[0];
-      console.log(img);
-      console.log(img.name);
       this.setState({
         imgUpload: URL.createObjectURL(img),
         url:img,
-        isSubmit:true
+        isUpload:true
       });
     }
   };
   
-   uploadImage = () => {
-  
+   uploadImage = (e) => {
+  e.preventDefault()
+  this.setState({
+    isUpload:this.state.isUpload = false,
+    hide:this.state.hide = true
+  })
     const id = this.props.id
     const docUpdate = doc(database,'user',id)
   
@@ -109,26 +122,27 @@ class EditProfileCard extends React.Component{
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           console.log('File available at', downloadURL);
-          // this.setState({saveImage:!this.state.saveImage,});
-          // this.postLikes(ranID);
 
           updateDoc(docUpdate,{
-            images:downloadURL
-          })
-        .then(() =>{
-          this.setState({
-            pesan:"Update Profile Success",
-            sukses:this.state.sukses = true
-          })
-        })
-        .catch(err => {
-        alert(err.message)
-        this.setState({
-          error:this.state.error = true,
-          pesan:err.message
-        })
-        console.log(err);
-        })
+          images:downloadURL
+           })
+           .then(() =>{
+            this.setState({
+              pesan:this.state.pesan = "Upload Sukses",
+              sukses:true,
+              hide:this.state.hide = false
+            })
+             alert("update sukses")
+           })
+           .catch(err => {
+           alert(err.message)
+           this.setState({
+             error:this.state.error = true,
+             pesan:err.message,
+             isUpload:this.state.isUpload = true,
+             hide:this.state.hide = false
+           })
+           })
         });
       }
     );
@@ -137,28 +151,30 @@ class EditProfileCard extends React.Component{
   }
   
 
-  updateProfile = (e) => {
+  updateProfile = () => {
     const id = this.props.id
     const docUpdate = doc(database,'user',id)
 
     updateDoc(docUpdate,{
       username:this.state.username,
       fullname:this.state.fullname,
-      biodata:this.state.biodata,
-      link_website:this.state.website,
       phone:this.state.phone,
-      images:this.uploadImage() 
+      biodata:this.state.biodata,
+      link_website:this.state.website
      })
      .then(() =>{
-       this.setState({pesan:"Upload Sukses"})
-       e.target.reset()
+      this.setState({
+        pesan:this.state.pesan = "Upload Sukses",
+        sukses:true
+      })
        alert("update sukses")
      })
      .catch(err => {
      alert(err.message)
      this.setState({
        error:this.state.error = true,
-       pesan:err.message
+       pesan:err.message,
+       isSubmit:this.state.isSubmit = true
      })
      })
   }
@@ -172,23 +188,13 @@ class EditProfileCard extends React.Component{
         error:this.state.error = true
       })
       }
-    //   else if (this.state.username.length < 6) {
-    //     this.setState({
-    //       pesan:this.state.pesan = "Username minimal 6 karakter",
-    //       error:this.state.error = true
-    //     })
-    //   }
-    //   else if(this.state.fullname.length < 8){
-    //     this.setState({
-    //       pesan:this.state.pesan = "Fullname minimal 8 karakter",
-    //       error:this.state.error = true
-    //   })
-    //  }
   else{
     this.setState({
-      isLoad:this.state.isLoad = true
+      isLoad:this.state.isLoad = true,
+      isSubmit:false
     })
-  this.updateProfile(e) 
+
+  this.updateProfile()
     }
   }
 
@@ -199,7 +205,7 @@ class EditProfileCard extends React.Component{
   <div className='columns is-multiline  mx-6 is-centered is-variable is-desktop is-6-widescreen  '>
         <div className='column is-two-thirds box '>
 <div className='p-3'>
-<form className='is-flex is-flex-direction-column is-flex-gap-lg' onSubmit={this.Validasi}>
+<form className='my-3' onSubmit={this.uploadImage}>
 <div class="field is-flex is-flex-gap-xl is-align-items-center">
 <figure class="image is-48x48">
 <img class="is-rounded edit-image" src={this.state.imgUpload !== '' ? this.state.imgUpload : this.state.data.images === "" ? akun : this.state.data.images}  alt="profile"/>
@@ -207,7 +213,7 @@ class EditProfileCard extends React.Component{
 <div class="file is-small is-flex is-flex-direction-column is-flex-gap-sm">
 <label class="label p-0 m-0">{this.state.data.username}</label>
 <label class="file-label">
-<input class="file-input" type="file" name="resume" onChange={this.ImageChange}/>
+<input class="file-input" type="file" name="resume" defaultValue={this.state.data.images} onChange={this.ImageChange}/>
 <span class="file-cta">
 <span class="file-icon">
 <i class="fa fa-upload"></i>
@@ -217,27 +223,32 @@ Small file…
 </span>
 </span>
 </label>
+<div className={this.state.hide ? "" : 'hide'} >
+{this.state.isUpload ?  <button type='submit' class="button is-link is-small" >Save</button> : <button class="button is-link  is-loading is-small" disabled>Loading</button>}
 </div>
 </div>
+</div>
+</form>
 {/* END UPLOAD INPUT */}
+<form className='is-flex is-flex-direction-column is-flex-gap-lg' onSubmit={this.Validasi}>
 <div class="field">
 <label class="label">Fullname</label>
 <div class="control">
-<input class="input  is-link has-text-dark" type="text" name='fullname' placeholder={this.state.data.fullname} onChange={this.handlerChange}/>
+<input class="input  is-link has-text-dark" type="text" name='fullname' placeholder={this.state.data.fullname} defaultValue={this.state.data.fullname} onChange={this.handlerChange}/>
 </div>
 </div>
 
 <div class="field">
 <label class="label">Username</label>
 <div class="control">
-<input class="input  is-link" type="text" name='username' placeholder={this.state.data.username} onChange={this.handlerChange}/>
+<input class="input  is-link" type="text" name='username' placeholder={this.state.data.username}  defaultValue={this.state.data.username}  onChange={this.handlerChange}/>
 </div>
 </div>
 
 <div class="field">
 <label class="label">Website Link</label>
 <div class="control">
-<input class="input  is-link" type="text" name='website' placeholder={this.state.data.link_website} onChange={this.handlerChange}/>
+<input class="input  is-link" type="text" name='website' placeholder={this.state.data.link_website} defaultValue={this.state.data.link_website} onChange={this.handlerChange}/>
 </div>
 </div>
 
@@ -252,7 +263,7 @@ Small file…
           </a>
         </p>
         <p class="control is-expanded">
-          <input class="input is-link" type="tel" name='phone' placeholder="Your phone number" onChange={this.handlerChange}/>
+          <input class="input is-link" type="tel" name='phone' placeholder={this.state.data.phone} defaultValue={this.state.data.phone} onChange={this.handlerChange}/>
         </p>
       </div>
       <p class="help">Do not enter the first zero</p>
@@ -262,7 +273,7 @@ Small file…
 
 <div class="field">
 <label class="label">Bio</label>
-<textarea class="textarea is-link is-small" name='biodata' placeholder={this.state.data.biodata} onChange={this.handlerChange}></textarea>
+<textarea class="textarea is-link is-small" name='biodata' placeholder={this.state.data.biodata} defaultValue={this.state.data.biodata} onChange={this.handlerChange}></textarea>
 </div>
 
 

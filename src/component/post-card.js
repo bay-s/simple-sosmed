@@ -8,8 +8,8 @@ import ModalDelete from './delete-modal';
 
 
 class PostCard extends React.Component{
-constructor(){
-    super()
+constructor(props){
+    super(props)
     this.state = {
     getAvatar:[],
     modalDelete:true,
@@ -69,6 +69,11 @@ openModalDelete = e  => {
       e.preventDefault()
 this.setState({modalDelete:!this.state.modalDelete})
   }
+
+  nextSlide = e => {
+    e.preventDefault()
+    console.log(e.target.dataset.id);
+  }
 render(){
 
 const  timestamp = this.props.data.timestamp !== null ? this.props.data.timestamp.seconds : ""
@@ -97,7 +102,9 @@ const date = `${time.getDate()} ${this.state.month[time.getMonth()]} ${time.getF
 
 <div className={this.state.modalPost ? 'modal' : 'modal is-active modal-post'}>
  <div class="modal-background"></div>
+ <i class="fa fa-chevron-circle-left slide-l is-clickable is-size-3 has-text-white" aria-hidden="true" data-id={this.props.data.post_id} onClick={this.nextSlide}></i>
 <ModalPostDetail id={this.props.id} post_img={this.props.data.post_image} modalDelete={this.openModalDelete } user_id={this.props.data.user_id} user_name={this.props.data.username} avatar={this.props.avatar} post_id={this.state.post_detail_id}/>
+<i class="fa fa-chevron-circle-right slide-r is-clickable is-size-3 has-text-white" aria-hidden="true" data-id={this.props.data.post_id} onClick={this.nextSlide}></i>
  <button class="modal-close is-large" aria-label="close" onClick={this.openModalPost}></button>
  </div>
 

@@ -6,8 +6,8 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/
 import { collection, addDoc ,getDocs, doc, updateDoc, deleteDoc,onSnapshot, setDoc, query, orderBy, where, serverTimestamp} from 'firebase/firestore';
 
 class ModalPosts extends React.Component{
-constructor(){
-    super()
+constructor(props){
+    super(props)
     this.state = {
         hide:true,
         error:false,
@@ -19,7 +19,8 @@ constructor(){
         isUpload:false,
         icons:React.createRef(),
         imgUpload:'',
-        url:''
+        url:'',
+        total_posts:this.props.total_post
     }
 }
 
@@ -101,9 +102,9 @@ postLikes = (ranID) => {
      user_likes_id:[],
      likes_post_id:ranID
     })
-    .then(() => {console.log("notif sukses")})  
+    .then(() => {alert("notif sukses")})  
     .catch((err) => {
-      console.log(err);
+     alert(err);
     })
 
 }
@@ -111,7 +112,6 @@ postLikes = (ranID) => {
  uploadImage = () => {
 
   const id = this.props.id
-  let total_posts = this.props.total_post
   const ranID = Math.random().toString(36).substring(2,36);
   const username = this.props.name
 const db = collection(database,"post")
@@ -145,10 +145,10 @@ const docUpdate = doc(database,'user',id)
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         console.log('File available at', downloadURL);
         // this.setState({saveImage:!this.state.saveImage,});
-        // this.postLikes(ranID);
+        this.postLikes(ranID);
         console.log(downloadURL);
         updateDoc(docUpdate,{
-          total_post:total_posts + 1
+          total_post:this.state.total_posts =  + 1
         })
         setDoc(doc(db,ranID),  {
           post_caption:this.state.caption,
@@ -169,6 +169,7 @@ const docUpdate = doc(database,'user',id)
           isLoad:this.state.isLoad = false,
           isUpload:this.state.isUpload = true
         })
+        alert("sukses")
       })
       .catch(err => {
       alert(err.message)
@@ -176,7 +177,7 @@ const docUpdate = doc(database,'user',id)
         error:this.state.error = true,
         pesan:err.message
       })
-      console.log(err);
+      alert(err);
       })
       });
     }
@@ -210,7 +211,7 @@ render(){
     }
     return(
         <>
-        <div class="modal-background"></div>
+ <div class="modal-background"></div>
         <form onSubmit={this.Validasi}>
           <div class="modal-card">
             <header class="modal-card-head">

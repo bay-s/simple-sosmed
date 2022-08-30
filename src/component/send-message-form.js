@@ -7,7 +7,7 @@ import img from '../akun.jpg'
 
 function SendMessage(props){
     const {id} = useParams();
-    const ID = props.ID
+    const ID = props.id
 
     return(
      <SendMessageForm id={id} ID={ID} name={props.name} avatar={props.avatar}/>
@@ -25,23 +25,25 @@ class SendMessageForm extends React.Component{
             messages:'',
             images:'',
             url:'',
-            danger:'',
-            is_error:false,
+            pesan:'',
+            error:false,
             status:null,
             hide:true,
             sukses:false,
-            submit:false
+            submit:true
         }
     }
 
     handlerChange = (e) => {
         const {name,value} = e.target
+        console.log(value);
+        const check = value.length > 2 ? this.setState({submit:false}) :  this.setState({submit:true})
         this.setState(prev => {
           return{
        [name]:value
           }
         })
-    
+
       }
     
       ImageChange = event => {
@@ -50,43 +52,46 @@ class SendMessageForm extends React.Component{
           this.setState({url:img});
         }
       };
+
+
     
-      uploadImage = () => {
+      uploadImage = (e) => {
           const spaceRef = ref(storage, `images/${this.state.url.name}`);
           const uploadTask = uploadBytesResumable(spaceRef,this.state.url);
-          uploadTask.on('state_changed', 
-          (snapshot) => {
-            // Observe state change events such as progress, pause, and resume
-            // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            console.log('Upload is ' + progress + '% done');
-            this.setState({ status:progress})
-            switch (snapshot.state) {
-              case 'paused':
-                console.log('Upload is paused');
-                break;
-              case 'running':
-                console.log('Upload is running');
-                break;
-            }
-          }, 
-          (error) => {
-            // Handle unsuccessful uploads
-          alert(error.message)
-          }, 
-          () => {
-            // Handle successful uploads on complete
-            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-              console.log('File available at', downloadURL);
-              let url = '';
-              const urlCheck = this.state.url === '' ? '' :  url = downloadURL
-             this.sendMessages(url)
-            //  this.messageNotif()
-            });
-          }
-        );
-        
+          const docUpdate = doc(database,'user',this.props.id)
+
+  uploadTask.on('state_changed', 
+  (snapshot) => {
+    // Observe state change events such as progress, pause, and resume
+    // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    console.log('Upload is ' + progress + '% done');
+    this.setState({ status:progress})
+    switch (snapshot.state) {
+      case 'paused':
+        console.log('Upload is paused');
+        break;
+      case 'running':
+        console.log('Upload is running');
+        break;
+    }
+  }, 
+  (error) => {
+    // Handle unsuccessful uploads
+  alert(error.message)
+  }, 
+  () => {
+    // Handle successful uploads on complete
+    // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+      console.log('File available at', downloadURL);
+      let url = '';
+      const urlCheck = this.state.url === '' ?  url = '' :  url = downloadURL
+      this.sendMessages(url)
+    });
+  }
+);
+
       }
     
     sendMessages = (url) => {
@@ -95,7 +100,7 @@ class SendMessageForm extends React.Component{
         updateDoc(docUpdate,{
           private_message:arrayUnion({
               sender_subject:this.state.subject,
-              sender_name:this.props.user_name,
+              sender_name:this.props.name,
               sender_avatar:this.props.avatar,
               sender_id:this.props.ID,
               sender_text:this.state.messages,
@@ -106,22 +111,26 @@ class SendMessageForm extends React.Component{
       })
       .then(() =>{
         this.createMessage(ranID,url)
-        this.createReply(ranID),url
+        this.createReply(ranID,url)
         this.messageSent(ranID,url)
+        // this.messageNotif()
         this.setState({
-          danger:"Message sent",
-          is_error:false,
-          hide:this.state.hide = true,
+          pesan:"Message sent",
+          error:false,
           sukses:this.state.sukses = true,
           submit:this.state.submit = false,
+          url:this.state.url = '',
+          subject:this.state.subject = '',
+          messages:this.state.messages = ''
       })
-      window.location.replace(`/account/${this.props.id}`);
+      // window.location.replace(`/account/${this.props.id}`);
       })
       .catch(err => {
         this.setState({
-          danger:err,
-          is_error:true
+          pesan:err,
+          error:true
         })
+        alert(err)
       })
     }
     
@@ -130,7 +139,7 @@ class SendMessageForm extends React.Component{
       updateDoc(sentMessage,{
         sent_message:arrayUnion({
           sender_subject:this.state.subject,
-          sender_name:this.props.user_name,
+          sender_name:this.props.name,
           sender_avatar:this.props.avatar,
           sender_id:this.props.ID,
           sender_text:this.state.messages,
@@ -148,9 +157,9 @@ class SendMessageForm extends React.Component{
            user_reply:[],
            msg_reply_id:ranID
         })
-        .then(() => {console.log("notif sukses")})  
+        .then(() => {alert("notif sukses")})  
         .catch((err) => {
-          console.log(err);
+        alert(err);
         })
     }
     
@@ -159,7 +168,7 @@ class SendMessageForm extends React.Component{
       const db = collection(database,'private_message')
       setDoc(doc(db,ranID), {
         sender_subject:this.state.subject,
-        sender_name:this.props.user_name,
+        sender_name:this.props.name,
         sender_avatar:this.props.avatar,
         sender_id:this.props.ID,
         sender_text:this.state.messages,
@@ -174,14 +183,14 @@ class SendMessageForm extends React.Component{
     
       updateDoc(docUpdate,{
                   notif:arrayUnion({
-                      pesan:`Message from ${this.props.user_name}`,
-                      user_name:this.props.user_name,
+                      pesan:`Message from ${this.props.name}`,
+                      user_name:this.props.name,
                       user_id:this.props.ID,
                       user_avatar:this.props.avatar,
                     })
             })
       .then(() => {alert("notif me senpai")})
-      .catch((err) => {console.log(err)}); 
+      .catch((err) => {alert(err)}); 
     
     }
     
@@ -202,31 +211,28 @@ class SendMessageForm extends React.Component{
         e.preventDefault()
       if (this.state.subject.length < 1) {
         this.setState({
-            danger:"Subject are required",
-            is_error:true
+            pesan:"Subject are required",
+            error:true
         })
       }
-      else if(this.state.messages.length < 10)(
+      else if(this.state.messages.length < 6){
         this.setState({
-            danger:"Messages atleast 10 character",
-            is_error:true
+          pesan:"Messages atleast 6 character",
+          error:true
         })
-      )
+    }
     else{
-    this.uploadImage()
-    this.setState({
-      hide:this.state.hide = false,
-      submit:this.state.submit = true
-    })
+this.setState({submit:this.state.submit = true})
+this.uploadImage()
       }
     
       }
         
 render(){
     return(
-        <div className='container my-fluid post-detail'>
+ <div className='container message-container'>
         <div className='columns is-multiline is-centered'>
-        <div className='column is-10 p-0 shadow mt-4 box'>
+        <div className='column is-7 p-0 shadow mt-4 box'>
 <form className='is-flex is-flex-column is-flex-gap-md p-5' onSubmit={this.Validasi}>
 <h5 className='title is-title is-3 '>Send Message</h5>
  <div class="field">
@@ -266,17 +272,30 @@ render(){
   </label>
 </div>
 
+<article class={this.state.error ? "message is-danger" : 'hide'}>
+  <div class="message-body">
+  <i>{JSON.stringify(this.state.pesan)}</i>
+  </div>
+</article>
+<article class={this.state.sukses ? "message is-success" : 'hide'}>
+  <div class="message-body">
+ <i>{JSON.stringify(this.state.pesan)}</i>
+  </div>
+</article>
+
 <div class="field is-grouped is-grouped-right">
   <p class="control">
-    <button type='submit' class="button is-info is-medium">
+  {this.state.submit ? <button type='submit' class="button is-info is-medium" disabled>
       Submit
-    </button>
+    </button> : <button type='submit' class="button is-info is-medium" >
+      Submit
+    </button>}
   </p>
 </div>
      </form>
      </div>
          </div>
-        </div>
+ </div>
     )
 }
 }

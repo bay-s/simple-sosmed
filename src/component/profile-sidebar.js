@@ -1,6 +1,7 @@
 import React from 'react'
 import banners from '../banner.jpg'
 import akun from '../akun.jpg'
+import { Link } from 'react-router-dom'
 function ProfileSidebar(props){
 
 
@@ -9,7 +10,6 @@ const banner =  {
     backgroundImage:`url(${banners})`
   }
 
-  
     return(
 <div className='p-0 box is-flex is-flex-direction-column is-flex-gap-lg'>
         <div className='profile-images is-flex is-flex-direction-column is-flex-gap-md'>
@@ -18,23 +18,31 @@ const banner =  {
      <figure class="image is-64x64 avatar ">
      <img class="is-rounded border-md" src={props.avatar === '' ? akun : props.avatar} alt='' /> 
      </figure>
-     <div className='username is-flex is-flex-direction-column is-align-items-start is-flex-gap-sm'>
-      <h4 className='is-size-5 has-text-weight-bold is-title'>{props.fullname}</h4>
-      <h5 className='is-size-6 has-text-weight-normal '>@{props.name}</h5>
+     <div className='username is-flex is-flex-column is-align-items-start is-flex-gap-sm'>
+      <h4 className='subtitle is-6 has-text-weight-bold is-title p-0 m-0 '><Link to={`/profile/${props.id}`} className='has-text-dark'>{props.fullname}</Link></h4>
+      <h5 className='subtitle is-6 has-text-weight-normal p-0 m-0'>@{props.name}</h5>
      </div>
                            </div>
    <ul className='is-flex is-align-items-center is-justify-content-space-around mx-5'>
    <li className='navbar-item is-flex is-flex-direction-column'>
      <span className='has-text-weight-bold has-text-dark is-title'>{props.total_post}</span>
-     <a className='has-text-dark is-size-6'>Post</a>
+     <p className='subtitle has-text-dark is-size-6  p-2'>Post</p>
     </li>
     <li className='navbar-item is-flex is-flex-direction-column '>
      <span className='has-text-weight-bold has-text-dark is-title'>{props.total_follow}</span>
-     <a className='has-text-dark is-size-6'>Follower</a>
+  <p class="control mt-1">
+    <button class="button is-small">
+      <span>Follower</span>
+    </button>
+  </p>
     </li>
     <li className='navbar-item is-flex is-flex-direction-column '>
      <span className='has-text-weight-bold has-text-dark is-title'>{props.total_following}</span>
-     <a className='has-text-dark is-size-7'>Following</a>
+     <p class="control mt-1">
+    <button class="button is-small">
+      <span>Following</span>
+    </button>
+  </p>
     </li>
      </ul>
                          </div>

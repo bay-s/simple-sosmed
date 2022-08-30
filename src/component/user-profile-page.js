@@ -2,7 +2,17 @@ import React from "react";
 import banners from "../banner.jpg";
 import akun from '../akun.jpg'
 import {database} from '../firebase';
-import { collection, getDocs,query, where,doc, deleteDoc,getDocFromCache} from 'firebase/firestore';
+import {
+  collection,
+  getDocs,
+  query,
+  where,
+  doc,
+  deleteDoc,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
 import PostCard from './post-card';
 import FollowerCard from './follower-card';
 import FollowingCard from './following-card';
@@ -14,85 +24,150 @@ class UserProfilePage extends React.Component{
   constructor(){
     super()
     this.state = {
-       data:[],
-       modal:false,
-       modalDelete:false,
-       dataPost:[],
-       loading:true,
-       follower:[],
-       following:[],
-       option:'POST'
+      data: [],
+      option:'POST',
+      modal: false,
+      dataPost: [],
+      loading: true,
+      total_followers: null,
+      total_following: null,
+      follower_id: [],
+      follower:[],
+      following:[],
+      isFollow:false,
+      url:''
     }
 }
 
 async componentDidMount() {
-    
-    const db = collection(database,"user")
-    const post = collection(database,'post')
-    const follower = collection(database,'user_follower')
-    const id = this.props.id
-    const q = query(db,where("uid","==" , id))
-    const q2 = query(post,where("user_id","==" , id))
-    const queryFollow = query(follower,where("uid","==" , id))
-    
-    // GET USER LOGIN
- getDocs(q).then(res => {
-      res.docs.map(item => {
-      const data = item.data()
-        return this.setState({ data:this.state.data = data})  
-        });
+  const db = collection(database, "user");
+  const post = collection(database, "post");
+  const id = this.props.id;
+  const follower = collection(database, "user_follower");
+  const q = query(db, where("uid", "==", id));
+  const q2 = query(post, where("user_id", "==", id));
+  const queryFollow = query(follower, where("uid", "==", id));
+
+  // GET USER
+  getDocs(q).then((res) => {
+    res.docs.map((item) => {
+      const data = item.data();
+      return this.setState({
+        data: (this.state.data = data),
+        total_followers: (this.state.total_followers = data.total_follower),
+        total_following: (this.state.total_following = data.total_following),
+      });
+    });
+  });
+
+             // GET FOLLOWER
+             await getDocs(queryFollow).then(res => {
+              res.docs.map(item => {
+                const data = item.data()
+                this.setState({
+                  follower:this.state.follower = data.follower,
+                  following:this.state.following = data.following
+                })
+                  });
+                })
+
+  //   GET ALL POST
+  await getDocs(q2).then((res) => {
+    if (res) {
+      console.log(res.docs);
+      this.setState({
+        dataPost: (this.state.dataPost = res),
+        loading: (this.state.loading = false),
+      });
+    }
+  });
+
+  // GET FOLLOWER ID
+  await getDocs(queryFollow).then((res) => {
+    res.docs.map((item) => {
+      const data = item.data();
+      console.log(data);
+      data.follower.map(f_id  => {
+        if(f_id === this.props.ID) 
+        {
+          console.log("Tes");
+          this.setState({
+            follower_id: (this.state.follower_id = f_id ),
+            isFollow:this.state.isFollow = true
+          });
+        }else{
+          console.log("salah");
+        }
       })
-    
-    //   GET ALL POST
-      await getDocs(q2).then(res => {
-          if (res) {
-              this.setState({ 
-                  dataPost:this.state.dataPost = res,
-                  loading:this.state. loading = false
-                 })  
-          }
-            })
-      
-          // GET FOLLOWER
-          await getDocs(queryFollow).then(res => {
-            res.docs.map(item => {
-              const data = item.data()
-              this.setState({
-                follower:this.state.follower = data.follower,
-                following:this.state.following = data.following
-              })
-                });
-              })
-        
+    });
+  });
+
 }
 
 async componentDidUpdate() {
-    
-  const db = collection(database,"user")
-  const post = collection(database,'post')
+  const db = collection(database, "user");
+  const post = collection(database, "post");
   const id = this.props.id;
-  const q = query(db,where("uid","==" , id))
-  const q2 = query(post,where("user_id","==" , id))
+  const q = query(db, where("uid", "==", id));
+  const q2 = query(post, where("user_id", "==", id));
+  const follower = collection(database, "user_follower");
+  const queryFollow = query(follower, where("uid", "==", id));
 
-  // GET USER LOGIN
-getDocs(q).then(res => {
-    res.docs.map(item => {
-    const data = item.data()
-      return this.setState({ data:this.state.data = data})  
+  // GET USER
+  getDocs(q).then((res) => {
+    res.docs.map((item) => {
+      const data = item.data();
+      return this.setState({
+        data: (this.state.data = data),
+        total_followers: (this.state.total_followers = data.total_follower),
+        total_following: (this.state.total_following = data.total_following),
       });
-    })
-  
+    });
+  });
+
   //   GET ALL POST
-    await getDocs(q2).then(res => {
-        if (res) {
-            this.setState({ 
-                dataPost:this.state.dataPost = res,
-                loading:this.state. loading = false
-               })  
+  await getDocs(q2).then((res) => {
+    if (res) {
+      this.setState({
+        dataPost: (this.state.dataPost = res),
+        loading: (this.state.loading = false),
+      });
+    }
+  });
+
+               // GET FOLLOWER
+               await getDocs(queryFollow).then(res => {
+                res.docs.map(item => {
+                  const data = item.data()
+                  this.setState({
+                    follower:this.state.follower = data.follower,
+                    following:this.state.following = data.following
+                  })
+                    });
+                  })
+
+  // GET FOLLOWER ID
+  await getDocs(queryFollow).then((res) => {
+    res.docs.map((item) => {
+      const data = item.data();
+      data.follower.map(f_id  => {
+        if(f_id === this.props.ID) 
+        {
+          this.setState({
+            follower_id: (this.state.follower_id = f_id ),
+            isFollow:this.state.isFollow = true
+          });
+        }else{
+          console.log("salah");
         }
-          })
-    
+      })
+    });
+  });
+
+  // OPEN SENT MESSAGE
+  
 }
+
    
 
 followNotif = (user_id) => {
@@ -111,7 +186,7 @@ followNotif = (user_id) => {
       alert("notif me senpai");
     })
     .catch((err) => {
-      console.log(err);
+      alert(err);
     });
 };
 
@@ -155,7 +230,7 @@ follow = (e) => {
         total_follower: this.state.total_followers - 1,
       })
         .then(() => {
-          console.log('delete succes');
+          alert('followsucces');
           this.setState({ hide: (this.state.hide = false) });
         })
         .catch((err) => {
@@ -168,11 +243,11 @@ follow = (e) => {
       this.follower_profiles(user_id);
       this.following_profiles(user_id);
       updateDoc(docUpdate, {
-        total_follower: this.state.total_followers + 1,
+        total_follower:+ 1,
       })
         .then(() => {
-          console.log('Follow succes');
-          this.followNotif(user_id);
+          alert('Follow succes');
+          // this.followNotif(user_id);
           this.setState({ hide: (this.state.hide = false) });
         })
         .catch((err) => {alert(err.message);});
@@ -196,8 +271,8 @@ Remove = (user_id) => {
     total_following: (this.state.total_following = -1),
   })
     .then(() => {
-      console.log("remove succes");
-      console.log(this.state.follower_id.length);
+      alert("remove succes");
+      alert(this.state.follower_id.length);
     })
     .catch((err) => {
       alert(err.message);
@@ -210,14 +285,17 @@ displayOption = (e) => {
 }
 
   render(){
-    const banner = {
-      backgroundImage: `url(${banners})`,
-    };
-  
-    
+
+    const buttonFollow =
+    this.state.isFollow ? 
+    <button class="button is-link is-outlined is-title is-size-6 is-small following" data-follow={this.props.id}
+    onClick={this.follow}>Following</button>   
+    :       <button class="button is-link is-outlined is-title is-size-6 is-small" data-follow={this.props.id}
+    onClick={this.follow}>Follow</button>
+     
     const postCard = Array.isArray(this.state.dataPost.docs) ? this.state.dataPost.docs.map((post,index)=> {
       const posts = post.data()
-      return <PostCard data={posts} avatar={this.state.data.images} isLogin={this.props.isLogin} id={this.props.ID}/>
+      return <PostCard data={posts} avatar={this.state.data.images}  isLogin={this.props.isLogin} id={this.props.ID}/>
       }) : ""
 
   const followCard = this.state.follower != null ? this.state.follower.map(data => {
@@ -255,7 +333,7 @@ displayOption = (e) => {
              </div>
              {/* END PROFILE LEFT */}
            <div className="button-action is-flex is-flex-direction-column is-flex-gap-sm">
-            <button class="button is-link is-outlined is-title is-size-6 is-small">Follow</button>
+            {buttonFollow}
             <Link to={`/send-message/${this.props.id}`} class="button is-link is-outlined is-title is-size-6 is-small">Send Message</Link>
             </div>
            </div>

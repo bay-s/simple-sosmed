@@ -183,7 +183,8 @@ this.setState({modalDelete:!this.state.modalDelete})
 
       const postCard = Array.isArray(this.state.dataPost.docs) ? this.state.dataPost.docs.map((post,index)=> {
           const posts = post.data()
-          return <PostCard data={posts} avatar={this.state.data.images} isLogin={this.props.isLogin} id={this.props.ID}/>
+
+          return <PostCard data={posts} avatar={this.state.data.images} index={index} isLogin={this.props.isLogin} id={this.props.ID}/>
           }) : ""
 
       const followCard = this.state.follower != null ? this.state.follower.map(data => {
@@ -230,20 +231,28 @@ this.setState({modalDelete:!this.state.modalDelete})
            <nav class="level is-mobile">
    <div class="level-item has-text-centered">
      <div>
-       <p class="heading">Post</p>
-       <p class="title">{this.state.data.total_post}</p>
+       <p class="heading pt-2 is-size-7">Post</p>
+       <p class="subtitle m-0 is-5 is-bold">{this.state.data.total_post}</p>
      </div>
    </div>
    <div class="level-item has-text-centered">
      <div>
-       <p class="heading">Following</p>
-       <p class="title">{this.state.data.total_following}</p>
+     <p class="control ">
+    <button class="button is-small">
+      <span>Following</span>
+    </button>
+  </p>
+       <p class="subtitle m-0 is-5 is-bold">{this.state.data.total_following}</p>
      </div>
    </div>
    <div class="level-item has-text-centered">
      <div>
-       <p class="heading">Followers</p>
-       <p class="title">{this.state.data.total_follower}</p>
+   <p class="control">
+    <button class="button is-small">
+      <span>Follower</span>
+    </button>
+  </p>
+       <p class="subtitle m-0 is-5 is-bold">{this.state.data.total_follower}</p>
      </div>
    </div>
    <div class="level-item has-text-centered">

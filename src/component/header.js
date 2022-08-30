@@ -50,7 +50,7 @@ function Header(props){
 
 <ul className='is-flex is-align-items-center navbar-item has-dropdown is-hoverable mt-1 right-nav'>
 <li className='mt-2'>
-<figure className="image is-32x32">
+<figure className="image is-32x32 avatar">
   <img className="is-rounded avatar" src="https://bulma.io/images/placeholders/128x128.png" alt=''/> 
 </figure>
 </li>

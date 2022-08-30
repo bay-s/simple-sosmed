@@ -79,19 +79,20 @@ class Home extends React.Component{
         const postContentCard = this.state.dataPost.length < 1 ? "" : this.state.dataPost.docs.map(item => {
           const post = item.data()
           console.log(post);
-          return <PostContent  post={post} />
+          return <PostContent  post={post}  id={this.props.id} name={this.props.name} />
         })
+
         return(
-<div className='container my-fluid my-6'>
+<div className='container my-fluid mt-6'>
   <div className='columns is-multiline mx-6 is-centered is-variable is-desktop is-6-widescreen home-container'>
 
               {/* START MAIN COLUMN */}            
-<div className='column is-three-fifths is-flex is-flex-direction-column is-flex-gap-lg'>
+<div className='column is-three-fifths '>
 <>
 <UserRecomendCard />
 </>
 
- <div className='columns is-multiline  p-0 is-flex is-flex-direction-column is-flex-gap-lg'>
+ <div className='columns is-multiline  p-0 '>
 {this.state.loading ? <div className='column is-12 '> <div class="card-loader is-loading">
     <div class="image"></div>
     <div class="content-loader">
@@ -108,7 +109,7 @@ class Home extends React.Component{
               {/* END MIDDLE COLUMN */}
             {/* START RIGHT SIDEBAR */}
                 <div className='column is-4 p-0 right-sidebar'>
-               <ProfileSidebar id={this.props.uid} total_follow={this.props.total_follow} total_following={this.props.total_following} name={this.props.name} fullname={this.props.fullname} avatar={this.props.avatar} total_post={this.props.total_post} />
+               <ProfileSidebar id={this.props.id} total_follow={this.props.total_follow} total_following={this.props.total_following} name={this.props.name} fullname={this.props.fullname} avatar={this.props.avatar} total_post={this.props.total_post} />
                <SidebarPost />
                 </div>
             {/* END RIGHT COLUMN */}
