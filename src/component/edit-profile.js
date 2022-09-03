@@ -69,7 +69,7 @@ class EditProfileCard extends React.Component{
     this.setState(prev => {
       return{
    [name]:value,
-   isSubmit:this.state.isSubmit = true
+   isSubmit:this.state.isSubmit = true,
       }
     })
   }
@@ -81,8 +81,10 @@ class EditProfileCard extends React.Component{
       this.setState({
         imgUpload: URL.createObjectURL(img),
         url:img,
-        isUpload:true
+        isUpload:true,
+        hide:this.state.hide = true
       });
+      console.log(this.state.hide);
     }
   };
   
@@ -224,7 +226,7 @@ Small file…
 </span>
 </label>
 <div className={this.state.hide ? "" : 'hide'} >
-{this.state.isUpload ?  <button type='submit' class="button is-link is-small" >Save</button> : <button class="button is-link  is-loading is-small" disabled>Loading</button>}
+{this.state.isUpload ?  <button type='submit' class="button is-info is-small" >Save</button> : <button class="button is-link  is-loading is-small" disabled>Loading</button>}
 </div>
 </div>
 </div>

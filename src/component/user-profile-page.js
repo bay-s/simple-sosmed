@@ -14,10 +14,10 @@ import {
   arrayRemove,
 } from "firebase/firestore";
 import PostCard from './post-card';
-import FollowerCard from './follower-card';
-import FollowingCard from './following-card';
 import { Link } from "react-router-dom";
 import NoPost from "./no-post";
+import ModalFollower from "./modal-follower";
+import ModalFollowing from "./modal-following";
 
 
 class UserProfilePage extends React.Component{
@@ -284,6 +284,26 @@ displayOption = (e) => {
   this.setState({option:this.state.option = id})
 }
 
+
+openModal = e  => {
+  e.preventDefault()
+  console.log(e.target);
+if(e.target.classList.contains('open-delete')){
+  this.setState({modalDelete:!this.state.modalDelete})
+}if(e.target.classList.contains('open-following')){
+  this.setState({ modalFollowing:!this.state.modalFollowing})
+}if(e.target.classList.contains('open-follower')){
+  this.setState({modalFollower:!this.state.modalFollower})
+}
+}
+closeModal = e  => {
+  e.preventDefault()
+  this.setState({
+    modalFollower:this.state.modalFollowing = false,
+    modalFollowing:this.state.modalFollowing = false,
+    modalDelete:this.state.modalDelete = false
+  })
+}
   render(){
 
     const buttonFollow =
@@ -297,14 +317,6 @@ displayOption = (e) => {
       const posts = post.data()
       return <PostCard data={posts} avatar={this.state.data.images}  isLogin={this.props.isLogin} id={this.props.ID}/>
       }) : ""
-
-  const followCard = this.state.follower != null ? this.state.follower.map(data => {
-   return <FollowerCard follow_id={data} user_id={this.props.id }/>
-  }) : ""
-
-  const followingCard = this.state.following != null ? this.state.following.map(data => {
-    return <FollowingCard follow_id={data} user_id={this.props.id }/>
-   }) : ""
 
   return (
 <>
@@ -342,19 +354,23 @@ displayOption = (e) => {
            <nav class="level is-mobile">
    <div class="level-item has-text-centered">
      <div>
-       <p class="heading">Post</p>
+     <p class="pt-2 is-size-6 mb-2">Post</p>
        <p class="title">{this.state.data.total_post}</p>
      </div>
    </div>
    <div class="level-item has-text-centered">
      <div>
-       <p class="heading">Following</p>
+     <button class="button is-small open-following" onClick={this.openModal}>
+      Following
+    </button>
        <p class="title">{this.state.data.total_following}</p>
      </div>
    </div>
    <div class="level-item has-text-centered">
      <div>
-       <p class="heading">Followers</p>
+     <button class="button is-small open-follower" onClick={this.openModal}>
+      Follower
+    </button>
        <p class="title">{this.state.data.total_follower}</p>
      </div>
    </div>
@@ -401,6 +417,19 @@ displayOption = (e) => {
          </div>
          {/* END COLUMN CONTENT*/}
          
+          {/* MODAL FOLLOWER */}
+ <div className={this.state.modalFollowing ? 'modal is-active' : 'modal'}>
+ <div class="modal-background"></div>
+ <ModalFollowing closeModal={this.closeModal} followClick={this.follow} id={this.props.id} isFollow={this.state.isFollow} following={this.state.following}/>
+ <button class="modal-close is-large close-following" aria-label="close"  onClick={this.closeModal }></button>
+ </div>
+ {/* MODAL FOLLOWING */}
+ <div className={this.state.modalFollower ? 'modal is-active' : 'modal'}>
+ <div class="modal-background"></div>
+ <ModalFollower closeModal={this.closeModal} followClick={this.follow} id={this.props.id} isFollow={this.state.isFollow} follower={this.state.follower}/>
+ <button class="modal-close is-large close-follower" aria-label="close"  onClick={this.closeModal }></button>
+ </div>
+
          </>
   );
 }

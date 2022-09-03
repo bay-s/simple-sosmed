@@ -307,6 +307,19 @@ height: 550px !important;
   box-shadow: none !important;
 }
 
+.no-radius{
+  border-radius:0 !important;
+}
+
+.comment-container{
+overflow: hidden;
+overflow-y: scroll;
+}
+.comment-container::-webkit-scrollbar {
+  background-color: var(--whitey);
+  width: 7px;
+    }
+
 .likes{
   color: rgb(255, 16, 16);
 }
@@ -385,8 +398,10 @@ height: 550px !important;
 }
 
 .avatar img{
+  border-radius: 10px;
   height: 100% !important;
-  border: 2px solid rgba(0, 0, 0, 0.322);
+  border: 2px solid white;
+  object-fit: cover !important;
 }
 
 .loader-image {
@@ -471,20 +486,21 @@ height: 550px !important;
   height: 350px;
 }
 
-.profile-banner {
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  height: 350px;
-}
 
 .profile-banner {
   width: 100%;
-  height: 400px;
+  height: 250px;
   position: relative;
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
+}
+
+.text-is-stroke{
+text-stroke: 2px rgba(0,0,0,0.34);
+-webkit-text-fill-color: white;
+-webkit-text-stroke-width: 1px;
+/* -webkit-text-stroke-color: black; */
 }
 
 .profile-banner .upload-photoz {

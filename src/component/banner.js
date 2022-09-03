@@ -4,7 +4,7 @@ import { getAuth, deleteUser } from "firebase/auth";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { collection,updateDoc,doc,query,getDocFromCache,getDocs,where} from 'firebase/firestore';
 import banners from "../banner.jpg";
-
+import { Link } from 'react-router-dom';
 
 class Banner extends React.Component{
     constructor(){
@@ -144,10 +144,7 @@ banner =  {
         //   this.state.images.length > 0 ? bannerBG : normal
         //  }
         return(
-            <div
-className="column is-10 p-0 m-0 profile-banner"
-style={banner}
->
+ <div className="column is-10 p-0 m-0 profile-banner p-3 py-5" style={banner}>
  <div className='upload-photoz'>
             <form className='form' onSubmit={this.uploadBanner}>
             <label htmlFor="upload-photo" className='upload-photos'>
@@ -163,11 +160,44 @@ style={banner}
   <div class="color" style={process}></div>
 </div>
             </form>
-             </div>
- </div>
+          </div>
+ </div> 
         )
     }
 }
 
 
 export default Banner;
+
+
+
+
+//  <div className='columns is-multiline '>
+//  <div className='column is-flex justify-between'>
+// <div className='is-flex align-center is-flex-gap-lg'>
+// <figure class="image is-128x128 avatar">
+// <img class="" src="https://bulma.io/images/placeholders/128x128.png" />
+// </figure>
+// <div className="button-action is-flex is-flex-direction-column is-flex-gap-sm">
+// <Link to={``} class="button is-outlined is-title is-small has-text-info"><i class="fa fa-cog is-size-6 mx-3" aria-hidden="true"></i> Edit Profile</Link>
+// <button class="button  is-outlined is-title is-small has-text-danger" ><i class="fa fa-trash is-size-6 mx-3" aria-hidden="true" ></i>Delete Account</button>
+// </div>
+//    </div>
+//    <div class="file is-info has-name is-boxed">
+// <label class="file-label">
+//  <input class="file-input" type="file" name="resume" />
+//  <span class="file-cta">
+//    <span class="file-icon">
+//    <i className="fa fa-pencil-square-o has-text-white" aria-hidden="true"></i>
+//    </span>
+//    <span class="file-label">
+//      Danger file…
+//    </span>
+//  </span>
+//  <span class="file-name has-text-white text-is-stroke">
+//    Screen Shot 2017-07-29 at 15.54.25.png
+//  </span>
+// </label>
+// </div>
+//  </div>
+// </div>

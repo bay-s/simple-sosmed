@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams ,useNavigate, Navigate} from 'react-router-dom'
 import akun from '../akun.jpg'
 import {database,auth} from '../firebase';
-import { getAuth, deleteUser } from "firebase/auth";
+import {deleteUser } from "firebase/auth";
 import { collection, getDocs,query, where,doc, deleteDoc,getDocFromCache} from 'firebase/firestore';
 import banners from "../banner.jpg";
 import Banner from './banner';
@@ -12,6 +12,8 @@ import PostCard from './post-card';
 import ModalDeleteAccount from './modal-delete-account';
 import FollowerCard from './follower-card';
 import FollowingCard from './following-card';
+import ModalFollower from './modal-follower';
+import ModalFollowing from './modal-following';
 
 
 function ProfilePage(props){
@@ -55,6 +57,8 @@ class UserProfileCard extends React.Component{
          data:[],
          modal:false,
          modalDelete:false,
+         modalFollower:false,
+         modalFollowing:false,
          dataPost:[],
          loading:true,
          follower:[],
@@ -104,8 +108,7 @@ class UserProfileCard extends React.Component{
           
   }
 
-  async componentDidUpdate() {
-      
+  async componentDidUpdate() {  
     const db = collection(database,"user")
     const post = collection(database,'post')
     const id = this.props.ID;
@@ -175,9 +178,24 @@ displayOption = (e) => {
   this.setState({option:this.state.option = id})
 }
 
-openModalDelete = e  => {
+openModal = e  => {
   e.preventDefault()
-this.setState({modalDelete:!this.state.modalDelete})
+  console.log(e.target);
+if(e.target.classList.contains('open-delete')){
+  this.setState({modalDelete:!this.state.modalDelete})
+}if(e.target.classList.contains('open-following')){
+  this.setState({ modalFollowing:!this.state.modalFollowing})
+}if(e.target.classList.contains('open-follower')){
+  this.setState({modalFollower:!this.state.modalFollower})
+}
+}
+closeModal = e  => {
+  e.preventDefault()
+  this.setState({
+    modalFollower:this.state.modalFollowing = false,
+    modalFollowing:this.state.modalFollowing = false,
+    modalDelete:this.state.modalDelete = false
+  })
 }
   render(){
 
@@ -206,7 +224,7 @@ this.setState({modalDelete:!this.state.modalDelete})
              <div className="is-flex is-align-items-center is-flex-gap-md">
                <figure class="image is-128x128 avatar">
                  <img
-                   class="is-rounded border-md "
+                   class=" border-md "
                    src={this.state.data.images === '' ? akun : this.state.data.images }
                    alt=""
                  />
@@ -223,7 +241,7 @@ this.setState({modalDelete:!this.state.modalDelete})
              {/* END PROFILE LEFT */}
              <div className="button-action is-flex is-flex-direction-column is-flex-gap-sm">
              <Link to={`/edit-profile/${this.props.id}`} class="button is-link is-outlined is-title is-small"><i class="fa fa-cog is-size-6 mx-3" aria-hidden="true"></i> Edit Profile</Link>
-             <button class="button is-danger is-outlined is-title is-small"  onClick={this.openModalDelete }><i class="fa fa-trash mx-3" aria-hidden="true" ></i>Delete Account</button>
+             <button class="button is-danger is-outlined is-title is-small open-delete"  onClick={this.openModal}><i class="fa fa-trash mx-3" aria-hidden="true" ></i>Delete Account</button>
              </div>
            </div>
            {/* END PROFILE */}
@@ -231,25 +249,25 @@ this.setState({modalDelete:!this.state.modalDelete})
            <nav class="level is-mobile">
    <div class="level-item has-text-centered">
      <div>
-       <p class="heading pt-2 is-size-7">Post</p>
+       <p class="pt-2 is-size-6 mb-2">Post</p>
        <p class="subtitle m-0 is-5 is-bold">{this.state.data.total_post}</p>
      </div>
    </div>
    <div class="level-item has-text-centered">
      <div>
      <p class="control ">
-    <button class="button is-small">
-      <span>Following</span>
+    <button class="button is-small open-following" onClick={this.openModal}>
+      Following
     </button>
-  </p>
+      </p>
        <p class="subtitle m-0 is-5 is-bold">{this.state.data.total_following}</p>
      </div>
    </div>
    <div class="level-item has-text-centered">
      <div>
    <p class="control">
-    <button class="button is-small">
-      <span>Follower</span>
+    <button class="button is-small open-follower" onClick={this.openModal}>
+      Follower
     </button>
   </p>
        <p class="subtitle m-0 is-5 is-bold">{this.state.data.total_follower}</p>
@@ -299,12 +317,25 @@ this.setState({modalDelete:!this.state.modalDelete})
          {/* END COLUMN CONTENT*/}
          
 
-
+{/* MODAL DELETE */}
  <div className={this.state.modalDelete ? 'modal is-active' : 'modal'}>
  <div class="modal-background"></div>
- <ModalDeleteAccount modalDelete={this.openModalDelete} deleteAccount={this.deleteAccount}/>
- <button class="modal-close is-large" aria-label="close" onClick={this.openModalDelete }></button>
+ <ModalDeleteAccount modalDelete={this.openModal}  deleteAccount={this.deleteAccount}/>
+ <button class="modal-close is-large close-delete" aria-label="close" onClick={this.closeModal }></button>
  </div>
+ {/* MODAL FOLLOWER */}
+ <div className={this.state.modalFollowing ? 'modal is-active' : 'modal'}>
+ <div class="modal-background"></div>
+ <ModalFollowing closeModal={this.closeModal} id={this.props.id} following={this.state.following}/>
+ <button class="modal-close is-large close-following" aria-label="close"  onClick={this.closeModal }></button>
+ </div>
+ {/* MODAL FOLLOWING */}
+ <div className={this.state.modalFollower ? 'modal is-active' : 'modal'}>
+ <div class="modal-background"></div>
+ <ModalFollower closeModal={this.closeModal} id={this.props.id} follower={this.state.follower}/>
+ <button class="modal-close is-large close-follower" aria-label="close"  onClick={this.closeModal }></button>
+ </div>
+
          </>
       );
   }

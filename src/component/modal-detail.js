@@ -1,24 +1,27 @@
 import React from 'react'
 import { Link, useParams } from 'react-router-dom';
+import {database} from '../firebase';
+import { collection, getDocs,query, where,doc,updateDoc,addDoc,arrayUnion,serverTimestamp, arrayRemove} from 'firebase/firestore';
 import NoCommentYet from './no-commeny-yet';
 import img from '../akun.jpg'
+import LikesCard from './likes_card';
 
 
 class ModalPostDetail extends React.Component{
 constructor(){
   super()
   this.state = {
-    hide:true,
+    hide:false,
     comment:'',
     user_post_id:'',
-    total_comments:null
+    total_comments:null,
   }
 }
+
 
 handlerChange = (e) => {
   const {name,value} = e.target
   this.setState({[name]:value})
-
   if(value.length > 0){
       this.setState({hide:this.state.hide = false})
   }else{
@@ -117,7 +120,7 @@ alert("Too short")
   {/* END IMAGE POST */}
       {/*POST CAPTION*/}
 <div className='column is-4 p-0 is-flex is-flex-column justify-between'>
-<header class="modal-card-head has-background-white is-flex align-center justify-between">
+<header class="modal-card-head has-background-white py-2 is-flex align-center justify-between">
 <div className='media-left is-flex is-flex-gap-md align-center mt-2'>
 <figure class="image is-32x32">
 <img src={this.props.avatar === '' ? img : this.props.avatar} className='is-rounded' alt="Placeholder image" />
@@ -133,19 +136,30 @@ alert("Too short")
 </div>
 </header>
 {/* START COMMENT CONTENT */}
-<div className='is-flex is-flex-column is-flex-gap-md'>
-<NoCommentYet />
+<div className='is-flex is-flex-column is-flex-gap-md p-3'>
+<NoCommentYet />asd
 </div>
 {/* ENDCOMMENT CONTENT */}
 {/* START COMMENT INPUT */}
-<form class="field is-grouped  is-align-items-center border-sm" onSubmit={this.postComment}>
-<div class="column is-9 p-0 control ">
-<input class="input no-border" type="text" name='comment' placeholder="Text input" onChange={this.handlerChange}/>
+<div className='is-flex is-flex-column  my-auto is-flex-grow-1'>
+<div className='p-3 is-flex is-flex-column border-sm'>
+{<LikesCard id={this.props.user_id} avatar={this.props.avatar} name={this.props.name} post_id={this.props.post_id} />}
+<div className='mt-2'>
+<p className='subtitle is-7 p-0 m-0 is-title is-bold'>
+{this.props.total_likes > 0 ? `${this.props.total_likes} Like` : 'Be the first to'}
+</p> 
+<time className='subtitle is-7 p-0 m-0 is-title is-bold'>12 august 2022</time>
 </div>
-<div class="column is-3 p-0 control">
-{this.state.hide ? <button type='submit' class="button is-medium is-link is-light pe-5" disabled>Post</button> : <button type='submit' class="button is-medium is-link is-light pe-5">Post</button>}
 </div>
+<form class="field has-addons w-100 " onSubmit={this.postComment}>
+  <div class="control w-100">
+    <input class="input no-radius" type="text" name='comment' placeholder="write something"  onChange={this.handlerChange}/>
+  </div>
+  <div class="control">
+{this.state.hide ? <button class="button is-info" disabled>Post</button> : <button type='submit'  class="button is-info" >Post</button>}
+  </div>
 </form>
+</div>
 {/* END COMMENT */}
 </div>
     {/* END COL RIGHT*/}
@@ -157,3 +171,13 @@ alert("Too short")
 }
 
 export default ModalPostDetail;
+
+
+// <form class="field is-grouped  is-align-items-center border-sm" onSubmit={this.postComment}>
+// <div class="column is-9 p-0 control ">
+// <input class="input no-border" type="text" name='comment' placeholder="Text input" onChange={this.handlerChange}/>
+// </div>
+// <div class="column is-3 p-0 control">
+// {this.state.hide ? <button type='submit' class="button is-medium is-link is-light pe-5" disabled>Post</button> : <button type='submit' class="button is-medium is-link is-light pe-5">Post</button>}
+// </div>
+// </form>

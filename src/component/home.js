@@ -14,8 +14,6 @@ class Home extends React.Component{
         super()
         this.state = {
             dataPost:[],
-            avatar:'',
-            username:'',
             loading:true,
             getAvatar:[],
             avatar_id:[]
@@ -43,18 +41,6 @@ class Home extends React.Component{
         }
     })
 
-        // GET USER LOGIN
-     getDocs(q).then(res => {
-          res.docs.map(item => {
-          const data = item.data()
-          console.log(data);
-            return this.setState({ 
-                username:this.state.username = data.username,
-              avatar:this.state.avatar = data.images,
-              })  
-            });
-          })
-        
                       //  GET ALL POIST
 
 
