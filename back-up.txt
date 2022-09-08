@@ -1,15 +1,16 @@
-089-508-037-565
-
-
-    <div className='container m-5 w-100 has-background-white'>
-        <div className='columns is-multiline p-0 m-0 h-100'>
- <div className='column is-8 p-0 m-0 h-100'>
+<div class="modal-card">
+<section class="modal-card-body columns p-0">
+{/* IMAGE POST */}
+<div className='column is-8 h-100 p-0'>
 <figure class="h-100 image is-4by3">
 <img src={this.props.post_img} alt="Placeholder image" />
 </figure>
-            </div>
-  <div className='column is-4 p-0 m-0 h-100 '>
- <header class="modal-card-head has-background-white py-2 is-flex align-center justify-between">
+</div>
+{/* END IMAGE POST */}
+{/*POST CAPTION*/}
+{/* <div className='column is-4 p-0 is-flex is-flex-column justify-between'> */}
+<div className='column is-4 p-0 is-flex is-flex-column is-flex-gap-sm'>
+<header class="modal-card-head has-background-white py-2 is-flex align-center justify-between">
 <div className='media-left is-flex is-flex-gap-md align-center mt-2'>
 <figure class="image is-32x32">
 <img src={this.props.avatar === '' ? img : this.props.avatar} className='is-rounded' alt="Placeholder image" />
@@ -60,6 +61,7 @@
 </form>
 </div>
 {/* END COMMENT */}
-            </div>
-        </div>
-      </div>
+</div>
+  {/* END COL RIGHT*/}
+</section>
+</div>

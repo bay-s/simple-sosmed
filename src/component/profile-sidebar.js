@@ -14,7 +14,7 @@ const banner =  {
 <div className='p-0 box is-flex is-flex-direction-column is-flex-gap-lg'>
         <div className='profile-images is-flex is-flex-direction-column is-flex-gap-md'>
                       <div className='banner' style={banner}></div>
-                       <div className='profiles is-flex is-justify-content-space-between is-align-items-center mx-3'>
+<div className='profiles is-flex justify-between is-align-items-center mx-5'>
      <figure class="image is-64x64 avatar ">
      <img class="is-rounded border-md" src={props.avatar === '' ? akun : props.avatar} alt='' /> 
      </figure>
@@ -31,17 +31,13 @@ const banner =  {
     <li className='navbar-item is-flex is-flex-direction-column '>
      <span className='has-text-weight-bold has-text-dark is-title'>{props.total_follow}</span>
   <p class="control mt-1">
-    <button class="button is-small">
-      <span>Follower</span>
-    </button>
+<span>Follower</span>
   </p>
     </li>
     <li className='navbar-item is-flex is-flex-direction-column '>
      <span className='has-text-weight-bold has-text-dark is-title'>{props.total_following}</span>
      <p class="control mt-1">
-    <button class="button is-small">
-      <span>Following</span>
-    </button>
+     <span>Following</span>
   </p>
     </li>
      </ul>

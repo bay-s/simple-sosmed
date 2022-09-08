@@ -20,7 +20,7 @@ function Header(props){
 
 
 
-<div className='mx-auto search'>
+<div className={props.isLogin ? 'mx-auto search' : 'hide' }>
   <form className='is-flex mt-4'>
   <div class="control has-icons-left has-icons-right">
     <input class="input " type="text" placeholder="search user" />
@@ -32,7 +32,7 @@ function Header(props){
 </div>
 
 
-<div className='is-flex is-align-items-center p-0 m-0'>
+<div className={props.isLogin ? 'is-flex is-align-items-center p-0 m-0 mx-5' : 'hide'}>
 <ul className='is-flex is-align-items-center mt-2 mx-2 right-nav'>
   <li className='navbar-item'><Link to='/'>
   <i  className="fa fa-home has-text-dark has-text-weight-bold is-size-5" aria-hidden="true"></i>
@@ -49,12 +49,7 @@ function Header(props){
 </ul>
 
 <ul className='is-flex is-align-items-center navbar-item has-dropdown is-hoverable mt-1 right-nav'>
-<li className='mt-2'>
-<figure className="image is-32x32 avatar">
-  <img className="is-rounded avatar" src="https://bulma.io/images/placeholders/128x128.png" alt=''/> 
-</figure>
-</li>
-<li className='navbar-item mx-0 px-0'><a href='#0' className='has-text-dark is-title navbar-link'>Username</a></li>
+<li className='navbar-item mx-0 px-0'><a href='#0' className='has-text-dark is-title navbar-link'><i className="fa fa-user is-size-5 is-clickable" aria-hidden="true"></i> </a></li>
 <ul class="navbar-dropdown">
 <li className='navbar-item is-flex is-align-items-center is-flex-gap-sm'>
 <i className="fa fa-user is-size-5" aria-hidden="true"></i> 

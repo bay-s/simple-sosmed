@@ -23,7 +23,8 @@ constructor(){
      comment_user_id:'',
      container:React.createRef(),
      submit:true,
-     isLoading:true
+     isLoading:true,
+     month:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Okt','Nov','Dec']
     }
 }
 
@@ -261,16 +262,6 @@ else{
  }
 }
 
-Cancel = (e) => {
-  e.preventDefault()
-const closed = e.target.parentElement.previousElementSibling.parentElement.parentElement
-closed.classList.add('hide')
-  this.setState({
-    open:this.state.open = false,
-    openReply:this.state.openReply = false
-  })
-}
-
 
 viewReply = (e) => {
   e.preventDefault()
@@ -300,28 +291,34 @@ else{
  }
 }
 
-mustLogin = e => {
-  e.preventDefault()
-  alert("You must login first")
-}
+
 render(){
+
+
 
 const commentCard = Array.isArray(this.state.comment.docs) ? this.state.comment.docs.map((com,index) => {
    const data = com.data()
+ const  timestamp = data .timestamp !== null ? data.seconds : ""
+const time = new Date(timestamp*1000)
+const date = `${time.getDate()} ${this.state.month[time.getMonth()]} ${time.getFullYear()}`
+
  if(data.post_id === this.props.post_id){
     return <div className='is-flex is-flex-column align-start p-2' key={index}>
 <div className='media-left is-flex is-flex-gap-md align-center'>
 <figure class="image is-32x32 avatar">
 <img src={data.user_avatar === ''  ? img : data .user_avatar} className='is-rounded' alt="Placeholder image" />
 </figure>
-<div class="p-0 ">
+<div className='is-flex is-flex-column'>
+<div class="is-flex is-flex-gap-md align-center">
 <p class="subtitle is-7 is-title p-0 mb-1 is-bold" data-com_id={data.comment_author_id}><Link to={`/profile/${data.comment_author_id}`} className='has-text-dark'>{data.comment_author_name}</Link></p>
+<p className='post-text is-size-7'>{data.comment_text}</p>
 </div>
-    <p className='post-text is-size-7'>{data.comment_text}</p>
-</div>
-<div className="action is-align-self-center">
-<a href='#0' className='reply is-size-7 has-text-weight-semibold has-text-dark' data-comment_id={data.comment_id} title={index} onClick={this.props.isLogin ? this.openReplyComment : this.mustLogin}>Reply</a>
+<div className="action is-flex is-flex-gap-md align-center">
+<time className='subtitle is-7 has-text-grey-light p-0 m-0 is-title is-bold'>12 august 2022</time>
+<a href='#0' className='reply is-size-7 has-text-weight-semibold has-text-dark' data-comment_id={data.comment_id} title={index} onClick={this.openReplyComment}>Reply</a>
 <a href='#0' className='view' data-comment_id={data.comment_id} onClick={this.viewReply}>{data.reply.length > 0 ?  `View ${data.reply.length} Reply` : ""}</a>
+</div>
+</div>
 </div>
 
     </div>

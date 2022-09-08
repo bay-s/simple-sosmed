@@ -1,0 +1,19 @@
+  // GET FOLLOWER ID
+  // await getDocs(queryFollow).then((res) => {
+  //   res.docs.map((item) => {
+  //     const data = item.data();
+  //     console.log(data);
+  //     data.follower.map(f_id  => {
+  //       if(f_id === this.props.ID) 
+  //       {
+  //         console.log("Tes");
+  //         this.setState({
+  //           follower_id: (this.state.follower_id = f_id ),
+  //           isFollow:this.state.isFollow = true
+  //         });
+  //       }else{
+  //         console.log("salah");
+  //       }
+  //     })
+  //   });
+  // });

@@ -143,24 +143,45 @@ banner =  {
         // style={this.state.banner.length > 0 ? banner :
         //   this.state.images.length > 0 ? bannerBG : normal
         //  }
+
+
+
+//  <label htmlFor="upload-photo" className='upload-photos'>
+// <span className='has-text-white is-title'>Change Banner</span>
+// <i className="fa fa-pencil-square-o has-text-white" aria-hidden="true"></i>
+// </label>
+// <input type="file" name="photos" id="upload-photo"  onChange={this.changeBanner}/>
+// <div className={this.state.hide ? 'button-container' : 'hide' }>
+//    <a className='hvr-sweep-to-right cancels' onClick={this.Cancel}>Cancel</a>
+//    {this.state.saves ?  <button type='submit' className='hvr-sweep-to-right'>Save</button> : <button className='disabled' disabled>Save</button> }
+// </div>
+// <div class={this.state.status != null ? 'progress' : 'hide'}>
+// <div class="color" style={process}></div>
+// </div> 
         return(
- <div className="column is-10 p-0 m-0 profile-banner p-3 py-5" style={banner}>
- <div className='upload-photoz'>
-            <form className='form' onSubmit={this.uploadBanner}>
-            <label htmlFor="upload-photo" className='upload-photos'>
-             <span className='has-text-white is-title'>Change Banner</span>
-             <i className="fa fa-pencil-square-o has-text-white" aria-hidden="true"></i>
-             </label>
-             <input type="file" name="photos" id="upload-photo"  onChange={this.changeBanner}/>
-             <div className={this.state.hide ? 'button-container' : 'hide' }>
-                <a className='hvr-sweep-to-right cancels' onClick={this.Cancel}>Cancel</a>
-                {this.state.saves ?  <button type='submit' className='hvr-sweep-to-right'>Save</button> : <button className='disabled' disabled>Save</button> }
-             </div>
-<div class={this.state.status != null ? 'progress' : 'hide'}>
-  <div class="color" style={process}></div>
+ <div className="column is-10 p-0 m-0 profile-banner p-3 py-5 " style={banner}>
+<form className='is-flex is-flex-column mt-5 is-flex-gap-md' onSubmit={this.uploadBanner}>
+<div class="file is-small is-boxed has-name is-align-self-flex-end upload">
+  <label class="file-label">
+    <input class="file-input" type="file" name="resume" />
+    <span class="file-cta">
+      <span class="file-icon">
+        <i class="fa fa-camera is-bold is-size-4"></i>
+      </span>
+      <span class="file-label py-1">
+        Change banner
+      </span>
+    </span>
+    <span class="file-name has-text-white is-bold is-title">
+      Screen Shot 2017-07-29 at 15.54.25.png
+    </span>
+  </label>
+</div>
+<div className='is-flex is-align-self-flex-end align-center is-flex-gap-md'>
+   <a className='button is-small is-bold' onClick={this.Cancel}>Cancel</a>
+   {this.state.saves ?  <button type='submit' className='button is-link is-small is-bold'>Save</button> : <button className='disabled' disabled>Save</button> }
 </div>
             </form>
-          </div>
  </div> 
         )
     }

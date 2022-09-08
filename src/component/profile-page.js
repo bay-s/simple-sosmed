@@ -14,6 +14,7 @@ import FollowerCard from './follower-card';
 import FollowingCard from './following-card';
 import ModalFollower from './modal-follower';
 import ModalFollowing from './modal-following';
+import NoPost from './no-post';
 
 
 function ProfilePage(props){
@@ -36,7 +37,6 @@ setMyid(true);
 <div className="container my-fluid ">
 <div className="columns is-multiline  is-centered">
 {/*  BANNER */}
-  {id === ID ? <Banner ID={ID}/> : <BannerUser id={id}/> }
       {myId ?  <Navigate to="*" replace={true} /> : id === props.id ? <UserProfileCard id={id} ID={ID} isLogin={props.isLogin} /> : <UserProfilePage id={id} ID={ID} isLogin={props.isLogin} avatar={props.avatar} user_name={props.user_name} /> }
   
  {/*  END BANNER */}
@@ -198,7 +198,7 @@ closeModal = e  => {
   })
 }
   render(){
-
+   
       const postCard = Array.isArray(this.state.dataPost.docs) ? this.state.dataPost.docs.map((post,index)=> {
           const posts = post.data()
 
@@ -217,14 +217,11 @@ closeModal = e  => {
         <>
            {/* START TCOL 2 */}
           <div className="column is-10 box is-flex is-flex-direction-column is-flex-gap-lg">
-           <h3 className="is-title is-size-4 has-text-weight-bold has-text-centered my-2">
-             Profile
-           </h3>
            <div className="is-flex is-justify-content-space-between is-align-items-center ">
-             <div className="is-flex is-align-items-center is-flex-gap-md">
+             <div className="is-flex is-align-items-center is-flex-gap-md py-3">
                <figure class="image is-128x128 avatar">
                  <img
-                   class=" border-md "
+                   class="is-rounded"
                    src={this.state.data.images === '' ? akun : this.state.data.images }
                    alt=""
                  />
@@ -245,7 +242,7 @@ closeModal = e  => {
              </div>
            </div>
            {/* END PROFILE */}
-  <div className="is-flex is-flex-direction-column is-flex-gap-sm is-align-items-start my-4">
+  <div className="is-flex justify-between is-flex-gap-sm is-align-items-start my-4">
            <nav class="level is-mobile">
    <div class="level-item has-text-centered">
      <div>
@@ -273,9 +270,12 @@ closeModal = e  => {
        <p class="subtitle m-0 is-5 is-bold">{this.state.data.total_follower}</p>
      </div>
    </div>
-   <div class="level-item has-text-centered">
-   </div>
  </nav>
+ 
+ <div className='is-flex is-flex-column'>
+<h4 className='subtitle  is-size-7 '>John Doe posted a comment in </h4>
+<Link to=''>mywebsite.com</Link>
+ </div>
            </div>
            {/* END PROFILE */}
          </div>
@@ -310,7 +310,7 @@ closeModal = e  => {
              </ul>
            </div>
            <div className="columns is-multiline">
-             {postCard}
+           {this.state.dataPost.docs == 0 ? <NoPost />  : postCard}
              {/* <UserPostCard /> */}
             </div> 
          </div>

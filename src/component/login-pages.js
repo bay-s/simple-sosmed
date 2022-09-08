@@ -53,7 +53,7 @@ const banner =  {
   <p class="control ">
 
 
-    {props.isSubmit ? <button class="button is-primary is-fullwidth is-title" disabled>
+    {props.isSubmit ? <button class="button is-primary is-loading is-fullwidth is-title " disabled>
       Login
     </button>: <button type='submit' class="button is-primary is-fullwidth is-title">
     Login

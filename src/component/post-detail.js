@@ -6,7 +6,7 @@ import { collection, getDocs,updateDoc,setDoc,serverTimestamp,query, where,doc, 
 import NoCommentYet from './no-commeny-yet';
 import LikesCard from './likes_card';
 import DisplayComment from './display-comment';
-
+import PostComment from './comment-input-card';
 
 function PostDetail(props){
     const {id} = useParams()
@@ -29,7 +29,8 @@ class PostDetailCard extends React.Component{
             total:null,
             total_comment:0,
             username:'',
-            avatar:''
+            avatar:'',
+            comment:''
         }
     }
 
@@ -43,7 +44,6 @@ class PostDetailCard extends React.Component{
     if (res) {
         res.docs.map(item => {
             const data = item.data()
-            console.log(data);
     return this.setState({ 
         dataPost:this.state.dataPost = data,
         total:this.state.total = data.total_likes,
@@ -55,7 +55,6 @@ class PostDetailCard extends React.Component{
         }
     })
 
-
     }
 
     async componentDidUpdate(){
@@ -63,8 +62,7 @@ class PostDetailCard extends React.Component{
       const q2 = query(db2 ,where("uid","==" , this.state.user_id))
 
       // GET USER LOGIN
-
-      
+     
 await getDocs(q2).then(res => {
   res.docs.map(item => {
     const data = item.data()
@@ -77,88 +75,6 @@ avatar:data.images
        
     }
     
-handlerChange = (e) => {
-    const {name,value} = e.target
-    this.setState({[name]:value})
-    if(value.length > 0){
-        this.setState({hide:this.state.hide = true})
-    }else{
-        this.setState({hide:this.state.hide = false})
-    }
-  }
-  
-
-  commentNotif = (ranID) => {
-    const notif_id =  this.props.user_id
-  
-    const docUpdate = doc(database,'notifikasi',notif_id ) // ADD NOTIF
-    const time = serverTimestamp()
-  
-    updateDoc(docUpdate,{
-                notif:arrayUnion({
-                    pesan:`${this.props.name} Telah mengomentari postingan anda`,
-                    user_name:this.props.name,
-                    user_id:this.props.user_id,
-                    user_avatar:this.props.avatar,
-                    post_id:this.props.id,
-                  })
-          })
-    .then(() => {console.log("notif me senpai")})
-    .catch((err) => {console.log(err)}); 
-  
-  }
-  
-  createReply = () => {
-    const db = collection(database,'reply');
-    const user_id = this.props.id
-    setDoc(doc(db,user_id ),  {
-         original_reply:[],
-         user_reply:[],
-         comment_id:this.props.id
-      })
-      .then(() => {console.log("notif sukses")})  
-      .catch((err) => {
-        console.log(err);
-      })
-  }
-  
-  postComment = (e) => {
-    e.preventDefault()
-    const ranID = (Math.random() + 1).toString(36).substring(1);
-    const db = collection(database,"comment")
-    const id = this.props.user_id
-    const post_id = this.props.id
-    const docUpdate =doc(database,"post",post_id)
-  if (this.state.comment.length < 2) {
-  alert("Too short")
-  }else{
-    this.setState({hide:this.state.hide = false})
-    // this.createReply()
-    // this.commentNotif(ranID)
-    updateDoc(docUpdate,{
-        total_comment: + 1
-      })
-      setDoc(doc(db,ranID),  {
-        comment_id:ranID,
-        comment_author_id:id,
-        post_id: post_id,
-        post_owner_id:this.props.user_id,
-        comment_text:this.state.comment,
-        comment_author_name:this.props.name,
-        user_avatar:this.props.avatar,
-        timestamp: serverTimestamp(),
-        reply:[]
-        })
-        .then(() =>{
-        alert("comment posted")
-        this.setState({hide:this.state.hide = true})
-        e.target.reset()
-        })
-        .catch(err => {alert(err.message)})
-  }
-  }
-  
-  
   
     render(){
 
@@ -176,7 +92,7 @@ handlerChange = (e) => {
   {/* END IMAGE POST */}
       {/*POST CAPTION*/}
       
-<div className='column is-4 p-0 is-flex is-flex-column is-flex-gap-sm'>
+<div className='column is-4 p-0 is-flex is-flex-column is-flex-gap-sm '>
 <header class="modal-card-head has-background-white p-0 p-2 is-flex align-center justify-between">
 <div className='media-left is-flex is-flex-gap-md align-center'>
 <figure class="image is-32x32 avatar">
@@ -204,13 +120,10 @@ handlerChange = (e) => {
 
 {/*END POST CAPTION */}
 {/* START COMMENT CONTENT */}
-<div className='is-flex is-flex-column is-flex-gap-md p-0 my-auto is-flex-grow-1'>
+<div className='is-flex is-flex-column is-flex-gap-md px-2 my-auto is-flex-grow-1 comment-container'>
 {this.state.total_comment > 0 ? comment : <NoCommentYet />}
 </div>
 {/* ENDCOMMENT CONTENT */}
-
-{/* START COMMENT INPUT */}
-<div className='is-flex is-flex-column'>
 <div className='p-3 is-flex is-flex-column border-sm'>
 {<LikesCard id={this.state.dataPost.user_id} avatar={this.props.avatar} name={this.props.name} post_id={this.state.dataPost.post_id} />}
 <div className='mt-2'>
@@ -220,21 +133,8 @@ handlerChange = (e) => {
 <time className='subtitle is-7 p-0 m-0 is-title is-bold'>12 august 2022</time>
 </div>
 </div>
-<form class="field is-grouped  is-align-items-center " onSubmit={this.postComment}>
-<div class="field has-addons w-100">
-  <div class="control w-100">
-    <input class="input" type="text" name='comment' placeholder="write something"  onChange={this.handlerChange}/>
-  </div>
-  <div class="control">
-{this.state.hide ? <button type='submit' class="button is-info">
-      Post
-    </button> : <button class="button is-info" disabled>
-      Post
-    </button>}
-  </div>
-</div>
-</form>
-</div>
+{/* START COMMENT INPUT */}
+<PostComment post_id={this.props.id} user_id={this.props.user_id} name={this.props.name} avatar={this.props.avatar}/>
 {/* END COMMENT */}
 </div>
     {/* END COL RIGHT */}
@@ -246,3 +146,30 @@ handlerChange = (e) => {
 }
 
 
+
+
+// <div className='is-flex is-flex-column mb-5'>
+// <div className='p-3 is-flex is-flex-column border-sm'>
+// {<LikesCard id={this.state.dataPost.user_id} avatar={this.props.avatar} name={this.props.name} post_id={this.state.dataPost.post_id} />}
+// <div className='mt-2'>
+// <p className='subtitle is-7 p-0 m-0 is-title is-bold'>
+// {this.state.total > 0 ? `${this.state.total } Like`: 'Be the first to'}
+// </p> 
+// <time className='subtitle is-7 p-0 m-0 is-title is-bold'>12 august 2022</time>
+// </div>
+// </div>
+// <form class="field is-grouped  is-align-items-center " onSubmit={this.postComment}>
+// <div class="field has-addons w-100">
+//   <div class="control w-100">
+//     <input class="input" type="text" name='comment' placeholder="write something"  onChange={this.handlerChange}/>
+//   </div>
+//   <div class="control">
+// {this.state.hide ? <button type='submit' class="button is-info">
+//       Post
+//     </button> : <button class="button is-info" disabled>
+//       Post
+//     </button>}
+//   </div>
+// </div>
+// </form>
+// </div>

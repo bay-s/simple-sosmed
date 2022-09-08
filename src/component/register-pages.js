@@ -76,7 +76,7 @@ const banner =  {
 
 <div class="field">
   <p class="control">
-{props.isSubmit ? <button class="button is-link is-title" disabled>
+{props.isSubmit ? <button class="button is-link is-loading is-title" disabled>
      Register </button> : <button type='submit' class="button is-link is-title">
      Register
     </button>}

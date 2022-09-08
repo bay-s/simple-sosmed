@@ -5,14 +5,23 @@ import { Link } from 'react-router-dom'
 function messasgeCard(props){
 
     return(
-<Link to={`message`} className='p-0'>
-<div className='is-flex is-flex-gap-xl p-3 border-sm'>
-<span className='subtitle is-6 text-nowrap p-0 m-0 has-text-info'>Eren Yeager</span>
-<span className='subtitle is-6 text-hide text-nowrap p-0 m-0'>Unfeeling so rapturous discovery he exquisite. Reasonably so middletons or impression by terminated. Old pleasure required removing elegance him had. Down she bore sing saw calm high. Of an or game gate west face shed. ﻿no great but music too old found arose.</span>
-<span className='subtitle is-6 text-nowrap p-0 m-0'>TEST 123</span>
-</div>
+<Link to={`/message/${props.msg.message_id}`} className='p-0 has-text-dark'>
+<div className='shadow'>
+        <header className='is-flex justify-between p-3'>
+            <span className='is-title is-size-6'>From: {props.msg.sender_name}</span>
+            <a href='#'><i class="fa fa-paperclip"></i></a>
+        </header>
+         <div className='card-content text-hide '>
+         <h4 className='is-bold is-size-6 mb-3'>{props.msg.sender_subject}</h4>
+         <p className='subtitle is-6 p-0' >
+         {props.msg.sender_text}
+          </p>
+         </div>
+        </div>
 </Link>
     )
 }
 
 export default messasgeCard;
+
+

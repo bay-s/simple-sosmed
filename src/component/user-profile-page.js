@@ -52,6 +52,7 @@ async componentDidMount() {
   getDocs(q).then((res) => {
     res.docs.map((item) => {
       const data = item.data();
+      console.log(data);
       return this.setState({
         data: (this.state.data = data),
         total_followers: (this.state.total_followers = data.total_follower),
@@ -68,40 +69,32 @@ async componentDidMount() {
                   follower:this.state.follower = data.follower,
                   following:this.state.following = data.following
                 })
+                data.follower.map(f_id  => {
+                  if(f_id === this.props.ID) 
+                  {
+                    console.log("Tes");
+                    this.setState({
+                      follower_id: (this.state.follower_id = f_id ),
+                      isFollow:this.state.isFollow = true
+                    });
+                  }else{
+                    console.log("salah");
+                  }
+                })
                   });
                 })
+
 
   //   GET ALL POST
   await getDocs(q2).then((res) => {
     if (res) {
-      console.log(res.docs);
+      console.log(res);
       this.setState({
         dataPost: (this.state.dataPost = res),
         loading: (this.state.loading = false),
       });
     }
   });
-
-  // GET FOLLOWER ID
-  await getDocs(queryFollow).then((res) => {
-    res.docs.map((item) => {
-      const data = item.data();
-      console.log(data);
-      data.follower.map(f_id  => {
-        if(f_id === this.props.ID) 
-        {
-          console.log("Tes");
-          this.setState({
-            follower_id: (this.state.follower_id = f_id ),
-            isFollow:this.state.isFollow = true
-          });
-        }else{
-          console.log("salah");
-        }
-      })
-    });
-  });
-
 }
 
 async componentDidUpdate() {
@@ -128,6 +121,7 @@ async componentDidUpdate() {
   //   GET ALL POST
   await getDocs(q2).then((res) => {
     if (res) {
+
       this.setState({
         dataPost: (this.state.dataPost = res),
         loading: (this.state.loading = false),
@@ -143,29 +137,20 @@ async componentDidUpdate() {
                     follower:this.state.follower = data.follower,
                     following:this.state.following = data.following
                   })
+                  data.follower.map(f_id  => {
+                    if(f_id === this.props.ID) 
+                    {     
+                      this.setState({
+                        follower_id: (this.state.follower_id = f_id ),
+                        isFollow:this.state.isFollow = true
+                      });
+                    }else{
+                
+                    }
+                  })
                     });
                   })
 
-  // GET FOLLOWER ID
-  await getDocs(queryFollow).then((res) => {
-    res.docs.map((item) => {
-      const data = item.data();
-      data.follower.map(f_id  => {
-        if(f_id === this.props.ID) 
-        {
-          this.setState({
-            follower_id: (this.state.follower_id = f_id ),
-            isFollow:this.state.isFollow = true
-          });
-        }else{
-          console.log("salah");
-        }
-      })
-    });
-  });
-
-  // OPEN SENT MESSAGE
-  
 }
 
    
@@ -305,26 +290,24 @@ closeModal = e  => {
   })
 }
   render(){
-
+ 
     const buttonFollow =
     this.state.isFollow ? 
     <button class="button is-link is-outlined is-title is-size-6 is-small following" data-follow={this.props.id}
     onClick={this.follow}>Following</button>   
     :       <button class="button is-link is-outlined is-title is-size-6 is-small" data-follow={this.props.id}
     onClick={this.follow}>Follow</button>
-     
+
     const postCard = Array.isArray(this.state.dataPost.docs) ? this.state.dataPost.docs.map((post,index)=> {
       const posts = post.data()
       return <PostCard data={posts} avatar={this.state.data.images}  isLogin={this.props.isLogin} id={this.props.ID}/>
       }) : ""
 
+
   return (
 <>
         {/* START TCOL 2 */}
         <div className="column is-10 box is-flex is-flex-direction-column is-flex-gap-lg">
-           <h3 className="is-title is-size-4 has-text-weight-bold has-text-centered my-2">
-             Profile
-           </h3>
            <div className="is-flex is-justify-content-space-between is-align-items-center ">
              <div className="is-flex is-align-items-center is-flex-gap-md">
                <figure class="image is-128x128 avatar">
@@ -411,7 +394,8 @@ closeModal = e  => {
              </ul>
            </div>
            <div className="columns is-multiline">
-             {Array.isArray(this.state.dataPost.docs) ? postCard : <NoPost /> }
+   
+             {this.state.dataPost.docs == 0 ? <NoPost />  :postCard}
              {/* <UserPostCard /> */}
             </div> 
          </div>

@@ -51,7 +51,7 @@ async componentDidUpdate(){
 </Link>
 </figure>
 <div className='username is-flex is-flex-direction-column is-align-items-start is-flex-gap-sm'>
- <h4 className='is-size-7 has-text-weight-bold is-title'><Link to={`/account/${this.state.follower.uid}`} className='has-text-dark'>{this.state.follower.fullname}</Link></h4>
+ <h4 className='is-size-7 has-text-weight-bold is-title'><Link to={`/profile/${this.state.follower.uid}`} className='has-text-dark'>{this.state.follower.fullname}</Link></h4>
  <h5 className='is-size-7 has-text-weight-normal '>@{this.state.follower.username}</h5>
 </div>
 </div>
