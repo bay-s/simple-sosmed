@@ -6,14 +6,14 @@ import { collection, getDocs,updateDoc,setDoc,serverTimestamp,query, where,doc, 
 
 
 class PostComment extends React.Component{
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
             user_id:'',
             loading:true,
             hide:false,
             total:null,
-            total_comment:0,
+            total_comment:this.props.total_comment,
             username:'',
             avatar:'',
             comment:''
@@ -72,7 +72,7 @@ handlerChange = (e) => {
     const db = collection(database,"comment")
     const id = this.props.user_id
     const post_id = this.props.post_id
-    const docUpdate =doc(database,"post",id)
+    const docUpdate = doc(database,"post",post_id)
   if (this.state.comment.length < 2) {
   alert("Too short")
 
@@ -80,8 +80,9 @@ handlerChange = (e) => {
     this.setState({hide:this.state.hide = false})
     // this.createReply()
     // this.commentNotif(ranID)
+    console.log(post_id );
     updateDoc(docUpdate,{
-        total_comment: + 1
+        total_comment:this.state.total_comment + 1
       })
       setDoc(doc(db,ranID),  {
         comment_id:ranID,
@@ -104,6 +105,7 @@ handlerChange = (e) => {
   
   
   render(){
+
     return(
 <form class="field has-addons" onSubmit={this.postComment}>
   <div class="control w-100">

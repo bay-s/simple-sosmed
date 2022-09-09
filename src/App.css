@@ -189,14 +189,15 @@ body {
   /* color: white; */
 }
 
-.modal-card  .column{
-  /* width: 900px !important;
-  box-sizing: border-box !important;
-  height: 600px !important; */
+.modal-post .modal-card{
+width: 1000px;
+height: 600px;
 }
 
-
-
+.modal-container{
+  height: 550px;
+  z-index: 555;
+}
 
 .modal-post img{
   object-fit: cover;

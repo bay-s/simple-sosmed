@@ -1,31 +1,11 @@
-import React from 'react'
-import { Link, useParams } from 'react-router-dom';
-import {database} from '../firebase';
-import { collection, getDocs,query, where,doc,updateDoc,addDoc,arrayUnion,serverTimestamp, arrayRemove} from 'firebase/firestore';
-import NoCommentYet from './no-commeny-yet';
-import img from '../akun.jpg'
-import LikesCard from './likes_card';
-import DisplayComment from './display-comment';
-import PostComment from './comment-input-card';
-
-
-
-function ModalPostDetail(props){
-
-
-    const comment = <DisplayComment key={props.id} post_id={props.post_id} user_id={props.user_id} avatar={props.avatar} user_name={props.name} />
-    return(
-
-  <div class="modal-card">
-    <section class="modal-card-body columns p-0">
-{/* START COL LEFT */}
-<div className='column is-8 p-0 m-0'>
+      <div className='container m-5 w-100 has-background-white'>
+        <div className='columns is-multiline p-0 m-0 h-100'>
+ <div className='column is-8 p-0 m-0 h-100'>
 <figure class="h-100 image is-4by3">
 <img src={props.post_img} alt="Placeholder image" />
 </figure>
-</div>
-{/* end col left */}
-<div className='column is-4 p-0 m-0 h-100  is-flex is-flex-column justify-between'>
+            </div>
+  <div className='column is-4 p-0 m-0 h-100  is-flex is-flex-column justify-between'>
  <header class="modal-card-head has-background-white py-2 is-flex align-center justify-between">
 <div className='media-left is-flex is-flex-gap-md align-center mt-2'>
 <figure class="image is-32x32">
@@ -68,30 +48,10 @@ function ModalPostDetail(props){
 </div>
 </div>
 {/* START COMMENT INPUT */}
-<PostComment post_id={props.post_id} total_comment={props.total_comment} user_id={props.user_id} name={props.name} avatar={props.avatar}/>
+<PostComment post_id={props.post_id} user_id={props.user_id} name={props.name} avatar={props.avatar}/>
 {/* END COMMENT */}
 </div>
 {/* END COMMENT */}
             </div>
-    </section>
-  </div>
-
-    )
-
-}
-
-export default ModalPostDetail;
-
-
-// <form class="field is-grouped  is-align-items-center border-sm" onSubmit={this.postComment}>
-// <div class="column is-9 p-0 control ">
-// <input class="input no-border" type="text" name='comment' placeholder="Text input" onChange={this.handlerChange}/>
-// </div>
-// <div class="column is-3 p-0 control">
-// {this.state.hide ? <button type='submit' class="button is-medium is-link is-light pe-5" disabled>Post</button> : <button type='submit' class="button is-medium is-link is-light pe-5">Post</button>}
-// </div>
-// </form>
-
-
-
-
+        </div>
+      </div>

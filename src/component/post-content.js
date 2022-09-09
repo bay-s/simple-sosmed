@@ -96,7 +96,7 @@ render(){
 </div>
 </div>
 {/* END CARD-CONTENT */}
-<PostComment post_id={this.props.post.post_id} user_id={this.props.post.user_id} name={this.props.post.username} avatar={this.state.getAvatar}/>
+<PostComment post_id={this.props.post.post_id} total_comment={this.props.post.total_comment} user_id={this.props.post.user_id} name={this.props.post.username} avatar={this.state.getAvatar}/>
 {/* END FIELDS */}
 </div>
 </div>

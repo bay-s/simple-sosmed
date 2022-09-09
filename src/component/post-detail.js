@@ -47,7 +47,7 @@ class PostDetailCard extends React.Component{
     return this.setState({ 
         dataPost:this.state.dataPost = data,
         total:this.state.total = data.total_likes,
-        total_comment:data.total_comment,
+        total_comment:this.state.total_comment = data.total_comment,
         loading:this.state. loading = false,
         user_id:this.state.dataPost.user_id
        })  
@@ -134,7 +134,7 @@ avatar:data.images
 </div>
 </div>
 {/* START COMMENT INPUT */}
-<PostComment post_id={this.props.id} user_id={this.props.user_id} name={this.props.name} avatar={this.props.avatar}/>
+<PostComment post_id={this.props.id} total_comment={this.state.total_comment} user_id={this.props.user_id} name={this.props.name} avatar={this.props.avatar}/>
 {/* END COMMENT */}
 </div>
     {/* END COL RIGHT */}
@@ -147,29 +147,3 @@ avatar:data.images
 
 
 
-
-// <div className='is-flex is-flex-column mb-5'>
-// <div className='p-3 is-flex is-flex-column border-sm'>
-// {<LikesCard id={this.state.dataPost.user_id} avatar={this.props.avatar} name={this.props.name} post_id={this.state.dataPost.post_id} />}
-// <div className='mt-2'>
-// <p className='subtitle is-7 p-0 m-0 is-title is-bold'>
-// {this.state.total > 0 ? `${this.state.total } Like`: 'Be the first to'}
-// </p> 
-// <time className='subtitle is-7 p-0 m-0 is-title is-bold'>12 august 2022</time>
-// </div>
-// </div>
-// <form class="field is-grouped  is-align-items-center " onSubmit={this.postComment}>
-// <div class="field has-addons w-100">
-//   <div class="control w-100">
-//     <input class="input" type="text" name='comment' placeholder="write something"  onChange={this.handlerChange}/>
-//   </div>
-//   <div class="control">
-// {this.state.hide ? <button type='submit' class="button is-info">
-//       Post
-//     </button> : <button class="button is-info" disabled>
-//       Post
-//     </button>}
-//   </div>
-// </div>
-// </form>
-// </div>
