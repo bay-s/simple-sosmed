@@ -227,9 +227,6 @@ closeModal = e  => {
                  />
                </figure>
                <div className="is-flex is-flex-direction-column is-flex-gap-sm">
-                 <h3 className="is-title is-size-5 has-text-weight-bold">
-                   {this.state.data.fullname}
-                 </h3>
                  <h3 className="is-title is-size-6 has-text-weight-semibold">
                  {this.state.data.username}
                  </h3>
@@ -272,9 +269,12 @@ closeModal = e  => {
    </div>
  </nav>
  
- <div className='is-flex is-flex-column'>
-<h4 className='subtitle  is-size-7 '>John Doe posted a comment in </h4>
-<Link to=''>mywebsite.com</Link>
+ <div className='is-flex is-flex-column is-flex-gap-sm'>
+ <h3 className="is-title is-size-5 has-text-weight-bold">
+ {this.state.data.fullname}
+</h3>
+<h4 className='subtitle is-size-7 p-0 m-0'> {this.state.data.biodata}</h4>
+<a href={this.state.data.link_website}> {this.state.data.link_website}</a>
  </div>
            </div>
            {/* END PROFILE */}

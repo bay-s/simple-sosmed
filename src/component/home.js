@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import img from '../akun.jpg'
 import {database} from '../firebase';
-import { collection, addDoc ,getDocs, doc, updateDoc, deleteDoc,onSnapshot, setDoc, query, orderBy, where} from 'firebase/firestore';
+import {enableIndexedDbPersistence, collection, addDoc ,getDocs, doc, updateDoc, deleteDoc,onSnapshot, setDoc, query, orderBy, where} from 'firebase/firestore';
 import PostContent from './post-content'
 import ProfileSidebar from './profile-sidebar'
 import SidebarPost from './right-sidebar'
@@ -22,7 +22,6 @@ class Home extends React.Component{
 
     async componentDidMount(){
         const id = this.props.id
-        console.log(id);
         const db = collection(database,'post')
         const db1 = collection(database,"user")
         const q = query(db1 ,where("uid","==" , id))
@@ -31,7 +30,6 @@ class Home extends React.Component{
     if (res) {
         res.docs.map(item => {
             const data = item.data()
-            console.log(data);
     return this.setState({ 
         dataPost:this.state.dataPost = res,
         loading:this.state. loading = false,
@@ -48,6 +46,7 @@ class Home extends React.Component{
     if (res) {
         res.docs.map(item => {
             const data = item.data()
+           const saveToLocal = localStorage.setItem("dataPost",data )
     return this.setState({ 
         dataPost:this.state.dataPost = res,
         loading:this.state. loading = false,
@@ -74,9 +73,6 @@ class Home extends React.Component{
 
               {/* START MAIN COLUMN */}            
 <div className='column is-three-fifths '>
-<>
-<UserRecomendCard />
-</>
 
  <div className='columns is-multiline  p-0 '>
 {this.state.loading ? <div className='column is-12 '> <div class="card-loader is-loading">
@@ -96,7 +92,7 @@ class Home extends React.Component{
             {/* START RIGHT SIDEBAR */}
                 <div className='column is-4 p-0 right-sidebar'>
                <ProfileSidebar id={this.props.id} total_follow={this.props.total_follow} total_following={this.props.total_following} name={this.props.name} fullname={this.props.fullname} avatar={this.props.avatar} total_post={this.props.total_post} />
-               <SidebarPost />
+               <SidebarPost user_login_id={this.props.id} />
                 </div>
             {/* END RIGHT COLUMN */}
             </div>

@@ -47,7 +47,7 @@ async componentDidUpdate(){
 <div className='is-flex align-center is-flex-gap-md'>
 <figure class="image image is-32x32 avatar">
 <Link to={`/account/${this.state.follower.uid}`}>
-<img class="is-rounded" src={this.state.follower.images != null ? this.state.follower.images : img}  alt='' /> 
+<img class="is-rounded" src={this.state.follower.images !== '' ? this.state.follower.images : img}  alt='' /> 
 </Link>
 </figure>
 <div className='username is-flex is-flex-direction-column is-align-items-start is-flex-gap-sm'>

@@ -207,6 +207,7 @@ registerAkun = (e) => {
           error:this.state.error = true,
           load:this.state.load = true,
           sukses:this.state.sukses = false,
+          isSubmit:this.state.isSubmit = false
         })
       });
     
@@ -262,43 +263,50 @@ logout = (e) => {
   if(this.state.username.indexOf(' ') >= 0){
   this.setState({
     pesan:this.state.pesan = "Username tidak boleh menggunakan spasi",
-    error:this.state.error = true
+    error:this.state.error = true,
+    sukses:this.state.sukses = false
   })
   }
   else if (this.state.username.length < 6) {
     this.setState({
       pesan:this.state.pesan = "Username minimal 6 karakter",
-      error:this.state.error = true
+      error:this.state.error = true,
+      sukses:this.state.sukses = false
     })
   }
   else if(this.state.fullname.length < 8){
     this.setState({
       pesan:this.state.pesan = "Fullname minimal 8 karakter",
-      error:this.state.error = true
+      error:this.state.error = true,
+      sukses:this.state.sukses = false
   })
   }
   else if(this.state.email.length < 10){
     this.setState({
       pesan:this.state.pesan = "Email minimal 10 karakter",
-      error:this.state.error = true
+      error:this.state.error = true,
+      sukses:this.state.sukses = false
   })
   }
   else if(this.state.email.indexOf(' ') >= 0){
     this.setState({
       pesan:this.state.pesan = "tidak boleh ada spasi pada email",
-      error:this.state.error = true
+      error:this.state.error = true,
+      sukses:this.state.sukses = false
   })
   }
   else if(this.state.password.indexOf(' ') >= 0){
     this.setState({
       pesan:this.state.pesan = "Password tidak boleh berisi spasi",
-      error:this.state.error = true
+      error:this.state.error = true,
+      sukses:this.state.sukses = false   
   })
   }
   else if(this.state.password.length < 8){
     this.setState({
       pesan:this.state.pesan = "Password minimal 8 karakter",
-      error:this.state.error = true
+      error:this.state.error = true,
+      sukses:this.state.sukses = false
   })
   }
   else{
