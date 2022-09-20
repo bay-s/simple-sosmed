@@ -1,0 +1,110 @@
+   
+
+followNotif = (user_id) => {
+  const notif_id = user_id;
+  const docUpdate = doc(database, "notifikasi", user_id);
+
+  updateDoc(docUpdate, {
+    notif: arrayUnion({
+      pesan: `${this.props.user_name} Has been followed you`,
+      user_name: this.props.user_name,
+      user_id: notif_id,
+      user_avatar: this.props.avatar,
+    }),
+  })
+    .then(() => {
+      alert("notif me senpai");
+    })
+    .catch((err) => {
+      alert(err);
+    });
+};
+
+following_profiles = (user_id) => {
+  const current_user = this.props.ID;
+  const docUpdate = doc(database, "user_follower", current_user);
+  const user = doc(database, "user", this.props.ID);
+  updateDoc(docUpdate, {
+    following: arrayUnion(user_id),
+  });
+  updateDoc(user, {
+    total_following: (this.state.total_following = +1),
+  })
+    .then(() => console.log("follow succes"))
+    .catch((err) => {
+      alert(err.message);
+    });
+};
+
+follower_profiles = (user_id) => {
+  const docUpdate = doc(database, "user_follower", user_id);
+  const current_user = this.props.ID;
+  updateDoc(docUpdate, {
+    follower: arrayUnion(current_user),
+  })
+    .then(() => console.log("follow succes"))
+    .catch((err) => {
+      alert(err.message);
+    });
+};
+
+follow = (e) => {
+  const user_id = this.props.id;
+  const is_follows = e.target.dataset.follow;
+  const docUpdate = doc(database, "user", user_id);
+  if (is_follows === user_id) {
+    if (e.target.classList.contains("following")) {
+      this.Remove(user_id);
+      e.target.textContent = 'Follow'
+      updateDoc(docUpdate, {
+        total_follower: this.state.total_followers - 1,
+      })
+        .then(() => {
+          alert('followsucces');
+          this.setState({ hide: (this.state.hide = false) });
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+      console.log("KOSONGxxx");
+    } else {
+
+      console.log("ada ASDASDAS");
+      this.follower_profiles(user_id);
+      this.following_profiles(user_id);
+      updateDoc(docUpdate, {
+        total_follower:+ 1,
+      })
+        .then(() => {
+          alert('Follow succes');
+          // this.followNotif(user_id);
+          this.setState({ hide: (this.state.hide = false) });
+        })
+        .catch((err) => {alert(err.message);});
+    }
+  }
+};
+
+Remove = (user_id) => {
+  const removeNotif = doc(database, "notifikasi", user_id);
+  const removeFollowing = doc(database, "user_follower", this.props.ID);
+  const user = doc(database, "user", this.props.ID);
+  const removeFollower = doc(database, "user_follower", user_id);
+
+  updateDoc(removeFollower, {
+    follower: arrayRemove(this.props.ID),
+  });
+  updateDoc(removeFollowing, {
+    following: arrayRemove(user_id),
+  });
+  updateDoc(user, {
+    total_following: (this.state.total_following = -1),
+  })
+    .then(() => {
+      alert("remove succes");
+      alert(this.state.follower_id.length);
+    })
+    .catch((err) => {
+      alert(err.message);
+    });
+};

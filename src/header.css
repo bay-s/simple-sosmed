@@ -1,0 +1,27 @@
+
+:root{
+--Gray:#8e8e8ea9;
+--lBlue:rgba(0, 60, 255, 0.808);
+--notActive:rgba(84, 129, 228, 0.678);
+}
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300&family=Pacifico&family=Poppins:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico:wght@300&display=swap');
+/* END RESET */
+
+
+
+/* HEADER */
+.header{
+    background-color: white;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+ position: fixed;
+top: 0;
+width: 100%;
+z-index: 1
+}
+
+.header .main-title{
+    font-family: 'Pacifico', sans-serif;
+}
+
