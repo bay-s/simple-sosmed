@@ -5,6 +5,7 @@ import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/
 import { collection,updateDoc,doc,query,getDocFromCache,getDocs,where} from 'firebase/firestore';
 import banners from "../banner.jpg";
 import { Link } from 'react-router-dom';
+import ModalBanner from './modal-confirm-banner';
 
 class Banner extends React.Component{
     constructor(){
@@ -91,8 +92,8 @@ uploadImage = () => {
           .catch(err => {
             alert(`Something wrong ${err.message}`)
             this.setState({
-              saves:this.state.saves = true,
-              hide:this.state.hide = false
+              saves:true,
+              hide:false
             })
         })
         });
@@ -101,14 +102,13 @@ uploadImage = () => {
     
   }  
 
-  uploadBanner = (e) => {
+uploadBanner = (e) => {
     e.preventDefault()
-    alert("test")
     if(this.state.url.length < 1){
 alert("empty")
     }else{
 alert("test")
-this.setState({saves:this.state.saves = false})
+this.setState({saves:false})
 this.uploadImage() 
     }
   }
@@ -122,42 +122,27 @@ this.uploadImage()
  }
     render(){
 
-//       let banner;
-//         const process = {
-//           width:`${this.state.status}%`
-//         }
-//     if(this.state.banner.length > 0){
-//       banner =  {
-//         backgroundImage:`url(${this.state.banner})`
-//       }
-//       console.log("test");
-//     }else if(this.state.images.length > 1){
-//       banner = {
-//         backgroundImage:`url(${this.state.images})`
-//       }
-//     }else{
-// banner =  {
-//   backgroundImage:`url(${banners})`
-// }
-//     }
+ let banner =  this.state.images !== '' ? {
+  backgroundImage:`url(${this.state.images})`
+  } : this.state.banner === "" ? {
+    backgroundImage:`url(${banners})`
+    } : {
+      backgroundImage:`url(${this.state.banner})`
+      }
 
-
-        const banner =  {
-          backgroundImage:`url(${banners})`
-        }
-
+console.log(this.state.banner);
         return(
- <div className="column is-10 p-0 m-0 profile-banner p-3 " style={banner}>
+<div className="column is-10 p-0 m-0 profile-banner p-3 " style={ banner}>
 <form className='is-flex is-flex-column align-end is-flex-gap-md' onSubmit={this.uploadBanner}>
-  <label class="file-label">
-    <input class="file-input" type="file" name="resume" />
-    <span class="file-icon has-background-grey is-rounded  p-5">
+  <label class="file-label is-clickable">
+    <input class="file-input is-clickable" type="file" name="resume" onChange={this.changeBanner }/>
+    <span class="file-icon has-background-grey is-rounded  p-5 is-clickable">
         <i class="fa fa-pencil is-bold is-size-4 has-text-white "></i>
      </span>
   </label>
-<div className='is-flex is-align-self-flex-end align-center is-flex-gap-md'>
-   <a className='button is-small is-bold' onClick={this.Cancel}>Cancel</a>
-   {this.state.saves ?  <button type='submit' className='button is-link is-small is-bold'>Save</button> : <button className='disabled' disabled>Save</button> }
+<div className={this.state.hide ? 'is-flex is-align-self-flex-end align-center is-flex-gap-md' : 'hide'}>
+  {!this.state.saves ? "" :  <a className='button is-small is-primary is-outlined is-bold' onClick={this.Cancel}>Cancel</a>}
+   {this.state.saves ?  <button type='submit' className='button is-primary is-small is-bold'>Save</button> : <button class="button is-primary is-loading is-small" disabled>Loading</button>}
 </div>
             </form>
  </div> 

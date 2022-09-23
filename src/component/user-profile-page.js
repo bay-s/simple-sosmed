@@ -22,6 +22,7 @@ import ProfilePageAvatar from './profile-page-avatar';
 import UserPageContentLeft from "./user-profile-page-content-left";
 import UserPageContentRight from "./user-profile-page-content-right";
 import UserProfileAvatarRight from "./user-profile-page-avatar-right";
+import ProfilePageContentLeft from "./profile-page-content-left";
 
 
 class UserProfilePage extends React.Component{
@@ -79,63 +80,18 @@ async componentDidMount() {
 
 
   //   GET ALL POST
-     await getDocs(q2).then(res => {
-          if (res) {
-            const dataJson = JSON.stringify(res);
-            const saveToLocal = localStorage.setItem("user_post",dataJson )
-              this.setState({ 
-                  dataPost:this.state.dataPost = res,
-                  loading:this.state. loading = false
-                 })  
-              }
-            })
+  await getDocs(q2).then(res => {
+    if (res) {
+    res.docs.map(item => {
+      const data = item.data()
+      this.setState({ dataPost:data})  
+    })
+    }
+      })
 
 }
 
-async componentDidUpdate() {
-  const db = collection(database, "user");
-  const post = collection(database, "post");
-  const id = this.props.id;
-  const q = query(db, where("uid", "==", id));
-  const q2 = query(post, where("user_id", "==", id));
-  const follower = collection(database, "user_follower");
-  const queryFollow = query(follower, where("uid", "==", id));
 
-  // GET USER
-  // getDocs(q).then((res) => {
-  //   res.docs.map((item) => {
-  //     const data = item.data();
-  //     return this.setState({
-  //       data: (this.state.data = data),
-  //       total_followers: (this.state.total_followers = data.total_follower),
-  //       total_following: (this.state.total_following = data.total_following),
-  //     });
-  //   });
-  // });
-
-  //   GET ALL POST
-  // await getDocs(q2).then((res) => {
-  //   if (res) {
-
-  //     this.setState({
-  //       dataPost: (this.state.dataPost = res),
-  //       loading: (this.state.loading = false),
-  //     });
-  //   }
-  // });
-
-               // GET FOLLOWER
-              //  await getDocs(queryFollow).then(res => {
-              //   res.docs.map(item => {
-              //     const data = item.data()
-              //     this.setState({
-              //       follower:this.state.follower = data.follower,
-              //       following:this.state.following = data.following
-              //     })
-              //       });
-              //     })
-
-}
 
 
 displayOption = (e) => {
@@ -184,7 +140,10 @@ closeModal = e  => {
 {/* END AVATAR */}
 <div className='column is-10 p-0 m-0'>
     <div className='columns is-multiline'>
-<UserPageContentLeft data={this.state.data} isLogin={this.props.isLogin} ID={this.props.ID} dataPost={this.state.dataPost.docs}/>       
+ <ProfilePageContentLeft openModal={this.openModal } data={this.state.data} isLogin={this.props.isLogin} ID={this.props.ID} id={this.props.id} dataPost={this.state.dataPost}/>    
+  {/* END COLUMN LEFT */}
+{/*     
+<UserPageContentLeft data={this.state.data} isLogin={this.props.isLogin} ID={this.props.ID} dataPost={this.state.dataPost.docs}/>        */}
   {/* END COLUMN LEFT */}
 <UserPageContentRight skills={this.state.skills} openModalSkills={this.openModalSkills} data={this.state.data}/>   
    {/* END COLUMN RIGHT */}

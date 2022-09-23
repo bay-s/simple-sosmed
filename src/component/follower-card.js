@@ -27,19 +27,7 @@ async componentDidMount(){
                       })
 }
 
-async componentDidUpdate(){
-    const follower_id = this.props.follow_id
 
-    const follower = collection(database,'user')
-    const queryUser = query(follower,where("uid","==" , follower_id ))
-                  // GET FOLLOWER
-                  await getDocs(queryUser).then(res => {
-                    res.docs.map(item => {
-                      const data = item.data()
-                        this.setState({follower:this.state.follower = data})
-                        });
-                      })
-} 
     render(){
 
         return(

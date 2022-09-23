@@ -42,32 +42,32 @@ async componentDidMount(){
     })
 }
 
-async componentDidUpdate(){
+// async componentDidUpdate(){
 
-  const likes = collection(database,'post_likes')
-  const queryUser = query(likes ,where("likes_post_id","==" ,this.props.post_id))
-               // GET USER LIKES
-                                 // GET USER LIKES ID
+//   const likes = collection(database,'post_likes')
+//   const queryUser = query(likes ,where("likes_post_id","==" ,this.props.post_id))
+//                // GET USER LIKES
+//                                  // GET USER LIKES ID
 
-    await getDocs(queryUser).then(res => {
-        res.docs.map(item => {
-            const data = item.data()
-            data.user_likes_id.map(f_id => {
-                if (f_id === this.props.id) {
-                    this.setState({
-                        likes_id: this.state.likes_id = data.user_likes_id,
-                        isLikes: this.state.isLikes = true
-                    })
-                } else {
-                    this.setState({
-                        // isLikes:this.state.isLikes = false
-                    })
-                }
-            })
+//     await getDocs(queryUser).then(res => {
+//         res.docs.map(item => {
+//             const data = item.data()
+//             data.user_likes_id.map(f_id => {
+//                 if (f_id === this.props.id) {
+//                     this.setState({
+//                         likes_id: this.state.likes_id = data.user_likes_id,
+//                         isLikes: this.state.isLikes = true
+//                     })
+//                 } else {
+//                     this.setState({
+//                         // isLikes:this.state.isLikes = false
+//                     })
+//                 }
+//             })
 
-        });
-    })
-}
+//         });
+//     })
+// }
 
 likesNotif = (id) => {
     const notif_id = this.props.id

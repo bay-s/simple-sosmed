@@ -59,20 +59,20 @@ async componentDidMount(){
         })    
   }
   
-  async componentDidUpdate(){
-    const allMessage =collection(database,'private_message')
+  // async componentDidUpdate(){
+  //   const allMessage =collection(database,'private_message')
 
-    await getDocs(allMessage).then((res) => {
-      res.docs.map((item) => {
-        const data = item.data();
-        return this.setState({
-          listMessage:data.sender_message,
-          listSent:data.reply_message,
-          sender_id:data.message_from
-        });
-      });
-    });
-  }
+  //   await getDocs(allMessage).then((res) => {
+  //     res.docs.map((item) => {
+  //       const data = item.data();
+  //       return this.setState({
+  //         listMessage:data.sender_message,
+  //         listSent:data.reply_message,
+  //         sender_id:data.message_from
+  //       });
+  //     });
+  //   });
+  // }
 render(){
 
   const messasgeCard = this.state.listMessage.length < 1 ? "" : this.state.listMessage.map((msg,index) => {return <MessageSender msg={msg} key={index} index={index}/>});

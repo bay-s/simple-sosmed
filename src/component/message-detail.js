@@ -50,27 +50,7 @@ class MessageDetailCard extends React.Component{
             });
   }
   
-  async componentDidUpdate(){
-    // const reply_message = collection(database,'private_message');
-    // const id = this.props.id
-    // const qMsg = query(reply_message, where("message_id", "==",id));
 
-
-    //         // GET SENDER MESSAGE
-    //         await getDocs(qMsg ).then((res) => {
-    //           res.docs.map((item) => {
-    //             const data = item.data();
-    //             if(res){
-    //               const data = item.data();
-    //               this.setState({
-    //                 listMessage:data,
-    //                 loading:this.state.loading = false
-    //               })
-    //              }
-    //           });
-    //         });
-  }
-  
 
   openReply = e => {
     e.preventDefault()

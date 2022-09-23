@@ -53,19 +53,8 @@ class Home extends React.Component{
 
     }
 
-    async componentDidUpdate(){
-      const db = collection(database,'post')
-await getDocs(db).then(res => {
-  // if (res) {
-  //     res.docs.map(item => {
-  //         const data = item.data()
-  //   //  const dataJson =JSON.stringify(data);
-  //   //  const saveToLocal = localStorage.setItem("dataPost",dataJson )
-  //       })
-  //     }
-  })
 
-  }
+  
     render(){
 
       const is_data_exist = window.localStorage.getItem("dataPost")

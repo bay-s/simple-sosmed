@@ -83,63 +83,7 @@ class ButtonFollow extends React.Component{
       }
     });
   }
-  
-  async componentDidUpdate() {
-    const db = collection(database, "user");
-    const post = collection(database, "post");
-    const id = this.props.id;
-    const q = query(db, where("uid", "==", id));
-    const q2 = query(post, where("user_id", "==", id));
-    const follower = collection(database, "user_follower");
-    const queryFollow = query(follower, where("uid", "==", id));
-  
-    // GET USER
-    getDocs(q).then((res) => {
-      res.docs.map((item) => {
-        const data = item.data();
-        return this.setState({
-          data: (this.state.data = data),
-          total_followers: (this.state.total_followers = data.total_follower),
-          total_following: (this.state.total_following = data.total_following),
-        });
-      });
-    });
-  
-    //   GET ALL POST
-    await getDocs(q2).then((res) => {
-      if (res) {
-  
-        this.setState({
-          dataPost: (this.state.dataPost = res),
-          loading: (this.state.loading = false),
-        });
-      }
-    });
-  
-                 // GET FOLLOWER
-                 await getDocs(queryFollow).then(res => {
-                  res.docs.map(item => {
-                    const data = item.data()
-                    this.setState({
-                      follower:this.state.follower = data.follower,
-                      following:this.state.following = data.following
-                    })
-                    data.follower.map(f_id  => {
-                      if(f_id === this.props.ID) 
-                      {     
-                        this.setState({
-                          follower_id: (this.state.follower_id = f_id ),
-                          isFollow:this.state.isFollow = true
-                        });
-                      }else{
-                  
-                      }
-                    })
-                      });
-                    })
-  
-  }
-  
+
      
   
   followNotif = (user_id) => {

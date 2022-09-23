@@ -27,20 +27,7 @@ async componentDidMount(){
                       })
 }
 
-async componentDidUpdate(){
-    const follower_id = this.props.follow_id
- 
-    const follower = collection(database,'user')
-    const queryUser = query(follower,where("uid","==" , follower_id ))
-                  // GET FOLLOWER
-                  await getDocs(queryUser).then(res => {
-                    res.docs.map(item => {
-                      const data = item.data()
- 
-                        this.setState({follower:this.state.follower = data})
-                        });
-                      })
-}
+
     render(){
 
         return(
@@ -53,7 +40,7 @@ async componentDidUpdate(){
             </figure>
             <div className='username is-flex is-flex-direction-column is-align-items-start'>
              <h4 className='is-size-7 has-text-weight-bold  is-title m-0'><Link to={`/profile/${this.state.follower.uid}`} className='has-text-dark'>{this.state.follower.fullname}</Link></h4>
-             <h5 className='is-size-7 has-text-weight-normal m-0'>@{this.state.follower.username}</h5>
+             <h5 className='is-size-7 has-text-weight-normal m-0'>{this.state.follower.username}</h5>
             </div>
             </div>
             </div>

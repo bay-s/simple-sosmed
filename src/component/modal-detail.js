@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import {database} from '../firebase';
 import { collection, getDocs,query, where,doc,updateDoc,addDoc,arrayUnion,serverTimestamp, arrayRemove} from 'firebase/firestore';
@@ -9,12 +9,19 @@ import DisplayComment from './display-comment';
 import PostComment from './comment-input-card';
 
 
-
 function ModalPostDetail(props){
 
-    const comment = <DisplayComment key={props.id} post_id={props.post.post_id} user_id={props.post.user_id} avatar={props.avatar} user_name={props.post.name} />
-    return(
+  const [reply,setReply] = useState(false)
 
+    const openReply = e => {
+      e.preventDefault()
+      setReply(!false)
+      console.log(setReply);
+    }
+
+    const comment = <DisplayComment key={props.id} post_id={props.post.post_id} user_id={props.post.user_id} avatar={props.avatar} user_name={props.post.name} openReply={openReply}/>
+
+    return(
   <div class="modal-card">
     <section class="modal-card-body columns p-0">
 {/* START COL LEFT */}
@@ -31,7 +38,7 @@ function ModalPostDetail(props){
 <img src={props.avatar === '' ? img : props.avatar} className='is-rounded' alt="Placeholder image" />
 </figure>
 <div class="p-0 ">
-<p class="subtitle is-7 is-title p-0 mb-1"><a href="#0" className='has-text-dark'>{props.name}</a></p>
+<p class="subtitle is-7 is-title p-0 mb-1"><Link to={`/profile/${props.post.user_id}`} className='has-text-dark'>{props.post.username}</Link></p>
 </div>
 </div>
 {/* END MEDIA LEFT */}

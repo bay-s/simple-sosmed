@@ -114,49 +114,24 @@ class UserProfileCard extends React.Component{
                   });
                 })
 
+//  const is_data_exist = window.localStorage.getItem("profile_post")
+//  if(is_data_exist){
+//   console.log(JSON.parse(is_data_exist));
+// this.setState({dataPost:JSON.parse(is_data_exist)})
+//  }
                       // GET ALL POST
-      // await getDocs(q2).then(res => {
-      //     if (res) {
-      //       const dataJson = JSON.stringify(res);
-      //       const saveToLocal = localStorage.setItem("profile_post",dataJson )
-      //         this.setState({ 
-      //             dataPost:this.state.dataPost = res,
-      //             loading:this.state. loading = false
-      //            })  
-      //     }
-      //       })
+
+      await getDocs(q2).then(res => {
+        if (res) {
+        res.docs.map(item => {
+          const data = item.data()
+          this.setState({ dataPost:data})  
+        })
+        }
+          })
           
   }
-
-  async componentDidUpdate() {  
-    const db = collection(database,"user")
-    const post = collection(database,'post')
-    const id = this.props.ID;
-    const q = query(db,where("uid","==" , id))
-    const q2 = query(post,where("user_id","==" , id))
-
-    // GET USER LOGIN
-//  getDocs(q).then(res => {
-//       res.docs.map(item => {
-//       const data = item.data()
-//         return this.setState({ data:this.state.data = data})  
-//         });
-//       })
-     
-      // GET ALL POST
-      // await getDocs(q2).then(res => {
-      //     if (res) {
-      //       const dataJson = JSON.stringify(res);
-      //       const saveToLocal = localStorage.setItem("profile_post",dataJson )
-      //         this.setState({ 
-      //             dataPost:this.state.dataPost = res,
-      //             loading:this.state. loading = false
-      //            })  
-      //     }
-      //       })
-   
-}
-          
+         
  modals = (e) => {
 e.preventDefault()
 this.setState({modal:!this.state.modal})
@@ -285,7 +260,7 @@ console.log(arr);
 
       return (
         <>
-   <div className="column is-10 box is-flex align-center justify-between ">
+<div className="column is-10 box is-flex align-center justify-between ">
 <ProfilePageAvatar data={this.state.data} openModal={this.openModal} />
  {/* END LEFT PROFILE */}
 <ProfilePageAvatarRight openModal={this.openModal} id={this.props.id} />
@@ -294,7 +269,7 @@ console.log(arr);
         {/* END AVATAR */}
 <div className='column is-10 p-0 m-0'>
     <div className='columns is-multiline'>
-<ProfilePageContentLeft openModal={this.openModal } data={this.state.data} isLogin={this.props.isLogin} ID={this.props.ID} dataPost={this.state.dataPost.docs}/>    
+<ProfilePageContentLeft openModal={this.openModal } data={this.state.data} isLogin={this.props.isLogin} ID={this.props.ID} dataPost={this.state.dataPost}/>    
   {/* END COLUMN LEFT */}
 <ProfilePageContentRight skills={this.state.skills} openModalSkills={this.openModal} data={this.state.data}/>   
    {/* END COLUMN RIGHT */}
@@ -328,7 +303,7 @@ console.log(arr);
 
  <div className={this.state.modalSkills ? 'modal is-active ' : 'modal' }>
 <ModalAddSkill removeArr={this.removeArr} updateSkills={this.updateSkills} skills={this.state.skills} SkillText={this.state.SkillTextArr} handlerChange={this.handlerChange} addSkill={this.AddSkills} openInput={this.state.openInput} openModal={this.openModalSkills}/>
- <button class="modal-close is-large" aria-label="close" onClick={this.openModalSkills}></button>
+ <button class="modal-close is-large" aria-label="close" onClick={this.closeModal }></button>
  </div>
 
  <div className={this.state.modalEdit ? 'modal is-active' : 'modal'}>

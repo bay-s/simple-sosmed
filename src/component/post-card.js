@@ -77,7 +77,7 @@ render(){
 const timestamp = this.props.post == null ? "" : this.props.post.timestamp.seconds 
 const time = new Date(timestamp*1000)
 const date = `${time.getDate()} ${this.state.month[time.getMonth()]} ${time.getFullYear()}`
-
+console.log(this.props);
     return(
 <>      
 <div className='column is-4'>

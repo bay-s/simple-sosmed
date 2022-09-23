@@ -101,6 +101,9 @@ this.setState({hide:!this.state.hide});
 
       <Routes>
 
+      {/* <Route path="/" element={<Home id={this.state.uid} dataUser={this.state.dataUser} />} exact/>
+     */}
+
       <Route path="/" element={this.state.isLogin ? <Home id={this.state.uid} dataUser={this.state.dataUser} /> :<LoginPage />} />
 
       <Route path="/profile/:id" element={this.state.isLogin ? <ProfilePage id={this.state.uid}/> : <LoginPage />} />

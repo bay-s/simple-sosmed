@@ -51,8 +51,8 @@ class MessageListCard extends React.Component{
 openTab = e => {
 e.preventDefault()
 const tabs = e.target.dataset.tab
-this.setState({tab:this.state.tab = tabs})
-
+this.setState({tab:tabs})
+console.log(tabs);
 }
       
     render(){
@@ -61,58 +61,43 @@ this.setState({tab:this.state.tab = tabs})
 
         return(
             <div className='container my-fluid my-3'>
-    <div class="columns" id="mail-app">
+    <div class="columns is-centered is-multiline" id="mail-app">
         <aside class="column is-2 shadow h-100 p-0">
             <div>
                 <ul class="is-flex is-flex-column main">
-                    <a href="#" class="button is-flex is-flex-gap-sm align-center" data-tab='inbox' onClick={this.openTab}>
-                    <i class="fa fa-inbox " data-tab='inbox' onClick={this.openTab}></i>
-                     <span> Inbox</span>
+                <li className={this.state.tab === 'inbox' ? 'button is-flex is-flex-gap-sm align-center is-info' :'button is-flex is-flex-gap-sm align-center z-index' } data-tab='inbox' onClick={this.openTab}>
+                    <span class="icon" ><i class="fa fa-inbox " data-tab='inbox'></i></span>
+                    <span class="name" data-tab='inbox'>Inbox</span>
                     {this.state.listMessage.length < 1 ? "" : <span className='tag is-info'>{this.state.listMessage.length}</span>}
-                    </a>
-                    <a href="#" class="button is-flex is-flex-gap-sm align-center" data-tab='sent' onClick={this.openTab}>
-                    <i class="fa fa-envelope-o px-3" data-tab='sent' onClick={this.openTab}></i>
-                     <spam>Sent</spam>
-                    {this.state.listSent.length < 1 ? "" : <span className='tag is-info'> {this.state.listSent.length}</span>}
-                    </a>
-                    <a href="#" class="button">
-                    <span class="icon"><i class="fa fa-star"></i></span>
-                    <span class="name">Starred</span>
-                    </a>
-                    <a href="#" class="button">
+                   </li>
+                   <li className={this.state.tab === 'sent' ? 'button is-flex is-flex-gap-sm align-center is-info' :'button is-flex is-flex-gap-sm align-center z-index' } data-tab='sent' onClick={this.openTab}>
+                    <span class="icon" ><i class="fa fa-envelope-o px-3" data-tab='sent'></i></span>
+                    <span class="name" data-tab='sent'>Sent</span>
+                    {this.state.listMessage.length < 1 ? "" : <span className='tag is-info'>{this.state.listMessage.length}</span>}
+                   </li>
+                   <li className='button is-flex is-flex-gap-sm align-center'>
+                   <span class="icon"><i class="fa fa-folder-o"></i></span>
+                    <span class="name">Folders</span>
+                   </li>
+                    <li className='button is-flex is-flex-gap-sm align-center'>
                     <span class="icon"><i class="fa fa-folder-o"></i></span>
                     <span class="name">Folders</span>
-                    </a>
+                   </li>
                 </ul>
             </div>
         </aside>
-        <div class="column is-6 card is-flex-column is-flex-gap-md" id="message-feed">
-            <div class="action-buttons is-flex">
-                <div class="control is-grouped">
-                    <a class="button is-small"><i class="fa fa-chevron-down"></i></a>
-                    <a class="button is-small"><i class="fa fa-refresh"></i></a>
-                </div>
-                <div class="control is-grouped">
-                    <a class="button is-small"><i class="fa fa-inbox"></i></a>
-                    <a class="button is-small"><i class="fa fa-exclamation-circle"></i></a>
-                    <a class="button is-small"><i class="fa fa-trash-o"></i></a>
-                </div>
-                <div class="control is-grouped">
-                    <a class="button is-small"><i class="fa fa-folder"></i></a>
-                    <a class="button is-small"><i class="fa fa-tag"></i></a>
-                </div>
-            </div>
+ <div class="column is-6 card is-flex-column is-flex-gap-md" id="message-feed">
             {/* START BOX CARD */}
- <div className='tab'>
- <div class={this.state.tab === 'inbox' ? "card is-flex-column is-flex-gap-md" : "hide"} data-tab='inbox'>
+ <div className='tab tab-active'>
+ <div class={this.state.tab === 'inbox' ? "card is-flex-column is-flex-gap-md p-3 fade" : "hide"} data-tab='inbox'>
    {messasgeCard }
  </div>
- <div class={this.state.tab === 'sent' ? "card is-flex-column is-flex-gap-md p-3" : "hide"}data-tab='sent'>
+ <div class={this.state.tab === 'sent' ? "card is-flex-column is-flex-gap-md p-3 fade" : "hide"} data-tab='sent'>
    { sentCard}
  </div>
  </div>
             {/* END BOX CARD */}
-        </div>
+</div>
 
     </div>
 </div>

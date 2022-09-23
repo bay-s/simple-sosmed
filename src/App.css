@@ -138,6 +138,39 @@ table {
   border-spacing: 0;
 }
 
+.fade{
+  animation: fadeIn 1s  !important;
+  -webkit-animation: fadeIn 1s !important;
+  -moz-animation: fadeIn 1s  !important;
+  -o-animation: fadeIn 1s  !important;
+  -ms-animation: fadeIn 1s   !important;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-moz-keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-webkit-keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-o-keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@-ms-keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
 textarea {
   resize: none !important;
 }
@@ -577,7 +610,7 @@ overflow-y: scroll;
   width: 100%;
   height: 250px;
   position: relative;
-  background-position: center center;
+  background-position: 50%;
   background-size: cover;
   background-repeat: no-repeat;
 }

@@ -126,7 +126,7 @@ render() {
    </div>
    
 
-   <div className={this.state.modalPost ? 'modal' : 'modal is-active modal-post'}>
+<div className={this.state.modalPost ? 'modal' : 'modal is-active modal-post'}>
  <div class="modal-background"></div>
 <ModalPostDetail id={this.props.id} post={this.props.post} avatar={this.state.getAvatar} openModalPost={this.openModalPost}/>
  <button class="modal-close is-large open-post" aria-label="close" onClick={this.openModalPost}></button>

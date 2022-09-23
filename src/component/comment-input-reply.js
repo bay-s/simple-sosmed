@@ -5,7 +5,7 @@ import {database,auth} from '../firebase';
 import { collection,arrayUnion, getDocs,updateDoc,setDoc,serverTimestamp,query, where,doc, deleteDoc,getDocFromCache} from 'firebase/firestore';
 
 
-class PostComment extends React.Component{
+class ReplyComment extends React.Component{
     constructor(props){
         super(props)
         this.state = {
@@ -123,4 +123,4 @@ handlerChange = (e) => {
   }
 }
 
-export default PostComment;
+export default ReplyComment;
