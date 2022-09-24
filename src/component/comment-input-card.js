@@ -107,7 +107,7 @@ handlerChange = (e) => {
   render(){
 
     return(
-<form class="field has-addons mb-3" onSubmit={this.postComment}>
+<form class="field has-addons" onSubmit={this.postComment}>
   <div class="control w-100">
     <input class="input no-radius" type="text" name='comment' placeholder="Write something" onChange={this.handlerChange}/>
   </div>

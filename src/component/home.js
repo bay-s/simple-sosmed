@@ -23,6 +23,7 @@ class Home extends React.Component{
 
     async componentDidMount(){
         const id = this.props.id
+
         const db = collection(database,'post')
         const db1 = collection(database,"user")
         const q = query(db1 ,where("uid","==" , id))
@@ -67,7 +68,7 @@ class Home extends React.Component{
         //   return <PostContent  post={post}  id={this.props.id} name={this.props.name} />
         // })
 
-        const postContentCard = is_data_exist  ? <PostContent  post={postJson}  id={this.props.id} name={this.props.dataUser.username} avatar={this.props.dataUser.images}/>: ""
+        const postContentCard = is_data_exist  ? <PostContent  post={postJson}  id={this.props.id} dataUser={this.props.dataUser} />: <PostContent  post={this.state.dataPost}  id={this.props.id} dataUser={this.props.dataUser} />
         return(
           <div className='container my-fluid mt-6'>
             <div className='columns is-multiline mx-6 is-centered is-variable is-desktop is-6-widescreen home-container'>

@@ -10,7 +10,7 @@ function PostDetailCaption(props){
 <img src={props.data.images === '' ? img : props.data.images} className='is-rounded' alt="Placeholder image" />
 </figure>
 <div class="p-0">
-<p class="subtitle is-7 is-title p-0 mb-1"><Link to={`/profile/${props.post_id}`} className='has-text-dark'>{this.state.username}</Link></p>
+<p class="subtitle is-7 is-title p-0 mb-1"><Link to={`/profile/${props.post_id}`} className='has-text-dark'>{props.data.username}</Link></p>
 </div>
 <span className='is-7 p-0'>{props.post_caption}</span>
 </div>

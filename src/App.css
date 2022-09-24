@@ -343,6 +343,14 @@ height: 550px !important;
   text-align: center !important;
 }
 
+.text-small{
+  font-size: 11px !important;
+}
+
+.border-left{
+  border-left: 2px solid rgba(0, 0, 0, 0.103) !important;
+}
+
 .justify-content-center {
   display: flex !important;
   justify-content: center !important;

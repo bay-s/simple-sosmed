@@ -32,7 +32,7 @@ async componentDidMount(){
 await getDocs(q).then(res => {
   res.docs.map(item => {
   const data = item.data()
-return this.setState({getAvatar:this.state.getAvatar = data.images})
+return this.setState({getAvatar:data.images})
     });
   })
 
@@ -109,7 +109,7 @@ render() {
    </div>
    
    <div class="card-content p-2 ">
-   {<LikesCard avatar={this.props.avatar} name={this.props.name} id={this.props.post.user_id} post_id={this.props.post.post_id} />}
+   {<LikesCard avatar={this.props.dataUser.images} name={this.props.dataUser.username} id={ this.props.id} post_id={this.props.post.post_id} />}
    
    <div class="my-2 is-flex is-flex-direction-column is-flex-gap-sm">
    <div className='is-flex is-flex-gap-sm is-align-items-center'>
@@ -128,7 +128,7 @@ render() {
 
 <div className={this.state.modalPost ? 'modal' : 'modal is-active modal-post'}>
  <div class="modal-background"></div>
-<ModalPostDetail id={this.props.id} post={this.props.post} avatar={this.state.getAvatar} openModalPost={this.openModalPost}/>
+<ModalPostDetail id={this.props.id} post={this.props.post} avatar={this.state.getAvatar} openModalPost={this.openModalPost} dataUser={this.props.dataUser}/>
  <button class="modal-close is-large open-post" aria-label="close" onClick={this.openModalPost}></button>
  </div>
 

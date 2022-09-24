@@ -8,47 +8,31 @@ import img from '../default.jpg'
 function ReplyCard(props){
 
     return(
-        props.isLoading ? <div className="skeleton-card">
-        <div className="card-img skeleton">
-        </div>
-        <div className="card-body">
-            <h2 className="card-title skeleton">
-            </h2>
-            <p className="card-intro skeleton">   
-            </p>
-        </div>
-    </div> :props.reply.map(data => {
 
-                           return <div className='comment-card' key={data.reply_id}>
-                                                      <p className='post-texts'>{data.reply_to}</p>
-                           <div className='post-info'>
-                           <div className='image-wrap'>
-                           <img src={data.reply_author_avatar === ''  ? img : data.reply_author_avatar} />
-                           </div>
-                           <h4 className='username'><Link to={`/account/${data.reply_author_id}`}>{data.reply_author_name}</Link></h4>
-                           </div>
-                           <div className='comment-content'>
-                           <p className='post-text'>{data.reply_text}</p>
-                           </div>
-                       <div className="action">
-              
-                       <a href='#0' className='reply' data-comment_id={data.comment_id} onClick={props.isLogin ? props.openReply : props.mustLogin} >Reply to this comment</a>
-                       </div>
-                     <form className={props.open ? 'modal-form' : 'hide'} onSubmit={props.commentReply}>
-                       <div className='comment-inner'>
-                       <div className='comment-title'>
-                           <p>Reply </p>
-                           <textarea name='commentTxt' className='isi-post' placeholder="Write something..." onChange={props.handlerChange}></textarea>
-                       </div>
-                       </div>
-                        <div className='button-container'>
-                           <button className='hvr-sweep-to-right cancel' onClick={props.Cancel}>Cancel</button>
-                           {props.submit ? <button type='submit' className='hvr-sweep-to-right save' >Send</button> : <button className='hvr-sweep-to-right stop' disabled>Send</button>}
-                        </div>
-                           </form>
-                           </div>
-                       }) 
+<div className='media-left is-flex is-flex-gap-md align-center' key={props.index}>
+<figure class="image is-32x32 avatar">
+<img src={props.data.reply_author_avatar === ''  ? img : props.data.reply_author_avatar} className='is-rounded' />
+</figure>
+<div className='is-flex is-flex-column'>
+<div class="is-flex is-flex-gap-md align-center mb-1">
+<p class="subtitle is-7 is-title p-0 m-0 is-bold" data-com_id={props.data.reply_author_id}><Link to={`/profile/${props.data.reply_author_id}`} className='has-text-dark'>{props.data.reply_author_name}</Link></p>
+<p className='post-text is-size-7 p-0 m-0'>{props.data.reply_text}</p>
+</div>
+{/* START COMMENT TEXT */}
+<div className="is-flex is-flex-gap-md align-center">
+<time className='subtitle is-7 has-text-grey-light p-0 m-0 is-title is-bold'>{`props.data.timestamp`}</time>
+<button className='no-border is-size-7 has-text-weight-semibold has-text-dark' data-comment_id={props.data.comment_id} data-user={props.data.reply_author_name} data-author_id={props.data.reply_author_id} title={props.index} onClick={props.openReply}>Reply</button>
+</div>
+{/* END COMMENT TEXT */}
+</div>
+{/* END COMMENT */}
+</div>
+
           )
 }
 
 export default ReplyCard;
+
+
+
+

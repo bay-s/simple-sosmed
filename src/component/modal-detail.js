@@ -7,19 +7,27 @@ import img from '../akun.jpg'
 import LikesCard from './likes_card';
 import DisplayComment from './display-comment';
 import PostComment from './comment-input-card';
+import ReplyComment from './comment-input-reply';
 
 
 function ModalPostDetail(props){
 
   const [reply,setReply] = useState(false)
-
+  const [user,setUser] = useState("")
+  const [author,setAuthor] = useState("")
+  const  [comid,setComid] = useState("")
     const openReply = e => {
       e.preventDefault()
+      const user = e.target.dataset.user
+      const author = e.target.dataset.author_id
+      const comid = e.target.dataset.comment_id
       setReply(!false)
-      console.log(setReply);
+      setUser(user)
+      setAuthor(author)
+      setComid(comid)
     }
 
-    const comment = <DisplayComment key={props.id} post_id={props.post.post_id} user_id={props.post.user_id} avatar={props.avatar} user_name={props.post.name} openReply={openReply}/>
+    const comment = <DisplayComment key={props.id} post_id={props.post.post_id} user_id={props.post.user_id} avatar={props.avatar} user_name={props.post.name} openReply={openReply} com_id={comid} author_id={author} user={user}/>
 
     return(
   <div class="modal-card">
@@ -65,7 +73,7 @@ function ModalPostDetail(props){
 {/* START COMMENT*/}
 <div className='is-flex is-flex-column'>
 <div className='p-3 is-flex is-flex-column border-sm'>
-{<LikesCard id={props.post.user_id} avatar={props.avatar} name={props.post.name} post_id={props.post.post_id} />}
+{<LikesCard id={props.id } avatar={props.avatar} name={props.post.name} post_id={props.post.post_id} />}
 <div className='mt-2'>
 <p className='subtitle is-7 p-0 m-0 is-title is-bold'>
 {props.post.total_likes > 0 ? `${props.post.total_likes} Like` : 'Be the first to'}
@@ -74,7 +82,9 @@ function ModalPostDetail(props){
 </div>
 </div>
 {/* START COMMENT INPUT */}
-<PostComment post_id={props.post.post_id} total_comment={props.post.total_comment} user_id={props.post.user_id} name={props.post.name} avatar={props.avatar}/>
+{reply ? <ReplyComment post_id={props.post.post_id} total_comment={props.post.total_comment} user_id={props.post.user_id} dataUser={props.dataUser} com_id={comid} author_id={author} user={user} />
+: <PostComment post_id={props.post.post_id} total_comment={props.post.total_comment} user_id={props.user_id} dataUser={props.dataUser}/> 
+}
 {/* END COMMENT */}
 </div>
 {/* END COMMENT */}

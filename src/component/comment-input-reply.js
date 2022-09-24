@@ -21,101 +21,135 @@ class ReplyComment extends React.Component{
     }
 
        
-handlerChange = (e) => {
-    const {name,value} = e.target
-    this.setState({[name]:value})
-    if(value.length > 0){
-        this.setState({hide:this.state.hide = true})
-    }else{
-        this.setState({hide:this.state.hide = false})
+    handlerChange = (e) => {
+      const {name,value} = e.target
+      this.setState({[name]:value})
+      if(value.length > 0){
+          this.setState({hide:true})
+      }else{
+          this.setState({hide:false})
+      }
     }
-  }
-  
-
-  commentNotif = (ranID) => {
-    const notif_id =  this.props.user_id
-  
-    const docUpdate = doc(database,'notifikasi',notif_id ) // ADD NOTIF
-    const time = serverTimestamp()
-  
+    
+    commentNotif = (ranID) => {
+      const notif_id = this.props.author_id
+      const docUpdate = doc(database,'notifikasi',notif_id ) // ADD NOTIF
+    
+      updateDoc(docUpdate,{
+                  notif:arrayUnion({
+                      pesan:`${this.props.dataUser.username} Telah membalas komentar anda`,
+                      user_name:this.props.dataUser.username,
+                      user_id:this.props.dataUser.uid,
+                      user_avatar:this.props.dataUser.images,
+                      post_id:this.props.post_id,
+                    })
+            })
+      .then(() => {console.log("notif me senpai")})
+      .catch((err) => {console.log(err)}); 
+    
+    }
+    
+    commentReply = e => {
+        e.preventDefault()
+        const ranID = (Math.random() + 1).toString(36).substring(1);
+        const docUpdate = doc(database,'comment',this.props.com_id)
+    
+    if(this.state.comment.length < 3 ){
+      alert("COMMENT ATLEAST 3 CHARACTER")
+    }else{
+      this.setState({
+        submit:this.state.submit = false
+      })
+    
     updateDoc(docUpdate,{
-                notif:arrayUnion({
-                    pesan:`${this.props.dataUser.username} Telah mengomentari postingan anda`,
-                    user_name:this.props.dataUser.username,
-                    user_id:this.props.user_id,
-                    user_avatar:this.props.dataUser.images,
-                    post_id:this.props.post_id,
-                  })
-          })
-    .then(() => {console.log("notif me senpai")})
-    .catch((err) => {console.log(err)}); 
-  
-  }
-  
-  createReply = () => {
-    const db = collection(database,'reply');
-    const user_id = this.props.post_id
-    setDoc(doc(db,user_id ),  {
-         original_reply:[],
-         user_reply:[],
-         comment_id:this.props.post_id
-      })
-      .then(() => {console.log("notif sukses")})  
-      .catch((err) => {
-        console.log(err);
-      })
-  }
-  
-  postComment = (e) => {
-    e.preventDefault()
-    const ranID = (Math.random() + 1).toString(36).substring(1);
-    const db = collection(database,"comment")
-    const id = this.props.user_id
-    const post_id = this.props.post_id
-    const docUpdate = doc(database,"post",post_id)
-  if (this.state.comment.length < 2) {
-  alert("Too short")
+      reply:arrayUnion({
+      reply_id:ranID,
+      reply_to:`${this.props.dataUser.username} Has replied to a comment from ${this.props.author_id}`,
+      reply_author_name:this.props.dataUser.username,
+      reply_author_avatar:this.props.dataUser.images,
+      reply_author_id:this.props.dataUser.uid,
+      reply_text:this.state.comment,
+      comment_id:this.props.com_id,
+      timestamp:this.timeStamp ()
+    })
+    })
+    .then(() => {
+      alert("reply sukses")
+      this.setState({
 
-  }else{
-    this.setState({hide:this.state.hide = false})
-    // this.createReply()
-    // this.commentNotif(ranID)
-    console.log(post_id );
-    updateDoc(docUpdate,{
-        total_comment:this.state.total_comment + 1
       })
-      setDoc(doc(db,ranID),  {
-        comment_id:ranID,
-        post_id: post_id,
-        post_owner_id:this.props.user_id,
-        comment_text:this.state.comment,
-        comment_author_name:this.props.dataUser.username,
-        user_avatar:this.props.dataUser.images,
-        timestamp: serverTimestamp(),
-        reply:[]
-        })
-        .then(() =>{
-        alert("comment posted")
-        this.setState({hide:this.state.hide = true})
-        e.target.reset()
-        })
-        .catch(err => {alert(err.message)})
-  }
-  }
-  
-  
+      // this.commentNotif()
+      e.target.reset()
+    })
+    .catch((err) => {
+      console.log(err)
+      this.setState({
+
+      })
+    }
+    ); 
+    }
+    }  
+    
+    openReplyComment = (e) => {
+      e.preventDefault()
+      const replyContainer = e.target.parentElement.previousElementSibling.parentElement.firstChild.nextElementSibling.nextElementSibling.nextElementSibling
+      const com_id = e.target.dataset.comment_id
+      const targets = e.target.parentElement.previousSibling.previousSibling.firstChild.nextSibling.textContent;
+      const target_id = e.target.parentElement.previousSibling.previousSibling.firstChild.nextSibling.dataset.com_id
+    
+    
+      replyContainer.classList.toggle('hide')
+      this.setState({
+        comment_id:this.state.comment_id = com_id,
+        comment_owner:this.state.comment_owner = targets,
+        comment_user_id:this.state.comment_user_id = target_id,
+      })
+    
+     if(e.target.classList.contains('reply')){
+    this.setState({open:this.state.open = true})
+     }
+    else{
+      this.setState({open:this.state.open = false})
+     }
+    }
+    
+    
+    viewReply = (e) => {
+      e.preventDefault()
+      const com_id = e.target.dataset.comment_id
+      const viewContainer = e.target.parentElement.previousElementSibling.parentElement.firstChild.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling
+    
+    this.setState({comment_reply_id:this.state.comment_reply_id = com_id})
+    viewContainer.classList.toggle('hide')
+   
+    }
+      
+
+    timeStamp = () => {
+      const m = ['January','February','March','April','May','June','July','August','September','Oktober','November','December']
+      const dates = new Date();
+      const hours = dates.getHours() 
+      const min = dates.getMinutes()
+      const date = dates.getDate()
+      const month = m[dates.getMonth()];
+      const year = dates.getUTCFullYear()
+      
+      return `${date} ${month} ${year} ${hours}.${min}`;
+      }
+    
   render(){
 
     return(
-<form class="field has-addons mb-3" onSubmit={this.postComment}>
+<form class="field has-addons" onSubmit={this.commentReply}>
   <div class="control w-100">
     <input class="input no-radius" type="text" name='comment' placeholder="Write something" onChange={this.handlerChange}/>
   </div>
   <div class="control">
 {this.state.hide ? <button type='submit' class="button is-info no-radius">
-      Post
+      Reply
    </button> : <button class="button is-info no-radius" disabled>
-      Post
+      Reply
     </button>}
   </div>
 </form>

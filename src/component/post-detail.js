@@ -9,12 +9,13 @@ import DisplayComment from './display-comment';
 import PostComment from './comment-input-card';
 import PostDetailHeader from './post-detail-header';
 import PostDetailCaption from './post-detail-caption';
+import ReplyComment from './comment-input-reply';
 
 function PostDetail(props){
     const {id} = useParams()
 
     return(
-       <PostDetailCard id={id} name={props.name} user_id={props.id} avatar={props.avatar} />
+       <PostDetailCard id={id}  user_id={props.id} dataUser={props.dataUser}/>
     )
 }
 
@@ -31,7 +32,11 @@ class PostDetailCard extends React.Component{
             total:null,
             total_comment:0,
             username:'',
-            data:[]
+            data:[],
+            openReplys:false,
+            user:'',
+            com_id:'',
+            author_id:''
         }
     }
 
@@ -39,19 +44,10 @@ class PostDetailCard extends React.Component{
         const id = this.props.id
         const db = collection(database,'post')
         const q = query(db ,where("post_id","==" , id))
-
         const db2 = collection(database,'user')
-        const q2 = query(db2 ,where("uid","==" , this.state.user_id))
-  
-        // GET USER LOGIN
-  await getDocs(q2).then(res => {
-    res.docs.map(item => {
-      const data = item.data()
-  return this.setState({ 
-  data:data
-  })  
-    })
-    })
+
+        // GET USER DETAIL
+
        
              //  GET ALL POIST
 
@@ -59,12 +55,18 @@ class PostDetailCard extends React.Component{
     if (res) {
         res.docs.map(item => {
             const data = item.data()
+            const q2 = query(db2 ,where("uid","==" , data.user_id))
+            getDocs(q2).then(res => {
+                res.docs.map(item => {
+              const data = item.data()
+              return this.setState({data:data})  
+                })
+                })
     return this.setState({ 
-        dataPost:this.state.dataPost = data,
-        total:this.state.total = data.total_likes,
-        total_comment:this.state.total_comment = data.total_comment,
-        loading:this.state. loading = false,
-        user_id:this.state.dataPost.user_id
+        dataPost:data,
+        total:data.total_likes,
+        total_comment:data.total_comment,
+        loading:false,
        })  
           })
         }
@@ -72,12 +74,23 @@ class PostDetailCard extends React.Component{
 
     }
 
+ openReply = e => {
+e.preventDefault()
+const users = e.target.dataset.user
+const com_id = e.target.dataset.comment_id
+const author_id = e.target.dataset.author_id
+this.setState({
+    openReplys:!this.state.openReplys,
+    user:users,
+    com_id:com_id,
+    author_id:author_id
+})
+console.log(e.target.dataset.comment_id);
+      }
 
-    
-  
     render(){
 
-const comment = <DisplayComment key={this.props.id} post_id={this.props.id} user_id={this.props.user_id} avatar={this.props.avatar} user_name={this.props.name} />
+const comment = <DisplayComment key={this.props.id} post_id={this.props.id} user_id={this.props.user_id} avatar={this.props.dataUser.images} openReply={this.openReply} user_name={this.props.dataUser.username} />
         return(
 <div className='container my-fluid '>
 <div className='column is-9 mx-auto shadow'>
@@ -92,8 +105,8 @@ const comment = <DisplayComment key={this.props.id} post_id={this.props.id} user
       {/*POST CAPTION*/}
     
 <div className='column is-4 p-0 is-flex is-flex-column is-flex-gap-sm '>
-<PostDetailHeader data={this.state.data} id={this.props.id } post_id={this.state.dataPost.user_id}/>
-<PostDetailCaption  data={this.props.data} post_caption={this.state.dataPost.post_caption} post_id={this.state.dataPost.user_id}/>
+<PostDetailHeader data={this.state.data} id={this.props.id } post={this.state.dataPost} />
+<PostDetailCaption  data={this.state.data} post_caption={this.state.dataPost.post_caption} post_id={this.state.dataPost.user_id}/>
 {/*END POST CAPTION */}
 {/* START COMMENT CONTENT */}
 <div className='is-flex is-flex-column is-flex-gap-md px-2 my-auto is-flex-grow-1 comment-container'>
@@ -110,7 +123,12 @@ const comment = <DisplayComment key={this.props.id} post_id={this.props.id} user
 </div>
 </div>
 {/* START COMMENT INPUT */}
-<PostComment post_id={this.props.id} total_comment={this.state.total_comment} user_id={this.props.user_id} dataUser={this.props.dataUser}/>
+{this.state.openReplys ? <ReplyComment post_id={this.state.dataPost.post_id} total_comment={this.state.total_comment} user_id={this.props.user_id} dataUser={this.props.dataUser} com_id={this.state.com_id} author_id={this.state.author_id} user={this.state.user} /> 
+ : 
+<PostComment post_id={this.props.id} total_comment={this.state.total_comment} user_id={this.props.user_id} dataUser={this.props.dataUser}/> 
+}
+
+
 {/* END COMMENT */}
 </div>
     {/* END COL RIGHT */}

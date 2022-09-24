@@ -12,11 +12,11 @@ function PostDetailHeader(props){
 <img src={props.data.images === '' ? img : props.data.images} className='is-rounded' alt="Placeholder image" />
 </figure>
 <div class="p-0 ">
-<p class="subtitle is-7 is-title p-0 mb-1"><Link to={`/profile/${this.state.dataPost.user_id}`} className='has-text-dark'>{this.state.username}</Link></p>
+<p class="subtitle is-7 is-title p-0 mb-1"><Link to={`/profile/${props.post.user_id}`} className='has-text-dark'>{props.post.username}</Link></p>
 </div>
 </div>
 {/* END MEDIA LEFT */}
-<div className={props.id === props.post_id ? 'media-right px-3 mt-2' : 'hide'}>
+<div className={props.id === props.post.user_id ? 'media-right px-3 mt-2' : 'hide'}>
 <i className="fa fa-trash has-text-danger is-size-5 is-clickable" aria-hidden="true" onClick={``}></i>
 </div>
 </header>
