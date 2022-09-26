@@ -131,11 +131,17 @@ closeModal = e  => {
 
   return (
 <>
-<div className="column is-10 box is-flex align-center justify-between ">
+<div className="column is-10 box ">
+<div className='columns is-multiline align-center'>
+<div className='column'>
 <ProfilePageAvatar data={this.state.data} openModal={this.openModal} />
+</div>
  {/* END LEFT PROFILE */}
+ <div className='column is-one-fifth'>
 <UserProfileAvatarRight id={this.props.id} ID={this.props.ID} data={this.state.data}/>
+</div>
 {/* END RIGHT PROFILE */}
+</div>
 </div>
 {/* END AVATAR */}
 <div className='column is-10 p-0 m-0'>
