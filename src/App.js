@@ -116,7 +116,7 @@ this.setState({hide:!this.state.hide});
       <Route path="/send-message/:id" element={this.state.isLogin ? <SendMessage dataUser={this.state.dataUser}  isLogin={this.state.isLogin} /> : <LoginPage />}/>
       <Route path="/edit-profile/:id" element={this.state.isLogin ? <EditProfile id={this.state.uid}/> : <LoginPage />} />
 
-      <Route path="/login/" element={<LoginPage />} /> 
+      <Route path="/login/" element={<LoginPage  isLogin={this.state.isLogin}/> } /> 
       <Route path="/register/" element={<RegisterPages />} /> 
       <Route path='*' element={<NotFound />} />
       </Routes>

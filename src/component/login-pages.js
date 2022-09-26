@@ -1,8 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link , Navigate} from 'react-router-dom'
 import banners from '../banner.jpg'
 import {auth} from '../firebase';
 import { signInWithPopup, GoogleAuthProvider,  onAuthStateChanged,signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
+
 
 class LoginPage extends React.Component{
 constructor(){
@@ -20,6 +21,7 @@ constructor(){
     isSubmit:false,
   }
 }
+
 
 
 handlerChange = (e) => {
@@ -94,6 +96,7 @@ render(){
   }
   
   return(
+    this.props.isLogin ? <Navigate to="/" replace={true} /> :
     <div className='container my-fluid'>
             <div className='columns is-centered '>
       <div className='column is-6 box p-0 '>

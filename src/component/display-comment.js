@@ -49,9 +49,9 @@ async componentDidMount(){
             }
         })
 
-      //   onSnapshot(doc(db, "cities", "SF"), (doc) => {
-      //     console.log("Current data: ", doc.data());
-      // });
+        // onSnapshot(doc(comment), (doc) => {
+        //   console.log("Current data: ", doc.data());
+        //  });
 
       // GET TOTAL POST
   await getDocs(q).then(res => {
@@ -102,6 +102,10 @@ if(this.state.comment_reply_id === ''){
 displayReply = e => {
 e.preventDefault()
 this.setState({view:!this.state.view})
+const index = e.target.dataset.index
+const ref = e.target.parentElement.parentElement.firstChild.nextElementSibling
+ref.classList.toggle('hide')
+// console.log(ref.classList.contains(`test${index}`));
 }
 render(){
 
@@ -110,7 +114,7 @@ const data = com.data()
 const  timestamp = data.timestamp == null ? "" : data.timestamp.seconds
 const time = new Date(timestamp*1000)
 const date = `${time.getDate()} ${this.state.month[time.getMonth()]}`
-console.log(data);
+
 return data.post_id === this.props.post_id ? <CommentCard replyRef={this.state.replyRef} openReply={this.props.openReply} displayReply={this.displayReply} view={this.state.view}  data={data} date={date} post_id={CommentCard} index={index}/> : ""
 }) : ""
 

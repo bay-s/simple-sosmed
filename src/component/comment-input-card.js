@@ -108,6 +108,22 @@ handlerChange = (e) => {
 
     return(
 <form class="field has-addons" onSubmit={this.postComment}>
+    <input class="input no-radius" type="text" name='comment' placeholder="Write something" onChange={this.handlerChange}/>
+{this.state.hide ? <button type='submit' class="button is-info no-radius">
+      Post
+   </button> : <button class="button is-info no-radius" disabled>
+      Post
+    </button>}
+</form>
+    )
+  }
+}
+
+export default PostComment;
+
+
+
+{/* <form class="field has-addons" onSubmit={this.postComment}>
   <div class="control w-100">
     <input class="input no-radius" type="text" name='comment' placeholder="Write something" onChange={this.handlerChange}/>
   </div>
@@ -118,9 +134,4 @@ handlerChange = (e) => {
       Post
     </button>}
   </div>
-</form>
-    )
-  }
-}
-
-export default PostComment;
+</form> */}

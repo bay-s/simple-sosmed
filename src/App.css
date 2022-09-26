@@ -344,7 +344,7 @@ height: 550px !important;
 }
 
 .text-small{
-  font-size: 11px !important;
+  font-size: 10px !important;
 }
 
 .border-left{
@@ -389,12 +389,7 @@ height: 550px !important;
   word-break: break-all !important;
 }
 
-.text-small{
-  font-size: 0.75rem;
-  line-height: 1.5;
-  padding-left: 0.75em;
-  padding-right: 0.75em;
-}
+
 .align-center {
   display: flex !important;
   align-items: center !important;
@@ -428,7 +423,9 @@ z-index: 40 !important;
   outline: none !important;
   box-shadow: none !important;
 }
-
+.no-outline{
+  outline: none !important;
+}
 .no-radius{
   border-radius:0 !important;
 }
@@ -652,6 +649,7 @@ text-stroke: 2px rgba(0,0,0,0.34);
   margin-top: 100px !important;
   box-sizing: border-box !important;
 }
+
 .message-container{
   margin-top: 120px !important;
 }
@@ -867,13 +865,65 @@ text-stroke: 2px rgba(0,0,0,0.34);
 /* =====================
     RESPONSIVE
 ====================*/
-@media (min-width: 850px) {
 
-  .modal-card {
-    /* width: 700px !important;
-    height: 600px; */
-  }
+@media (max-width: 1055px) {
+  .modal-post .modal-card{
+    width: 900px;
+    }
+    
+    .modal-container{
+      /* height: 550px;
+      z-index: 555; */
+    }
 }
+
+
+@media (max-width: 945px) {
+  .modal-post .modal-card{
+    width: 800px;
+    }
+
+}
+
+
+@media (max-width: 830px) {
+  .modal-post .modal-card{
+    width: 700px;
+    margin-top: 30px;
+    }
+}
+
+@media (max-width: 730px) {
+  .modal-post .modal-card{
+    width: 600px;
+    margin-top: 30px;
+    }
+}
+
+
+@media (max-width: 642px) {
+  .modal-post .modal-card{
+    width: 370px;
+    margin-top: 55px !important;
+    }
+}
+
+@media (max-width: 420px) {
+.avatar-container{
+  flex-direction: column !important;
+  align-items: center !important;
+}
+.avatars{
+  align-items: center !important;
+}
+}
+
+@media (max-width: 385px) {
+  .modal-post .modal-card{
+    width: 280px;
+    }
+}
+
 
 @media (max-width: 1025px) {
   .right-nav {
@@ -895,7 +945,7 @@ text-stroke: 2px rgba(0,0,0,0.34);
     width: 100% !important;
   }
   .my-fluid {
-    margin: 120px 25px !important;
+    margin: 100px 25px !important;
   }
   .message-container {
     margin: 120px 25px !important;
@@ -903,5 +953,17 @@ text-stroke: 2px rgba(0,0,0,0.34);
   .my-fluid .home-container {
     margin: 0 1px !important;
     box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 900px){
+  .my-fluid {
+    margin: 100px 5px !important;
+  }
+}
+
+@media (max-width: 750px){
+  .my-fluid {
+    margin: 100px 15px !important;
   }
 }

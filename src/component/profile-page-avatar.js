@@ -4,7 +4,7 @@ import akun from '../akun.jpg'
 function ProfilePageAvatar(props){
 
     return(
-  <div className='is-flex  align-center is-flex-gap-md'>
+  <div className='is-flex  align-center is-flex-gap-md avatar-container'>
             <figure class="image is-128x128 avatar">
                  <img
                    class="is-rounded"
@@ -12,7 +12,7 @@ function ProfilePageAvatar(props){
                    alt=""
                  />
                </figure>
-             <div className='is-flex is-flex-column is-flex-gap-md'>
+<div className='is-flex is-flex-column is-flex-gap-md avatars'>
  <h3 className="is-title is-size-4 is-bold">
  {props.data.username}
  </h3>

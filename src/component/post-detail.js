@@ -85,7 +85,7 @@ this.setState({
     com_id:com_id,
     author_id:author_id
 })
-console.log(e.target.dataset.comment_id);
+
       }
 
     render(){
@@ -93,8 +93,8 @@ console.log(e.target.dataset.comment_id);
 const comment = <DisplayComment key={this.props.id} post_id={this.props.id} user_id={this.props.user_id} avatar={this.props.dataUser.images} openReply={this.openReply} user_name={this.props.dataUser.username} />
         return(
 <div className='container my-fluid '>
-<div className='column is-9 mx-auto shadow'>
-<div className='columns is-centered p-0  h-500px'>
+<div className='column is-10 mx-auto shadow'>
+<div className='columns is-centered  p-0  h-500px'>
   {/* IMAGE POST */}
   <div className='column is-8 h-100 p-0'>
 <figure class="h-100 image is-4by3">

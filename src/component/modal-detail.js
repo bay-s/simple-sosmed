@@ -30,16 +30,16 @@ function ModalPostDetail(props){
     const comment = <DisplayComment key={props.id} post_id={props.post.post_id} user_id={props.post.user_id} avatar={props.avatar} user_name={props.post.name} openReply={openReply} com_id={comid} author_id={author} user={user}/>
 
     return(
-  <div class="modal-card">
-    <section class="modal-card-body columns p-0">
+  <div class="modal-card has-background-dark">
+    <section class="modal-card-body columns  p-0">
 {/* START COL LEFT */}
-<div className='column is-8 p-0 m-0'>
+<div className='column is-8 p-0 m-0 '>
 <figure class="h-100 image is-4by3">
 <img src={props.post.post_image} alt="Placeholder image" />
 </figure>
 </div>
 {/* end col left */}
-<div className='column is-4 p-0 m-0 h-100  is-flex is-flex-column justify-between'>
+<div className='column  p-0 m-0 h-100 is-flex is-flex-column justify-between'>
  <header class="modal-card-head has-background-white py-2 is-flex align-center justify-between">
 <div className='media-left is-flex is-flex-gap-md align-center mt-2'>
 <figure class="image is-32x32">
@@ -60,7 +60,7 @@ function ModalPostDetail(props){
 <img src={props.avatar === '' ? img : props.avatar} className='is-rounded' alt="Placeholder image" />
 </figure>
 <div class="p-0">
-<p class="subtitle is-7 is-title p-0"><a href="#0" className='has-text-dark'>{props.post.name}</a></p>
+<p class="subtitle is-7 is-title p-0"><a href="#0" className='has-text-dark'>{props.post.username}</a></p>
 </div>
 <span className='is-7 p-0'>{props.post.post_caption}</span>
 </div>
@@ -71,8 +71,8 @@ function ModalPostDetail(props){
 </div>
 {/* ENDCOMMENT CONTENT */}
 {/* START COMMENT*/}
-<div className='is-flex is-flex-column'>
-<div className='p-3 is-flex is-flex-column border-sm'>
+<div className='is-flex is-flex-column mb-3'>
+<div className='px-2 p-3 is-flex is-flex-column border-sm'>
 {<LikesCard id={props.id } avatar={props.avatar} name={props.post.name} post_id={props.post.post_id} />}
 <div className='mt-2'>
 <p className='subtitle is-7 p-0 m-0 is-title is-bold'>
